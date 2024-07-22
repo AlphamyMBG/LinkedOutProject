@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<ApiContext>(
-    opt => opt.UseInMemoryDatabase("LinkOnDb"), contextLifetime: ServiceLifetime.Singleton
+    opt => opt.UseInMemoryDatabase("LinkOnDb"), 
+    contextLifetime: ServiceLifetime.Singleton
 );
 builder.Services.AddControllers();
 
@@ -16,6 +17,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ILinkedOutUserService, LinkedOutUserService>();
 builder.Services.AddSingleton<ILinkedOutPostService, LinkedOutPostService>();
+builder.Services.AddSingleton<ILinkedOutJobService, LinkedOutJobService>();
+builder.Services.AddSingleton<INotificationService, NotificationService>();
+builder.Services.AddSingleton<IMessageService, MessageService>();
+builder.Services.AddSingleton<IInterestService, InterestService>();
 
 var app = builder.Build();
 

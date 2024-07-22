@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 namespace BackendApp.Model
 {
     public class AppUser
+    (
+        string email,
+        string passwordHash
+    )
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public ulong Id {get; set;}
-        
-        public string Email { get; set; } = "";
-        public string PasswordHash { get; set; } = "";
+        public string Email { get; set; } = email;
+        public string PasswordHash { get; set; } = passwordHash;
     }
 }

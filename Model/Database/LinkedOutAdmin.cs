@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BackendApp.Model
 {
-    public class LinkedOutAdmin : AppUser{
+    // public class LinkedOutAdmin : AppUser{
         
-    }
+    // }
 }

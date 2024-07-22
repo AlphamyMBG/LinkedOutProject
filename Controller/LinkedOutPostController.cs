@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using BackendApp.Model;
+using BackendApp.Model.Enums;
 using BackendApp.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +14,12 @@ namespace BackendApp.Controller
 
     [Route("api/[Controller]")]
     [ApiController]
-    public class LinkedOutPostController(ILinkedOutPostService postService) : ControllerBase
+    public class LinkedOutPostController
+    (ILinkedOutPostService postService, IInterestService interestService) 
+    : ControllerBase
     {
         private readonly ILinkedOutPostService postService = postService;
+        private readonly IInterestService interestService = interestService;
 
         [HttpPost]
         public IActionResult CreatePost(LinkedOutPost post)
@@ -47,6 +51,20 @@ namespace BackendApp.Controller
         {
             var user = this.postService.GetPostById(id);
             return user is not null ? this.Ok(user) : this.NotFound();
+        }
+
+        [Route("{postId}/interest/set/{userId}")]
+        [HttpPost]
+        public IActionResult DeclareInterest(uint userId, uint postId)
+        {
+            return this.interestService.DeclareInterestForPost(userId, postId).ToResultObject(this);
+        }
+
+        [Route("{postId}/interest/unset/{userId}")]
+        [HttpPost]
+        public IActionResult RemoveInterest(uint userId, uint postId)
+        {
+            return this.interestService.RemoveInterestForPost(userId, postId).ToResultObject(this);
         }
     }
 }

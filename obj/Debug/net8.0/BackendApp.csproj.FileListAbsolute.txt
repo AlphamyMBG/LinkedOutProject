@@ -16,14 +16,6 @@ G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
 G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
 G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
-G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.Extensions.Caching.Abstractions.dll
-G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
-G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
-G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
-G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
-G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
-G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
 G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.OpenApi.dll
 G:\Programs\C#\BackendApp\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 G:\Programs\C#\BackendApp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
@@ -36,7 +28,6 @@ G:\Programs\C#\BackendApp\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTar
 G:\Programs\C#\BackendApp\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.BackendApp.props
 G:\Programs\C#\BackendApp\obj\Debug\net8.0\staticwebassets.pack.json
 G:\Programs\C#\BackendApp\obj\Debug\net8.0\scopedcss\bundle\BackendApp.styles.css
-G:\Programs\C#\BackendApp\obj\Debug\net8.0\BackendApp.csproj.CopyComplete
 G:\Programs\C#\BackendApp\obj\Debug\net8.0\BackendApp.dll
 G:\Programs\C#\BackendApp\obj\Debug\net8.0\refint\BackendApp.dll
 G:\Programs\C#\BackendApp\obj\Debug\net8.0\BackendApp.pdb
@@ -44,3 +35,5 @@ G:\Programs\C#\BackendApp\obj\Debug\net8.0\BackendApp.genruntimeconfig.cache
 G:\Programs\C#\BackendApp\obj\Debug\net8.0\ref\BackendApp.dll
 G:\Programs\C#\BackendApp\bin\Debug\net8.0\startup.json
 G:\Programs\C#\BackendApp\bin\Debug\net8.0\Newtonsoft.Json.dll
+G:\Programs\C#\BackendApp\obj\Debug\net8.0\BackendApp.sourcelink.json
+G:\Programs\C#\BackendApp\obj\Debug\net8.0\BackendApp.csproj.Up2Date

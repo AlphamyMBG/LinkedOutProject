@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BackendApp.Data;
 using BackendApp.Model;
+using BackendApp.Model.Enums;
 
 namespace BackendApp.Service
 {

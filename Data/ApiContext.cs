@@ -11,4 +11,7 @@ public class ApiContext(DbContextOptions<ApiContext> options) : DbContext(option
 {
     public DbSet<LinkedOutUser> LinkedOutUsers {get; set;}
     public DbSet<LinkedOutPost> LinkedOutPosts {get; set;}
+    public DbSet<LinkedOutJob> LinkedOutJobs {get; set;}
+    public DbSet<Notification> Notifications {get; set;}
+    public DbSet<Message> Messages {get; set;}
 }

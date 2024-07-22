@@ -5,26 +5,32 @@ using BackendApp.Data;
 using BackendApp.Model.Requests;
 using Newtonsoft.Json;
 using BackendApp.Service;
+using BackendApp.Model.Enums;
 
 namespace BackendApp.Controllers
 {
     [Route("api/[Controller]")]
     [ApiController]
-    public class LinkedOutUserController(ILinkedOutUserService userService) : ControllerBase
+    public class LinkedOutUserController(
+        ILinkedOutUserService userService
+    ) : ControllerBase
     {
         private readonly ILinkedOutUserService linkedOutUserService = userService;
 
         [Route("register")]
         [HttpPost]
         public IActionResult Register( RegisterRequest request ){
-            LinkedOutUser newUser = new(){
-                Email = request.Email,
-                PasswordHash = request.Password + "AAA",
-                Name = request.Name,
-                Surname = request.Surname,
-                PhoneNumber = request.PhoneNumber,
-                ImageName = request.ImageName
-            };
+            LinkedOutUser newUser = new(
+                email: request.Email,
+                passwordHash: request.Password + "AAA",
+                name: request.Name,
+                surname: request.Surname,
+                phoneNumber: request.PhoneNumber,
+                imagePath: request.ImageName,
+                location: request.Location,
+                currentPosition: "",
+                abilities: []
+            );
             bool added = this.linkedOutUserService.AddUser(newUser);
             return added ? new JsonResult(this.Ok(newUser.Id)) : new JsonResult(this.Conflict());
         }

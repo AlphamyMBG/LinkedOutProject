@@ -5,16 +5,10 @@ using BackendApp.Data;
 using BackendApp.Model.Requests;
 using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
+using BackendApp.Model.Enums;
 
 namespace BackendApp.Service
 {
-
-    public enum UpdateResult{
-        KeyAlreadyExists,
-        NotFound,
-        Ok
-    }
-
     public interface ILinkedOutUserService{
         public LinkedOutUser? GetUserByEmail(string email);
         public LinkedOutUser? GetUserById(ulong id);
@@ -77,7 +71,6 @@ namespace BackendApp.Service
             return true;
         }
     }
-
 }
 
 
