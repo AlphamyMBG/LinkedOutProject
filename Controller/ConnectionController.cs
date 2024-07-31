@@ -15,7 +15,7 @@ namespace BackendApp.Controller
     (IConnectionService connectionService) 
     : ControllerBase
     {
-        private readonly IConnectionService ConnectionService = ConnectionService;  
+        private readonly IConnectionService ConnectionService = connectionService;  
 
         [HttpPost]
         public IActionResult CreateConnection(Connection Connection)
