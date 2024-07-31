@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 namespace BackendApp.Model
 {
     public class LinkedOutJob
-    (   string jobTitle,
-        string description,
-        string requirements,
+    (   
         LinkedOutUser postedBy,
-        List<LinkedOutUser> interestedUsers 
-    ) : LinkedOutPostBase(postedBy, interestedUsers)
+        List<LinkedOutUser> interestedUsers,
+        DateTime postedAt,
+        string jobTitle,
+        string description,
+        string requirements
+    ) 
+    : LinkedOutPostBase(postedBy, interestedUsers, postedAt)
     {
         public string JobTitle {get; set;} = jobTitle;
         public string Description {get; set;} = description;

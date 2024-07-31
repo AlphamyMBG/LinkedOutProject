@@ -46,5 +46,23 @@ namespace BackendApp.Controller
             var Message = this.messageService.GetMessageById(id);
             return Message is not null ? this.Ok(Message) : this.NotFound();
         }
+
+        [Route("send/{senderId}/{receipientId}")]
+        [HttpPost]
+        public IActionResult Send(uint senderId, uint receipientId, string content)
+        {
+            return this.messageService.SendMessage(senderId, receipientId, content) ? this.Ok() : this.NotFound();
+        }
+
+        [Route("chat/{userAId}/{userBId}")]
+        [HttpGet]
+        public IActionResult GetChatHistory(uint userAId, uint userBId) 
+            => this.Ok(this.messageService.GetConversationBetween(userAId, userBId));
+
+        [Route("chat/{userAId}/{userBId}/{startAt}/{endAfter}")]
+        [HttpGet]
+        public IActionResult GetChatHistory(uint userAId, uint userBId, int startAt, int endAfter) 
+            => this.Ok(this.messageService.GetRangeOfConversationBetween(userAId, userBId, startAt, endAfter));
+
     }
 }

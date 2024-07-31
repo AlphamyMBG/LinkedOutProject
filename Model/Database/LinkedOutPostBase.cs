@@ -8,13 +8,15 @@ namespace BackendApp.Model
 {
     public class LinkedOutPostBase(
         LinkedOutUser postedBy, 
-        List<LinkedOutUser> interestedUsers
+        List<LinkedOutUser> interestedUsers,
+        DateTime postedAt
     )
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public ulong Id {get; set;}
         public LinkedOutUser PostedBy {get; set;} = postedBy;
         public List<LinkedOutUser> InterestedUsers { get; set; } = interestedUsers;
+        public DateTime PostedAt {get; set;} = postedAt;
         public void Update(LinkedOutPostBase postBase)
         {
             this.PostedBy = postBase.PostedBy;
