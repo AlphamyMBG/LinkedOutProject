@@ -11,50 +11,50 @@ namespace BackendApp.Service
     public interface ILinkedOutJobService
     {
 
-        public LinkedOutJob? GetJobById(ulong id);
+        public JobPost? GetJobById(ulong id);
         // public LinkedOutPost[] GetPostsByContent(string content);
         // public LinkedOutPost[] GetPostsOfUser(ulong id);
         // public LinkedOutPost[] GetPostPostsOfUserWithId(ulong id);
         // public LinkedOutPost[] GetAdPostsOfUserWithId(ulong id);
-        public LinkedOutJob[] GetAllJobs();
-        public bool AddJob(LinkedOutJob post);
+        public JobPost[] GetAllJobs();
+        public bool AddJob(JobPost post);
         public bool RemoveJob(ulong id);
-        public UpdateResult UpdateJob(ulong id, LinkedOutJob postContent);
-        public UpdateResult AddInterestedUser(ulong id, LinkedOutUser user);
+        public UpdateResult UpdateJob(ulong id, JobPost postContent);
+        public UpdateResult AddInterestedUser(ulong id, RegularUser user);
     
     }
     public class LinkedOutJobService(ApiContext context) : ILinkedOutJobService
     {
         private readonly ApiContext context = context;
         
-        public bool AddJob(LinkedOutJob job)
+        public bool AddJob(JobPost job)
         {
             if(this.GetJobById(job.Id) != null) return false;
-            this.context.LinkedOutJobs.Add(job);
+            this.context.JobPost.Add(job);
             this.context.SaveChanges();
             return true;
         }
 
-        public LinkedOutJob[] GetAllJobs()
-            => [.. this.context.LinkedOutJobs];
+        public JobPost[] GetAllJobs()
+            => [.. this.context.JobPost];
 
-        public LinkedOutJob? GetJobById(ulong id)
-            => this.context.LinkedOutJobs.FirstOrDefault(post => post.Id == id);
+        public JobPost? GetJobById(ulong id)
+            => this.context.JobPost.FirstOrDefault(post => post.Id == id);
 
         public bool RemoveJob(ulong id)
         {
-            LinkedOutJob? post = this.GetJobById(id);
+            JobPost? post = this.GetJobById(id);
             if(post == null) return false;
 
-            this.context.LinkedOutJobs.Remove(post);
+            this.context.JobPost.Remove(post);
             this.context.SaveChanges();
             return true;
         }
 
-        public UpdateResult UpdateJob(ulong id, LinkedOutJob JobContent)
+        public UpdateResult UpdateJob(ulong id, JobPost JobContent)
         {
             //Check if user exists
-            LinkedOutJob? jobInDb = this.GetJobById(id);
+            JobPost? jobInDb = this.GetJobById(id);
             if(jobInDb is null) return UpdateResult.NotFound;
 
             //Save new data
@@ -63,9 +63,9 @@ namespace BackendApp.Service
             return UpdateResult.Ok;
         }
 
-        public UpdateResult AddInterestedUser(ulong id, LinkedOutUser user)
+        public UpdateResult AddInterestedUser(ulong id, RegularUser user)
         {
-            LinkedOutJob? jobInDb = this.GetJobById(id);
+            JobPost? jobInDb = this.GetJobById(id);
             if(jobInDb is null) return UpdateResult.NotFound;
 
             //Save new data
@@ -74,9 +74,9 @@ namespace BackendApp.Service
             return UpdateResult.Ok;
         }
 
-        public UpdateResult RemoveInterestedUser(ulong id, LinkedOutUser user)
+        public UpdateResult RemoveInterestedUser(ulong id, RegularUser user)
         {
-            LinkedOutJob? jobInDb = this.GetJobById(id);
+            JobPost? jobInDb = this.GetJobById(id);
             if(jobInDb is null) return UpdateResult.NotFound;
 
             //Save new data

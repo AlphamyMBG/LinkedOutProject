@@ -12,15 +12,15 @@ namespace BackendApp.Service{
         public bool AddMessage(Message message);
         public bool RemoveMessage(ulong id);
         public UpdateResult UpdateMessage(ulong id, Message message);
-        public bool SendMessage(LinkedOutUser from, LinkedOutUser to, string content);
+        public bool SendMessage(RegularUser from, RegularUser to, string content);
         public bool SendMessage(uint from, uint to, string content);
         public Message[] GetRangeOfConversationBetween(uint userAId, uint userBId, int startAt, int endAfter);
     }
 
-    public class MessageService(ApiContext context, ILinkedOutUserService userService) : IMessageService
+    public class MessageService(ApiContext context, IRegularUserService userService) : IMessageService
     {
         private readonly ApiContext context = context;
-        private readonly ILinkedOutUserService userService = userService;
+        private readonly IRegularUserService userService = userService;
         public bool AddMessage(Message message)
         {
             if(this.GetMessageById(message.Id) is not null) return false;
@@ -96,7 +96,7 @@ namespace BackendApp.Service{
             return UpdateResult.Ok;
         }
 
-        public bool SendMessage(LinkedOutUser from, LinkedOutUser to, string content)
+        public bool SendMessage(RegularUser from, RegularUser to, string content)
         {
             var message = new Message
             (

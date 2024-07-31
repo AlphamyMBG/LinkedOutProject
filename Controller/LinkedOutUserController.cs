@@ -12,15 +12,15 @@ namespace BackendApp.Controllers
     [Route("api/[Controller]")]
     [ApiController]
     public class LinkedOutUserController(
-        ILinkedOutUserService userService
+        IRegularUserService userService
     ) : ControllerBase
     {
-        private readonly ILinkedOutUserService linkedOutUserService = userService;
+        private readonly IRegularUserService linkedOutUserService = userService;
 
         [Route("register")]
         [HttpPost]
         public IActionResult Register( RegisterRequest request ){
-            LinkedOutUser newUser = new(
+            RegularUser newUser = new(
                 email: request.Email,
                 passwordHash: request.Password + "AAA",
                 name: request.Name,
@@ -36,14 +36,14 @@ namespace BackendApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(LinkedOutUser user){
+        public IActionResult Create(RegularUser user){
             bool added = this.linkedOutUserService.AddUser(user);
             return added ? new JsonResult(this.Ok(user.Id)) : new JsonResult(this.Conflict());
         }
 
         [Route("{id}")]
         [HttpPost]
-        public IActionResult Update(ulong id, LinkedOutUser user)
+        public IActionResult Update(ulong id, RegularUser user)
             => this.linkedOutUserService.Update(id, user) switch
             {
                 UpdateResult.KeyAlreadyExists => new JsonResult(this.Conflict()),    

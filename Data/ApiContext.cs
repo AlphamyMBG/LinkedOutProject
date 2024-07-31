@@ -9,9 +9,10 @@ namespace BackendApp.Data;
 
 public class ApiContext(DbContextOptions<ApiContext> options) : DbContext(options)
 {
-    public DbSet<LinkedOutUser> LinkedOutUsers {get; set;}
-    public DbSet<LinkedOutPost> LinkedOutPosts {get; set;}
-    public DbSet<LinkedOutJob> LinkedOutJobs {get; set;}
+    public DbSet<RegularUser> RegularUsers {get; set;}
+    public DbSet<Post> Posts {get; set;}
+    public DbSet<JobPost> JobPost {get; set;}
     public DbSet<Notification> Notifications {get; set;}
     public DbSet<Message> Messages {get; set;}
+    public DbSet<Connection> Connections {get; set;}
 }

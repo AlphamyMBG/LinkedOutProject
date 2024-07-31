@@ -15,12 +15,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<ILinkedOutUserService, LinkedOutUserService>();
+builder.Services.AddSingleton<IRegularUserService, RegularUserService>();
 builder.Services.AddSingleton<ILinkedOutPostService, LinkedOutPostService>();
 builder.Services.AddSingleton<ILinkedOutJobService, LinkedOutJobService>();
 builder.Services.AddSingleton<INotificationService, NotificationService>();
 builder.Services.AddSingleton<IMessageService, MessageService>();
 builder.Services.AddSingleton<IInterestService, InterestService>();
+builder.Services.AddSingleton<IConnectionService, ConnectionService>();
 
 var app = builder.Build();
 

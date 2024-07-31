@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace BackendApp.Model
 {
 
-    public class LinkedOutPost(
-        LinkedOutUser postedBy,
-        List<LinkedOutUser> interestedUsers,
+    public class Post(
+        RegularUser postedBy,
+        List<RegularUser> interestedUsers,
         DateTime postedAt,
         string content,
-        List<LinkedOutPost> replies
+        List<Post> replies
     ) : LinkedOutPostBase(postedBy, interestedUsers, postedAt)
     {
         public string Content { get; set; } = content;
-        public List<LinkedOutPost> Replies { get; set; } = replies;
-        public void Update( LinkedOutPost post ){
+        public List<Post> Replies { get; set; } = replies;
+        public void Update( Post post ){
             this.Id = post.Id;
             this.Content = post.Content;
             this.Replies = [.. post.Replies];

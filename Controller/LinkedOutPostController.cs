@@ -22,12 +22,12 @@ namespace BackendApp.Controller
         private readonly IInterestService interestService = interestService;
 
         [HttpPost]
-        public IActionResult CreatePost(LinkedOutPost post)
+        public IActionResult CreatePost(Post post)
             => this.postService.AddPost(post) ? this.Ok(post.Id) : this.Conflict();
         
         [Route("{id}")]
         [HttpPost]
-        public IActionResult UpdatePost(ulong id, LinkedOutPost post)
+        public IActionResult UpdatePost(ulong id, Post post)
             => this.postService.UpdatePost(id, post) switch
             {
                 UpdateResult.KeyAlreadyExists => this.Conflict(),

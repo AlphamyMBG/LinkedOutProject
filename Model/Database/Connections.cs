@@ -6,27 +6,27 @@ using System.Threading.Tasks;
 
 namespace BackendApp.Model
 {
-    public class Message
+    public class Connection
     (
-        string content,
         RegularUser sentBy, 
         RegularUser sentTo, 
+        bool accepted,
         DateTime timestamp
     )
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public ulong Id {get; set;}
-        public string Content {get; set;} = content;
         public RegularUser SentBy {get; set;} = sentBy;
         public RegularUser SentTo {get; set;} = sentTo;
         public DateTime Timestamp {get; set;} = timestamp;
+        public bool Accepted {get; set;} = accepted;
     
-        public void Update(Message message)
+        public void Update(Connection connection)
         {
-            this.Content = message.Content;
-            this.SentBy = message.SentBy;
-            this.SentTo = message.SentTo;
-            this.Timestamp = message.Timestamp;
+            this.SentBy = connection.SentBy;
+            this.SentTo = connection.SentTo;
+            this.Timestamp = connection.Timestamp;
+            this.Accepted = connection.Accepted;
         }
 
     }

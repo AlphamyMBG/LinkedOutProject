@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BackendApp.Model
 {
-    public class AppUser
+    public class AppUserBase
     (
         string email,
         string passwordHash

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BackendApp.Model
 {
-    public class LinkedOutJob
+    public class JobPost
     (   
-        LinkedOutUser postedBy,
-        List<LinkedOutUser> interestedUsers,
+        RegularUser postedBy,
+        List<RegularUser> interestedUsers,
         DateTime postedAt,
         string jobTitle,
         string description,
@@ -21,7 +21,7 @@ namespace BackendApp.Model
         public string Description {get; set;} = description;
         public string Requirements {get; set;} = requirements;
 
-        public void Update(LinkedOutJob job) {
+        public void Update(JobPost job) {
             base.Update(job);
             this.PostedBy = job.PostedBy;
             this.InterestedUsers = job.InterestedUsers;

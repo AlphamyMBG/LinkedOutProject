@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BackendApp.Model
 {
-    public class LinkedOutUser(
+    public class RegularUser(
         string email,
         string passwordHash,
         string name,
@@ -16,7 +16,7 @@ namespace BackendApp.Model
         string currentPosition,
         List<string> abilities,
         string? imagePath
-    ) : AppUser(email, passwordHash)
+    ) : AppUserBase(email, passwordHash)
     
     {
         public string Name { get; set; } = name;
@@ -29,7 +29,7 @@ namespace BackendApp.Model
 
         //TODO: Add employer
 
-        public void Update(LinkedOutUser linkedOutUser){
+        public void Update(RegularUser linkedOutUser){
             this.Email = linkedOutUser.Email;
             this.PasswordHash = linkedOutUser.PasswordHash + "AAA";
             this.Name = linkedOutUser.Name;

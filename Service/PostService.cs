@@ -11,48 +11,48 @@ namespace BackendApp.Service
     public interface ILinkedOutPostService
     {
 
-        public LinkedOutPost? GetPostById(ulong id);
+        public Post? GetPostById(ulong id);
         // public LinkedOutPost[] GetPostsByContent(string content);
         // public LinkedOutPost[] GetPostsOfUser(ulong id);
         // public LinkedOutPost[] GetPostPostsOfUserWithId(ulong id);
         // public LinkedOutPost[] GetAdPostsOfUserWithId(ulong id);
-        public LinkedOutPost[] GetAllPosts();
-        public bool AddPost(LinkedOutPost post);
+        public Post[] GetAllPosts();
+        public bool AddPost(Post post);
         public bool RemovePost(ulong id);
-        public UpdateResult UpdatePost(ulong id, LinkedOutPost postContent);
+        public UpdateResult UpdatePost(ulong id, Post postContent);
     
     }
     public class LinkedOutPostService(ApiContext context) : ILinkedOutPostService
     {
         private readonly ApiContext context = context;
-        public bool AddPost(LinkedOutPost post)
+        public bool AddPost(Post post)
         {
             if(this.GetPostById(post.Id) != null) return false;
-            this.context.LinkedOutPosts.Add(post);
+            this.context.Posts.Add(post);
             this.context.SaveChanges();
             return true;
         }
 
-        public LinkedOutPost[] GetAllPosts()
-            => this.context.LinkedOutPosts.ToArray();
+        public Post[] GetAllPosts()
+            => this.context.Posts.ToArray();
 
-        public LinkedOutPost? GetPostById(ulong id)
-            => this.context.LinkedOutPosts.FirstOrDefault(post => post.Id == id);
+        public Post? GetPostById(ulong id)
+            => this.context.Posts.FirstOrDefault(post => post.Id == id);
 
         public bool RemovePost(ulong id)
         {
-            LinkedOutPost? post = this.GetPostById(id);
+            Post? post = this.GetPostById(id);
             if(post == null) return false;
 
-            this.context.LinkedOutPosts.Remove(post);
+            this.context.Posts.Remove(post);
             this.context.SaveChanges();
             return true;
         }
 
-        public UpdateResult UpdatePost(ulong id, LinkedOutPost postContent)
+        public UpdateResult UpdatePost(ulong id, Post postContent)
         {
             //Check if user exists
-            LinkedOutPost? postInDb = this.GetPostById(id);
+            Post? postInDb = this.GetPostById(id);
             if(postInDb is null) return UpdateResult.NotFound;
 
             //Save new data

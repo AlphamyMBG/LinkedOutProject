@@ -18,12 +18,12 @@ namespace BackendApp.Controller
         private readonly IInterestService interestService = interestService;
 
         [HttpPost]
-        public IActionResult CreateJob(LinkedOutJob job)
+        public IActionResult CreateJob(JobPost job)
             => this.jobService.AddJob(job) ? this.Ok(job.Id) : this.Conflict();
         
         [Route("{id}")]
         [HttpPost]
-        public IActionResult UpdateJob(ulong id, LinkedOutJob job)
+        public IActionResult UpdateJob(ulong id, JobPost job)
             => this.jobService.UpdateJob(id, job) switch
             {
                 UpdateResult.KeyAlreadyExists => this.Conflict(),
