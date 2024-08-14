@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using BackendApp.Data;
 using BackendApp.Controllers;
 using BackendApp.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +13,23 @@ builder.Services.AddDbContext<ApiContext>(
     opt => opt.UseInMemoryDatabase("LinkOnDb"), 
     contextLifetime: ServiceLifetime.Singleton
 );
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(
+        x =>
+        {
+            x.TokenValidationParameters = new TokenValidationParameters
+            {   ValidIssuer = "https://localhost:8080",
+                ValidAudience = "https://localhost:5432",
+                IssuerSigningKey = new SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes("ThisIsNotSafeDoItSaferAtSomeOtherPoint")),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true
+            };
+        }
+    );
 builder.Services.AddControllers();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

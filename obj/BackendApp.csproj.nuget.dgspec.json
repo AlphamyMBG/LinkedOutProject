@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "G:\\Programs\\C#\\BackendApp\\BackendApp.csproj": {}
+    "C:\\Users\\USER\\Desktop\\LinkedOut\\BackendApp.csproj": {}
   },
   "projects": {
-    "G:\\Programs\\C#\\BackendApp\\BackendApp.csproj": {
+    "C:\\Users\\USER\\Desktop\\LinkedOut\\BackendApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\Programs\\C#\\BackendApp\\BackendApp.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\LinkedOut\\BackendApp.csproj",
         "projectName": "BackendApp",
-        "projectPath": "G:\\Programs\\C#\\BackendApp\\BackendApp.csproj",
-        "packagesPath": "C:\\Users\\PeePeePooPoo\\.nuget\\packages\\",
-        "outputPath": "G:\\Programs\\C#\\BackendApp\\obj\\",
+        "projectPath": "C:\\Users\\USER\\Desktop\\LinkedOut\\BackendApp.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USER\\Desktop\\LinkedOut\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\PeePeePooPoo\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -47,7 +45,7 @@
           "dependencies": {
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[8.0.7, )"
+              "version": "[8.0.8, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
@@ -89,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
