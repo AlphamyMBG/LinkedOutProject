@@ -29,5 +29,9 @@ namespace BackendApp.Model
             this.Accepted = connection.Accepted;
         }
 
+        public bool IsBetween(RegularUser userA, RegularUser userB)
+            => this.SentBy.Id == userA.Id && this.SentTo.Id == userB.Id
+                || this.SentBy.Id == userB.Id && this.SentTo.Id == userA.Id;
+
     }
 }

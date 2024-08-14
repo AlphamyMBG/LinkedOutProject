@@ -6,8 +6,8 @@ namespace BackendApp.Service{
     public interface IConnectionService {
         public Connection? GetConnectionById(ulong id);
         public Connection[] GetAllConnections();
-        public Connection[] GetAllConnectionsSentBy(uint userId);
-        public Connection[] GetAllConnectionsSentTo(uint userId);
+        public Connection[] GetAllConnectionsSentBy(ulong userId);
+        public Connection[] GetAllConnectionsSentTo(ulong userId);
         public bool AddConnection(Connection Connection);
         public bool RemoveConnection(ulong id);
         public UpdateResult UpdateConnection(ulong id, Connection Connection);
@@ -32,18 +32,31 @@ namespace BackendApp.Service{
         public Connection[] GetAllConnections()
             => [.. this.context.Connections];
         
-        public Connection[] GetAllConnectionsSentBy(uint userId)
+        public Connection[] GetAllConnectionsSentBy(ulong userId)
             => this.context.Connections
                 .Where(Connection => Connection.SentBy.Id == userId)
                 .OrderBy(Connection => Connection.Timestamp)
                 .ToArray();
-        public Connection[] GetAllConnectionsSentTo(uint userId)
+        public Connection[] GetAllConnectionsSentTo(ulong userId)
             => this.context.Connections
                 .Where(Connection => Connection.SentTo.Id == userId)
                 .OrderBy(Connection => Connection.Timestamp)
                 .ToArray();
         
+        public bool ConnectionHasBeenRequested(RegularUser by, RegularUser to)
+        {
+            return this.GetAllConnectionsSentBy(by.Id)
+                .FirstOrDefault(user => user.Id == to.Id) is not null;
+        }
 
+        public bool AreConnected(RegularUser userA, RegularUser userB)
+        {
+            return this.context.Connections
+                .Where(
+                    con => con.IsBetween(userA, userB) && con.Accepted
+                )
+                .Any();
+        }
         public Connection? GetConnectionById(ulong id)
             => this.context.Connections.FirstOrDefault( 
                 Connection => Connection.Id == id 
@@ -71,7 +84,11 @@ namespace BackendApp.Service{
         }
 
         public bool SendConnectionRequest(RegularUser from, RegularUser to)
-        {
+        {   
+            if(
+                this.ConnectionHasBeenRequested(from, to)
+                || this.ConnectionHasBeenRequested(to, from)
+            ) return false;
             var Connection = new Connection
             (
                 sentBy: from,
