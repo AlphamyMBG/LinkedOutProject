@@ -25,6 +25,11 @@ namespace BackendApp.Controller
         public IActionResult CreatePost(Post post)
             => this.postService.AddPost(post) ? this.Ok(post.Id) : this.Conflict();
         
+        [Route("create/{creatorId}")]
+        [HttpPost]
+        public IActionResult CreatePost(ulong creatorId, string content)
+            => this.postService.AddPost(content, creatorId) ? this.Ok() : this.Conflict();
+        
         [Route("{id}")]
         [HttpPost]
         public IActionResult UpdatePost(ulong id, Post post)

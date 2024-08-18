@@ -65,10 +65,30 @@ namespace BackendApp.Service
         public bool RemoveUser(ulong id){
             RegularUser? user = this.GetUserById(id);
             if( user is null ) return false;
+            this.RemoveDataAssociatedWith(user);
+            return true;
+        }
+
+        private void RemoveDataAssociatedWith(RegularUser user)
+        {
+            var connectionsToRemove = this.context.Connections
+                .Where( con => con.SentBy == user || con.SentTo == user);
+            this.context.Connections.RemoveRange(connectionsToRemove);
+            var postsToRemove = this.context.Posts
+                .Where(post => post.PostedBy == user);
+            this.context.Posts.RemoveRange(postsToRemove);
+            var jobsToRemove = this.context.JobPost
+                .Where(job => job.PostedBy == user);
+            this.context.JobPost.RemoveRange(jobsToRemove);
+            var messagesToRemove = this.context.Messages
+                .Where(message => message.SentBy == user || message.SentTo == user);
+            this.context.Messages.RemoveRange(messagesToRemove);            
+            var notificationsToRemove = this.context.Notifications
+                .Where(notification => notification.ToUser == user);
+            this.context.Notifications.RemoveRange(notificationsToRemove);
 
             this.context.RegularUsers.Remove(user);
             this.context.SaveChanges();
-            return true;
         }
     }
 }

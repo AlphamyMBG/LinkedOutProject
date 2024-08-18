@@ -84,3 +84,11 @@ C:\Users\USER\Desktop\LinkedOut\obj\Debug\net8.0\refint\BackendApp.dll
 C:\Users\USER\Desktop\LinkedOut\obj\Debug\net8.0\BackendApp.pdb
 C:\Users\USER\Desktop\LinkedOut\obj\Debug\net8.0\BackendApp.genruntimeconfig.cache
 C:\Users\USER\Desktop\LinkedOut\obj\Debug\net8.0\ref\BackendApp.dll
+G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+G:\Programs\C#\BackendApp\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+G:\Programs\C#\BackendApp\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll

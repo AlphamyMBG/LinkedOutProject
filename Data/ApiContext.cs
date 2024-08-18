@@ -9,10 +9,10 @@ namespace BackendApp.Data;
 
 public class ApiContext(DbContextOptions<ApiContext> options) : DbContext(options)
 {
-    public DbSet<RegularUser> RegularUsers {get; set;}
-    public DbSet<Post> Posts {get; set;}
-    public DbSet<JobPost> JobPost {get; set;}
-    public DbSet<Notification> Notifications {get; set;}
-    public DbSet<Message> Messages {get; set;}
-    public DbSet<Connection> Connections {get; set;}
+    public DbSet<RegularUser> RegularUsers {get; private set;}
+    public DbSet<Post> Posts {get; private set;}
+    public DbSet<JobPost> JobPost {get; private set;}
+    public DbSet<Notification> Notifications {get; private set;}
+    public DbSet<Message> Messages {get; private set;}
+    public DbSet<Connection> Connections {get; private set;}
 }
