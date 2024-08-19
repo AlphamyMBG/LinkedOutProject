@@ -25,6 +25,7 @@ namespace BackendApp.Service
 
         public bool AddUser(RegularUser user)
         {
+            if(this.AdminWithEmailExists(user.Email)) return false;
             if(this.GetUserByEmail(user.Email) != null) return false;
             this.context.RegularUsers.Add(user);
             this.context.SaveChanges();
@@ -48,6 +49,10 @@ namespace BackendApp.Service
 
         public UpdateResult Update(ulong id, RegularUser user)
         {
+            //Check if admin with same email exists
+            if(this.AdminWithEmailExists(user.Email)) 
+                return UpdateResult.KeyAlreadyExists;
+
             //Check if user exists
             RegularUser? userInDb = this.GetUserById(id);
             if(userInDb is null) return UpdateResult.NotFound;
@@ -67,6 +72,14 @@ namespace BackendApp.Service
             if( user is null ) return false;
             this.RemoveDataAssociatedWith(user);
             return true;
+        }
+
+        private bool AdminWithEmailExists(string email)
+        {
+            //Check if admin with same email exists
+            AppUser? admin = this.context.AdminUsers
+                .FirstOrDefault(admin => admin.Email == email);
+            return admin is not null;
         }
 
         private void RemoveDataAssociatedWith(RegularUser user)

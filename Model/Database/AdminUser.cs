@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace BackendApp.Model
 {
-    // public class LinkedOutAdmin : AppUser{
-        
-    // }
+    public class AdminUser
+    (string email, string passwordHash) 
+    : AppUser
+    (email: email, passwordHash: passwordHash)
+    {}
 }

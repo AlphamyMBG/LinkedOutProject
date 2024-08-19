@@ -6,6 +6,7 @@ using BackendApp.Model.Requests;
 using Newtonsoft.Json;
 using BackendApp.Service;
 using BackendApp.Model.Enums;
+using BackendApp.auth;
 
 namespace BackendApp.Controllers
 {
@@ -22,7 +23,7 @@ namespace BackendApp.Controllers
         public IActionResult Register( RegisterRequest request ){
             RegularUser newUser = new(
                 email: request.Email,
-                passwordHash: request.Password + "AAA",
+                passwordHash: EncryptionUtility.HashPassword(request.Password),
                 name: request.Name,
                 surname: request.Surname,
                 phoneNumber: request.PhoneNumber,
@@ -60,13 +61,19 @@ namespace BackendApp.Controllers
 
         [HttpGet]
         public IActionResult GetAll(){
-            return new JsonResult(this.linkedOutUserService.GetAllUsers());
+            var users = this.linkedOutUserService.GetAllUsers();
+            Array.ForEach(
+                users, 
+                a => a.PasswordHash = ""
+            );
+            return new JsonResult(users);
         }
 
         [Route("{id}")]
         [HttpGet]
         public IActionResult Get(ulong id){
             var user = this.linkedOutUserService.GetUserById(id);
+            if(user is not null) user.PasswordHash = "";
             return new JsonResult(user is not null ? this.Ok(user) : this.NotFound());
         }
     }

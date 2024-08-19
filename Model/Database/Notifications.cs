@@ -9,6 +9,10 @@ namespace BackendApp.Model
     public class Notification
     (string content, bool read, RegularUser toUser)
     {
+        public Notification(string content, bool read)
+        : this(content, read, new("","","","","","","",[],""))
+        {}
+        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public ulong Id {get; set;}
         public string Content {get; private set;} = content;

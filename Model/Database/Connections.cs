@@ -14,6 +14,17 @@ namespace BackendApp.Model
         DateTime timestamp
     )
     {
+        /// <summary>
+        /// EF constructor
+        /// </summary>
+        private Connection(bool accepted, DateTime timestamp) : this(
+            new("","","","","","","",[],""),
+            new("","","","","","","",[],""),
+            accepted, 
+            timestamp
+        )
+        {}
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public ulong Id {get; set;}
         public RegularUser SentBy {get; set;} = sentBy;

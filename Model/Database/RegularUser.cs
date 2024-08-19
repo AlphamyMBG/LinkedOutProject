@@ -16,7 +16,7 @@ namespace BackendApp.Model
         string currentPosition,
         List<string> abilities,
         string? imagePath
-    ) : AppUserBase(email, passwordHash)
+    ) : AppUser(email, passwordHash)
     
     {
         public string Name { get; set; } = name;
@@ -25,7 +25,7 @@ namespace BackendApp.Model
         public string Location { get; set; } = location;
         public string CurrentPosition {get; set;} = currentPosition;
         public List<string> Abilities {get; set;} = abilities;
-        public string? ImageName { get; set; } = imagePath;
+        public string? ImagePath { get; set; } = imagePath;
 
         //TODO: Add employer
 
@@ -36,7 +36,7 @@ namespace BackendApp.Model
             this.Surname = linkedOutUser.Surname;
             this.PhoneNumber = linkedOutUser.PhoneNumber;
             this.Location = linkedOutUser.Location;
-            this.ImageName = linkedOutUser.ImageName;
+            this.ImagePath = linkedOutUser.ImagePath;
         }
     }
 }

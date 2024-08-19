@@ -5,31 +5,36 @@ using BackendApp.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using BackendApp.auth;
+using BackendApp.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<ApiContext>(
-    opt => opt.UseInMemoryDatabase("LinkOnDb"), 
+    opt => opt.UseInMemoryDatabase("LinkedOutDb"), 
     contextLifetime: ServiceLifetime.Singleton
 );
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(
-        x =>
+    .AddJwtBearer( options =>
         {
-            x.TokenValidationParameters = new TokenValidationParameters
-            {   ValidIssuer = "https://localhost:8080",
-                ValidAudience = "https://localhost:5432",
-                IssuerSigningKey = new SymmetricSecurityKey
-                    (Encoding.UTF8.GetBytes("ThisIsNotSafeDoItSaferAtSomeOtherPoint")),
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true
-            };
+            options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] 
+                            ?? throw new Exception("Key has not been set up.")))
+                    };
         }
     );
-builder.Services.AddAuthorization();
+// builder.Services.AddMvc();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -41,6 +46,8 @@ builder.Services.AddSingleton<INotificationService, NotificationService>();
 builder.Services.AddSingleton<IMessageService, MessageService>();
 builder.Services.AddSingleton<IInterestService, InterestService>();
 builder.Services.AddSingleton<IConnectionService, ConnectionService>();
+builder.Services.AddSingleton<IAdminUserService, AdminUserService>();
+builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
 
 var app = builder.Build();
 
@@ -55,6 +62,10 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthentication();
 app.MapControllers();
+app.Services.GetService<ApiContext>()?
+    .AdminUsers
+    .Add(new AdminUser("a", EncryptionUtility.HashPassword("bigchungusplayer6969f12")));
 app.Run();
+
 
 

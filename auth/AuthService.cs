@@ -1,0 +1,79 @@
+
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using BackendApp.Data;
+using BackendApp.Model;
+using BackendApp.Model.Requests;
+using BackendApp.Service;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.IdentityModel.Tokens;
+
+namespace BackendApp.auth;
+
+public interface IAuthenticationService
+{
+    public AppUser? Authenticate(TokenGenerationRequest loginRequest);
+    public string GenerateToken(
+        AppUser user,
+        string secret, 
+        string issuer, 
+        string audience,
+        TimeSpan expiresAfter
+    );
+
+}
+
+public class AuthenticationService 
+(IRegularUserService userService, IAdminUserService adminService, ApiContext context)
+: IAuthenticationService
+{
+    private readonly IRegularUserService userService = userService;
+    private readonly IAdminUserService adminService = adminService;
+    private readonly ApiContext context = context;
+    public AppUser? Authenticate(TokenGenerationRequest loginRequest)
+    {
+        
+        var adminUser = this.adminService.GetAdminByEmail(loginRequest.Email);
+        if(
+            adminUser is not null 
+            && EncryptionUtility.HashPassword(loginRequest.Password) == adminUser.PasswordHash
+        ) return adminUser;
+
+        var user = this.userService.GetUserByEmail(loginRequest.Email);
+        if(
+            user is not null 
+            && EncryptionUtility.HashPassword(loginRequest.Password) == user.PasswordHash
+        ) return user;
+
+        return null;
+    }
+
+    public string GenerateToken(
+        AppUser user, 
+        string secret, 
+        string issuer, 
+        string audience,
+        TimeSpan expiresAfter
+    )
+    {
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.Role, user is AdminUser ? "admin" : "regular")
+        };
+
+        var token = new JwtSecurityToken(
+            issuer,
+            audience,
+            claims,
+            expires: DateTime.Now.Add(expiresAfter),
+            signingCredentials: credentials
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+}

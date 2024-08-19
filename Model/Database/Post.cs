@@ -15,6 +15,11 @@ namespace BackendApp.Model
         List<Post> replies
     ) : LinkedOutPostBase(postedBy, interestedUsers, postedAt)
     {
+        private Post(DateTime postedAt, string content)
+        : this
+        (new("","","","","","","",[],""),[], postedAt, content, [])
+        {}
+
         public string Content { get; set; } = content;
         public List<Post> Replies { get; set; } = replies;
         public void Update( Post post ){

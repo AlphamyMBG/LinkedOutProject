@@ -14,6 +14,10 @@ namespace BackendApp.Model
         DateTime timestamp
     )
     {
+        private Message(string content, DateTime timestamp)
+        : this(content, new("","","","","","","",[],""), new("","","","","","","",[],""), timestamp)
+        {}
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public ulong Id {get; set;}
         public string Content {get; set;} = content;
