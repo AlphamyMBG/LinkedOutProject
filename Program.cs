@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using BackendApp.auth;
 using BackendApp.Model;
 
+var corsPolicyName = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -34,6 +36,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     };
         }
     );
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: corsPolicyName,
+        policy  =>
+        {
+            policy.WithOrigins("http://localhost:3000/");
+        }
+    );
+});
 // builder.Services.AddMvc();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -59,8 +72,9 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection(); TODO: Add later
+app.UseCors(corsPolicyName);
 app.UseAuthentication();
-app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.Services.GetService<ApiContext>()?
     .AdminUsers
