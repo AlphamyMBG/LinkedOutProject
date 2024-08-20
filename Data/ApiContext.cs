@@ -17,4 +17,16 @@ public class ApiContext(DbContextOptions<ApiContext> options) : DbContext(option
     public DbSet<Notification> Notifications {get; private set;}
     public DbSet<Message> Messages {get; private set;}
     public DbSet<Connection> Connections {get; private set;}
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        // var admin = new AdminUser("a", EncryptionUtility.HashPassword("bigchungusplayer6969f12"))
+        // {
+        //     Id = 1
+        // };
+        // modelBuilder.Entity<AdminUser>().HasData(
+        //     admin
+        // );
+    }
 }

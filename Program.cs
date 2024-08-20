@@ -8,6 +8,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using BackendApp.auth;
 using BackendApp.Model;
+using Microsoft.OpenApi.Models;
 
 var corsPolicyName = "_myAllowSpecificOrigins";
 
@@ -20,20 +21,21 @@ builder.Services.AddDbContext<ApiContext>(
 );
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer( options =>
+    .AddJwtBearer( 
+        options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                        ValidAudience = builder.Configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] 
-                            ?? throw new Exception("Key has not been set up.")))
-                    };
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] 
+                        ?? throw new Exception("Key has not been set up.")))
+                };
         }
     );
 
@@ -51,7 +53,30 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen( setup =>
+{
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        BearerFormat = "JWT",
+        Name = "JWT Authentication",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+    setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+    setup.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+
+});
 builder.Services.AddSingleton<IRegularUserService, RegularUserService>();
 builder.Services.AddSingleton<ILinkedOutPostService, LinkedOutPostService>();
 builder.Services.AddSingleton<ILinkedOutJobService, LinkedOutJobService>();
@@ -76,9 +101,12 @@ app.UseCors(corsPolicyName);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.Services.GetService<ApiContext>()?
-    .AdminUsers
-    .Add(new AdminUser("a", EncryptionUtility.HashPassword("bigchungusplayer6969f12")));
+
+app.Services.GetService<ApiContext>()?.
+    AdminUsers
+    .Add(new AdminUser("a@emailer.com", EncryptionUtility.HashPassword("bigchungusplayer6969f12")){ Id = 1 });
+app.Services.GetService<ApiContext>()?.SaveChanges();  
+
 app.Run();
 
 

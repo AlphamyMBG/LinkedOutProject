@@ -16,21 +16,19 @@ public interface IAuthenticationService
     public AppUser? Authenticate(TokenGenerationRequest loginRequest);
     public string GenerateToken(
         AppUser user,
-        string secret, 
-        string issuer, 
-        string audience,
         TimeSpan expiresAfter
     );
 
 }
 
 public class AuthenticationService 
-(IRegularUserService userService, IAdminUserService adminService, ApiContext context)
+(IRegularUserService userService, IAdminUserService adminService, IConfiguration config, ApiContext context)
 : IAuthenticationService
 {
     private readonly IRegularUserService userService = userService;
     private readonly IAdminUserService adminService = adminService;
     private readonly ApiContext context = context;
+    private readonly IConfiguration configuration = config;
     public AppUser? Authenticate(TokenGenerationRequest loginRequest)
     {
         
@@ -51,12 +49,11 @@ public class AuthenticationService
 
     public string GenerateToken(
         AppUser user, 
-        string secret, 
-        string issuer, 
-        string audience,
         TimeSpan expiresAfter
     )
     {
+        var secret =  this.configuration["Jwt:Key"] ?? throw new Exception("Token Key has not been set within config.");
+        
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
@@ -67,8 +64,8 @@ public class AuthenticationService
         };
 
         var token = new JwtSecurityToken(
-            issuer,
-            audience,
+            this.configuration["Jwt:Issuer"] ?? throw new Exception("Token Issuer has not been set within config."),
+            this.configuration["Jwt:Audience"] ?? throw new Exception("Token Audience has not been set within config."),
             claims,
             expires: DateTime.Now.Add(expiresAfter),
             signingCredentials: credentials

@@ -15,10 +15,10 @@ namespace BackendApp.auth
     [Route("api/[Controller]")]
     [ApiController]
     public class AuthController
-    (IConfiguration config, IAuthenticationService authenticationService) 
+    (IAuthenticationService authenticationService) 
     : ControllerBase
     {
-        private readonly IConfiguration configuration = config;
+        
         private readonly IAuthenticationService authenticationService = authenticationService;
         private readonly TimeSpan tokenLifeSpan = TimeSpan.FromHours(4);
 
@@ -31,14 +31,11 @@ namespace BackendApp.auth
             {
                 var token = this.authenticationService.GenerateToken(
                     user,
-                    this.configuration["Jwt:Key"] ?? throw new Exception("Token Key has not been set within config."),
-                    this.configuration["Jwt:Issuer"] ?? throw new Exception("Token Issuer has not been set within config."),
-                    this.configuration["Jwt:Audience"] ?? throw new Exception("Token Audience has not been set within config."),
                     this.tokenLifeSpan
                 );
                 return Ok(token);
             }
-            return NotFound("User not found.");
+            return NotFound("User Not Found");
         }
     }
 }

@@ -7,12 +7,13 @@ using Newtonsoft.Json;
 using BackendApp.Service;
 using BackendApp.Model.Enums;
 using BackendApp.auth;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackendApp.Controllers
 {
     [Route("api/[Controller]")]
     [ApiController]
-    public class LinkedOutUserController(
+    public class UserController(
         IRegularUserService userService
     ) : ControllerBase
     {
@@ -20,6 +21,7 @@ namespace BackendApp.Controllers
 
         [Route("register")]
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Register( RegisterRequest request ){
             RegularUser newUser = new(
                 email: request.Email,
@@ -55,6 +57,7 @@ namespace BackendApp.Controllers
 
         [Route("{id}")]
         [HttpDelete]
+        [Authorize]
         public IActionResult Delete(ulong id)
             => this.linkedOutUserService.RemoveUser(id) ? new JsonResult(this.Ok()) : new JsonResult(this.NotFound());
         

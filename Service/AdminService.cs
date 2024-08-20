@@ -8,6 +8,7 @@ namespace BackendApp.Service;
 public interface IAdminUserService
 {
     AdminUser? GetAdminByEmail(string email); 
+    AdminUser[] AllAdmins();
 }
 
 public sealed class AdminUserService 
@@ -19,4 +20,6 @@ public sealed class AdminUserService
     {
         return this.context.AdminUsers.FirstOrDefault( admin => admin.Email == email );
     }
+
+    public AdminUser[] AllAdmins() => this.context.AdminUsers.ToArray(); 
 }
