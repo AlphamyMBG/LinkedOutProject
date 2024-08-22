@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
 using BackendApp.Model;
 using BackendApp.Model.Enums;
 using BackendApp.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static BackendApp.Auth.AuthConstants.PolicyNames;
+
 
 namespace BackendApp.Controller
 {
@@ -18,11 +19,13 @@ namespace BackendApp.Controller
         private readonly IInterestService interestService = interestService;
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateJob(JobPost job)
             => this.jobService.AddJob(job) ? this.Ok(job.Id) : this.Conflict();
         
         [Route("{id}")]
         [HttpPost]
+        [Authorize]
         public IActionResult UpdateJob(ulong id, JobPost job)
             => this.jobService.UpdateJob(id, job) switch
             {
@@ -34,15 +37,18 @@ namespace BackendApp.Controller
         
         [Route("{id}")]
         [HttpDelete]
+        [Authorize]
         public IActionResult Delete(ulong id)
             => this.jobService.RemoveJob(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
             => this.Ok(this.jobService.GetAllJobs());
 
         [Route("{id}")]
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Get(ulong id)
         {
             var user = this.jobService.GetJobById(id);
@@ -51,6 +57,7 @@ namespace BackendApp.Controller
 
         [Route("{jobId}/interest/set/{userId}")]
         [HttpPost]
+        [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
         public IActionResult DeclareInterest(uint userId, uint jobId)
         {
             return this.interestService.DeclareInterestForJob(userId, jobId).ToResultObject(this);
@@ -58,6 +65,7 @@ namespace BackendApp.Controller
 
         [Route("{jobId}/interest/unset/{userId}")]
         [HttpPost]
+        [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
         public IActionResult RemoveInterest(uint userId, uint jobId)
         {
             return this.interestService.RemoveInterestForJob(userId, jobId).ToResultObject(this);

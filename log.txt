@@ -1,0 +1,15 @@
+
+Debug Message Here! Id in route is 1
+http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress : b@emailer.com
+http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier : 1
+http://schemas.microsoft.com/ws/2008/06/identity/claims/role : regular
+exp : 1724350613
+iss : http://localhost:5048
+aud : http://localhost:5048
+Debug Message Here! Id in route is 1
+http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress : b@emailer.com
+http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid : 1
+http://schemas.microsoft.com/ws/2008/06/identity/claims/role : regular
+exp : 1724351440
+iss : http://localhost:5048
+aud : http://localhost:5048

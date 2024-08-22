@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using BackendApp.Model;
 using BackendApp.Model.Enums;
 using BackendApp.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static BackendApp.Auth.AuthConstants.PolicyNames;
+
 
 namespace BackendApp.Controller
 {
@@ -16,11 +19,13 @@ namespace BackendApp.Controller
         private readonly IMessageService messageService = messageService;  
 
         [HttpPost]
+        [Authorize( IsAdminPolicyName )]
         public IActionResult CreateMessage(Message message)
             => this.messageService.AddMessage(message) ? this.Ok(message.Id) : this.Conflict();
 
         [Route("{id}")]
         [HttpPost]
+        [Authorize( IsAdminPolicyName )]
         public IActionResult UpdateMessage(ulong id, Message notification)
             => this.messageService.UpdateMessage(id, notification) switch
             {
@@ -32,15 +37,18 @@ namespace BackendApp.Controller
 
         [Route("{id}")]
         [HttpDelete]
+        [Authorize( SentMessagePolicyName )]
         public IActionResult Delete(ulong id)
             => this.messageService.RemoveMessage(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
+        [Authorize( IsAdminPolicyName )]
         public IActionResult GetAll()
             => this.Ok(this.messageService.GetAllMessages());
 
         [Route("{id}")]
         [HttpGet]
+        [Authorize( SentMessagePolicyName )]
         public IActionResult Get(ulong id)
         {
             var Message = this.messageService.GetMessageById(id);
@@ -49,6 +57,7 @@ namespace BackendApp.Controller
 
         [Route("send/{senderId}/{receipientId}")]
         [HttpPost]
+        [Authorize( HasIdEqualToSenderIdPolicyName )]
         public IActionResult Send(uint senderId, uint receipientId, string content)
         {
             return this.messageService.SendMessage(senderId, receipientId, content) ? this.Ok() : this.NotFound();
@@ -56,11 +65,13 @@ namespace BackendApp.Controller
 
         [Route("chat/{userAId}/{userBId}")]
         [HttpGet]
+        [Authorize]
         public IActionResult GetChatHistory(uint userAId, uint userBId) 
             => this.Ok(this.messageService.GetConversationBetween(userAId, userBId));
 
         [Route("chat/{userAId}/{userBId}/{startAt}/{endAfter}")]
         [HttpGet]
+        [Authorize]
         public IActionResult GetChatHistory(uint userAId, uint userBId, int startAt, int endAfter) 
             => this.Ok(this.messageService.GetRangeOfConversationBetween(userAId, userBId, startAt, endAfter));
 

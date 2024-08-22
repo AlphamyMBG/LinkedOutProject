@@ -8,6 +8,7 @@ using BackendApp.Model.Requests;
 using BackendApp.Service;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.IdentityModel.Tokens;
+using BackendApp.Auth;
 
 namespace BackendApp.auth;
 
@@ -60,7 +61,8 @@ public class AuthenticationService
         var claims = new List<Claim>
         {
             new(ClaimTypes.Email, user.Email),
-            new(ClaimTypes.Role, user is AdminUser ? "admin" : "regular")
+            new(ClaimTypes.Sid, user.Id.ToString()),
+            new(ClaimTypes.Role, user is AdminUser ? "admin" : "regular"),
         };
 
         var token = new JwtSecurityToken(

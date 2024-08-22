@@ -7,17 +7,18 @@ using System.Threading.Tasks;
 namespace BackendApp.Model
 {
     public class Notification
-    (string content, bool read, RegularUser toUser)
+    (string content, bool read, RegularUser toUser, DateTime timestamp)
     {
-        public Notification(string content, bool read)
-        : this(content, read, new("","","","","","","",[],""))
+        private Notification(string content, bool read, DateTime timestamp)
+        : this(content, read, new("","","","","","","",[],""), timestamp)
         {}
         
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public ulong Id {get; set;}
-        public string Content {get; private set;} = content;
-        public bool Read {get; private set;} = read;
-        public RegularUser ToUser {get; private set;} = toUser; 
+        public string Content {get; set;} = content;
+        public bool Read {get; set;} = read;
+        public RegularUser ToUser {get; set;} = toUser; 
+        public DateTime Timestamp {get; set;} = timestamp;
 
         public void Update(Notification notification){
             this.Content = notification.Content;

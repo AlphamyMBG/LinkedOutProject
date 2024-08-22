@@ -8,6 +8,8 @@ using BackendApp.Service;
 using BackendApp.Model.Enums;
 using BackendApp.auth;
 using Microsoft.AspNetCore.Authorization;
+using static BackendApp.Auth.AuthConstants.PolicyNames;
+
 
 namespace BackendApp.Controllers
 {
@@ -39,6 +41,7 @@ namespace BackendApp.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(RegularUser user){
             bool added = this.linkedOutUserService.AddUser(user);
             return added ? new JsonResult(this.Ok(user.Id)) : new JsonResult(this.Conflict());
@@ -46,38 +49,47 @@ namespace BackendApp.Controllers
 
         [Route("{id}")]
         [HttpPost]
+        [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
         public IActionResult Update(ulong id, RegularUser user)
-            => this.linkedOutUserService.Update(id, user) switch
+        {
+            user.PasswordHash = EncryptionUtility.HashPassword(user.PasswordHash);
+            return this.linkedOutUserService.Update(id, user) switch
             {
                 UpdateResult.KeyAlreadyExists => new JsonResult(this.Conflict()),    
                 UpdateResult.NotFound => new JsonResult(this.NotFound()),    
                 UpdateResult.Ok => new JsonResult(this.Ok()),
                 _ => throw new Exception("Something went terribly wrong for you to be here.")
             };
-
+        }
         [Route("{id}")]
         [HttpDelete]
-        [Authorize]
+        [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
         public IActionResult Delete(ulong id)
-            => this.linkedOutUserService.RemoveUser(id) ? new JsonResult(this.Ok()) : new JsonResult(this.NotFound());
+            => this.linkedOutUserService.RemoveUser(id) 
+            ? new JsonResult(this.Ok("User successfully deleted.")) 
+            : new JsonResult(this.NotFound("User not found."));
         
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll(){
-            var users = this.linkedOutUserService.GetAllUsers();
-            Array.ForEach(
-                users, 
-                a => a.PasswordHash = ""
-            );
+            var users = this.linkedOutUserService
+                .GetAllUsers()
+                .Select( a => RegularUser.MapNewWithHiddenPassword(a));
             return new JsonResult(users);
         }
 
         [Route("{id}")]
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Get(ulong id){
             var user = this.linkedOutUserService.GetUserById(id);
-            if(user is not null) user.PasswordHash = "";
-            return new JsonResult(user is not null ? this.Ok(user) : this.NotFound());
+            return new JsonResult(
+                user is not null 
+                ? this.Ok(RegularUser.MapNewWithHiddenPassword(user)) 
+                : this.NotFound()
+            );
         }
+        
     }
 }

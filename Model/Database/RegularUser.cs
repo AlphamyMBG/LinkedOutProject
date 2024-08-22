@@ -19,6 +19,21 @@ namespace BackendApp.Model
     ) : AppUser(email, passwordHash)
     
     {
+        public static RegularUser MapNewWithHiddenPassword(RegularUser user)
+        {
+            return new RegularUser(user){
+                Id = user.Id, 
+                PasswordHash = ""
+            };
+        }
+
+        public RegularUser( RegularUser user ) 
+        : this
+        (user.Email, user.PasswordHash, user.Name, user.Surname, user.PhoneNumber,
+        user.Location, user.CurrentPosition, user.Abilities.ToList(), user.ImagePath)
+        {}
+
+
         public string Name { get; set; } = name;
         public string Surname { get; set; } = surname;
         public string PhoneNumber { get; set; } = phoneNumber;
@@ -31,7 +46,7 @@ namespace BackendApp.Model
 
         public void Update(RegularUser linkedOutUser){
             this.Email = linkedOutUser.Email;
-            this.PasswordHash = linkedOutUser.PasswordHash + "AAA";
+            this.PasswordHash = linkedOutUser.PasswordHash;
             this.Name = linkedOutUser.Name;
             this.Surname = linkedOutUser.Surname;
             this.PhoneNumber = linkedOutUser.PhoneNumber;

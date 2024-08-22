@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 using BackendApp.Model;
 using BackendApp.Model.Enums;
 using BackendApp.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static BackendApp.Auth.AuthConstants.PolicyNames;
+
 
 namespace BackendApp.Controller
 {
@@ -25,10 +28,11 @@ namespace BackendApp.Controller
         public IActionResult CreatePost(Post post)
             => this.postService.AddPost(post) ? this.Ok(post.Id) : this.Conflict();
         
-        [Route("create/{creatorId}")]
+        [Route("create/{userId}")]
         [HttpPost]
-        public IActionResult CreatePost(ulong creatorId, string content)
-            => this.postService.AddPost(content, creatorId) ? this.Ok() : this.Conflict();
+        [Authorize( Policy = HasIdEqualToUserIdParamPolicyName)]
+        public IActionResult CreatePost(ulong userId, string content)
+            => this.postService.AddPost(content, userId) ? this.Ok() : this.Conflict();
         
         [Route("{id}")]
         [HttpPost]
@@ -43,15 +47,18 @@ namespace BackendApp.Controller
         
         [Route("{id}")]
         [HttpDelete]
+        [Authorize]
         public IActionResult Delete(ulong id)
             => this.postService.RemovePost(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
             => this.Ok(this.postService.GetAllPosts());
 
         [Route("{id}")]
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Get(ulong id)
         {
             var user = this.postService.GetPostById(id);
@@ -60,6 +67,7 @@ namespace BackendApp.Controller
 
         [Route("{postId}/interest/set/{userId}")]
         [HttpPost]
+        [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
         public IActionResult DeclareInterest(uint userId, uint postId)
         {
             return this.interestService.DeclareInterestForPost(userId, postId).ToResultObject(this);
@@ -67,6 +75,7 @@ namespace BackendApp.Controller
 
         [Route("{postId}/interest/unset/{userId}")]
         [HttpPost]
+        [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
         public IActionResult RemoveInterest(uint userId, uint postId)
         {
             return this.interestService.RemoveInterestForPost(userId, postId).ToResultObject(this);
