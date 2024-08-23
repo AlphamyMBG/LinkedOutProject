@@ -41,7 +41,7 @@ namespace BackendApp.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize( IsAdminPolicyName )]
         public IActionResult Create(RegularUser user){
             bool added = this.linkedOutUserService.AddUser(user);
             return added ? new JsonResult(this.Ok(user.Id)) : new JsonResult(this.Conflict());

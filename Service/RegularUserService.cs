@@ -90,9 +90,9 @@ namespace BackendApp.Service
             var postsToRemove = this.context.Posts
                 .Where(post => post.PostedBy == user);
             this.context.Posts.RemoveRange(postsToRemove);
-            var jobsToRemove = this.context.JobPost
+            var jobsToRemove = this.context.JobPosts
                 .Where(job => job.PostedBy == user);
-            this.context.JobPost.RemoveRange(jobsToRemove);
+            this.context.JobPosts.RemoveRange(jobsToRemove);
             var messagesToRemove = this.context.Messages
                 .Where(message => message.SentBy == user || message.SentTo == user);
             this.context.Messages.RemoveRange(messagesToRemove);            

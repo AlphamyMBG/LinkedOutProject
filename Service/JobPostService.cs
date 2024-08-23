@@ -12,15 +12,13 @@ namespace BackendApp.Service
     {
 
         public JobPost? GetJobById(ulong id);
-        // public LinkedOutPost[] GetPostsByContent(string content);
-        // public LinkedOutPost[] GetPostsOfUser(ulong id);
-        // public LinkedOutPost[] GetPostPostsOfUserWithId(ulong id);
-        // public LinkedOutPost[] GetAdPostsOfUserWithId(ulong id);
         public JobPost[] GetAllJobs();
         public bool AddJob(JobPost post);
         public bool RemoveJob(ulong id);
         public UpdateResult UpdateJob(ulong id, JobPost postContent);
+        public JobPost? CreateNewJobPost(RegularUser user, string title, string description, string requirements);
         public UpdateResult AddInterestedUser(ulong id, RegularUser user);
+        public JobPost[] GetJobPostsBy(RegularUser user);
     
     }
     public class LinkedOutJobService(ApiContext context) : ILinkedOutJobService
@@ -30,23 +28,23 @@ namespace BackendApp.Service
         public bool AddJob(JobPost job)
         {
             if(this.GetJobById(job.Id) != null) return false;
-            this.context.JobPost.Add(job);
+            this.context.JobPosts.Add(job);
             this.context.SaveChanges();
             return true;
         }
 
         public JobPost[] GetAllJobs()
-            => [.. this.context.JobPost];
+            => [.. this.context.JobPosts];
 
         public JobPost? GetJobById(ulong id)
-            => this.context.JobPost.FirstOrDefault(post => post.Id == id);
+            => this.context.JobPosts.FirstOrDefault(post => post.Id == id);
 
         public bool RemoveJob(ulong id)
         {
             JobPost? post = this.GetJobById(id);
             if(post == null) return false;
 
-            this.context.JobPost.Remove(post);
+            this.context.JobPosts.Remove(post);
             this.context.SaveChanges();
             return true;
         }
@@ -84,5 +82,17 @@ namespace BackendApp.Service
             this.context.SaveChanges();
             return UpdateResult.Ok;
         }
-    }
+
+        public JobPost? CreateNewJobPost(RegularUser user, string title, string description, string requirements)
+        {
+            var job = new JobPost(user, [], DateTime.Now, title, description, requirements);
+            if(!this.AddJob(job)) return null;
+            return job;
+        }
+
+        public JobPost[] GetJobPostsBy(RegularUser user)
+            => this.context.JobPosts
+                .Where( jobPost => jobPost.PostedBy == user)
+                .ToArray();
+    }           
 }

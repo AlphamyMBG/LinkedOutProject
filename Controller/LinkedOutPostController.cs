@@ -18,13 +18,15 @@ namespace BackendApp.Controller
     [Route("api/[Controller]")]
     [ApiController]
     public class LinkedOutPostController
-    (ILinkedOutPostService postService, IInterestService interestService) 
+    (ILinkedOutPostService postService, IInterestService interestService, IRegularUserService userService) 
     : ControllerBase
     {
         private readonly ILinkedOutPostService postService = postService;
         private readonly IInterestService interestService = interestService;
+        private readonly IRegularUserService userService = userService;
 
         [HttpPost]
+        [Authorize( IsAdminPolicyName )]
         public IActionResult CreatePost(Post post)
             => this.postService.AddPost(post) ? this.Ok(post.Id) : this.Conflict();
         
@@ -32,10 +34,16 @@ namespace BackendApp.Controller
         [HttpPost]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName)]
         public IActionResult CreatePost(ulong userId, string content)
-            => this.postService.AddPost(content, userId) ? this.Ok() : this.Conflict();
+        {
+            var user = this.userService.GetUserById(userId);
+            if(user is null) return this.NotFound("User not found.");
+            var resultPost = this.postService.CreateNewPost(content, user); 
+            return resultPost is null ? this.Ok(resultPost) : this.Conflict();
+        }
         
         [Route("{id}")]
         [HttpPost]
+        [Authorize( IsAdminPolicyName )]
         public IActionResult UpdatePost(ulong id, Post post)
             => this.postService.UpdatePost(id, post) switch
             {

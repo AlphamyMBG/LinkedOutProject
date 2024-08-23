@@ -20,13 +20,13 @@ namespace BackendApp.Controller
         private readonly IConnectionService ConnectionService = connectionService;  
 
         [HttpPost]
-        [Authorize]
+        [Authorize( IsAdminPolicyName )]
         public IActionResult CreateConnection(Connection Connection)
             => this.ConnectionService.AddConnection(Connection) ? this.Ok(Connection.Id) : this.Conflict();
 
         [Route("{id}")]
         [HttpPost]
-        [Authorize]
+        [Authorize( IsAdminPolicyName )]
         public IActionResult UpdateConnection(ulong id, Connection notification)
             => this.ConnectionService.UpdateConnection(id, notification) switch
             {
@@ -38,18 +38,18 @@ namespace BackendApp.Controller
 
         [Route("{id}")]
         [HttpDelete]
-        [Authorize]
+        [Authorize( IsAdminPolicyName )] //TODO: Add apropriate filter
         public IActionResult Delete(ulong id)
             => this.ConnectionService.RemoveConnection(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
-        [Authorize]
+        [AllowAnonymous]
         public IActionResult GetAll()
             => this.Ok(this.ConnectionService.GetAllConnections());
 
         [Route("{id}")]
         [HttpGet]
-        [Authorize]
+        [AllowAnonymous]
         public IActionResult Get(ulong id)
         {
             var Connection = this.ConnectionService.GetConnectionById(id);
@@ -63,19 +63,19 @@ namespace BackendApp.Controller
         {
             return this.ConnectionService.SendConnectionRequest(senderId, receipientId) ? this.Ok() : this.NotFound();
         }
-        [Route("accept/{conId}")]
+        [Route("accept/{id}")]
         [HttpPost]
-        [Authorize]
-        public IActionResult Accept(uint conId, RegularUser connectionReceipient)
+        [Authorize( ReceivedConnectionRequestPolicyName )]
+        public IActionResult Accept(uint id, RegularUser connectionReceipient)
         {
-            return this.ConnectionService.AcceptConnectionRequest(connectionReceipient, conId) ? this.Ok() : this.NotFound();
+            return this.ConnectionService.AcceptConnectionRequest(connectionReceipient, id) ? this.Ok() : this.NotFound();
         }
-        [Route("decline/{conId}")]
+        [Route("decline/{id}")]
         [HttpPost]
-        [Authorize]
-        public IActionResult Decline(uint conId, RegularUser connectionReceipient)
+        [Authorize( ReceivedConnectionRequestPolicyName )]
+        public IActionResult Decline(uint id, RegularUser connectionReceipient)
         {
-            return this.ConnectionService.DeclineConnectionRequest(connectionReceipient, conId) ? this.Ok() : this.NotFound();
+            return this.ConnectionService.DeclineConnectionRequest(connectionReceipient, id) ? this.Ok() : this.NotFound();
         }
     
     }

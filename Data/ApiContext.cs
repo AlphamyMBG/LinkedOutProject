@@ -13,7 +13,7 @@ public class ApiContext(DbContextOptions<ApiContext> options) : DbContext(option
     public DbSet<AdminUser> AdminUsers {get; private set;} 
     public DbSet<RegularUser> RegularUsers {get; private set;}
     public DbSet<Post> Posts {get; private set;}
-    public DbSet<JobPost> JobPost {get; private set;}
+    public DbSet<JobPost> JobPosts {get; private set;}
     public DbSet<Notification> Notifications {get; private set;}
     public DbSet<Message> Messages {get; private set;}
     public DbSet<Connection> Connections {get; private set;}

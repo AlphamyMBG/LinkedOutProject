@@ -13,7 +13,9 @@ namespace BackendApp.Controller
 {
     [Route("api/[Controller]")]
     [ApiController]
-    public class NotificationController(INotificationService notifService) : ControllerBase
+    public class NotificationController
+    (INotificationService notifService) 
+    : ControllerBase
     {
         private readonly INotificationService notificationService = notifService;  
 

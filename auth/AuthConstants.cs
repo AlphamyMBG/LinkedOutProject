@@ -14,6 +14,10 @@ namespace BackendApp.Auth
             public const string HasIdEqualToIdParamPolicyName = "HasIdEqualToIdPolicy";
             public const string HasNotificationPolicyName = "HasNotificationPolicy";
             public const string SentMessagePolicyName = "SentMessagePolicy";
+            public const string SentConnectionRequestPolicyName = "SentConnectionRequestPolicy";
+            public const string ReceivedConnectionRequestPolicyName = "ReceivedConnectionRequest";
+            public const string CreatedJobPolicyName = "receivedConnectionRequest";
+            public const string CreatedPostPolicyName = "receivedConnectionRequest";
             public const string IsAdminPolicyName = "IsAdminPolicy";
         }
 

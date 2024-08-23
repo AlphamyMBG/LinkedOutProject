@@ -18,8 +18,8 @@ namespace BackendApp.Service
         // public LinkedOutPost[] GetAdPostsOfUserWithId(ulong id);
         public Post[] GetAllPosts();
         public bool AddPost(Post post);
-        public bool AddPost(string post, ulong creatorId);
         public bool RemovePost(ulong id);
+        public Post? CreateNewPost(string post, RegularUser creator);
         public UpdateResult UpdatePost(ulong id, Post postContent);
     
     }
@@ -34,18 +34,17 @@ namespace BackendApp.Service
             return true;
         }
 
-        public bool AddPost(string content, ulong creatorId)
+        public Post? CreateNewPost(string content, RegularUser creator)
         {
-            var user = context.RegularUsers.FirstOrDefault(x => x.Id == creatorId) ?? null;
-            if(user is null) return false;
             var post = new Post(
-                user,
+                creator,
                 [],
                 DateTime.Now,
                 content,
                 []
             );
-            return this.AddPost(post);
+            if(!this.AddPost(post)) return null;
+            return post;
         }
 
         public Post[] GetAllPosts()

@@ -55,13 +55,13 @@ namespace BackendApp.Service
         {
             var jobInDb = this.jobService.GetJobById(jobId);
             if(jobInDb is null) return UpdateResult.NotFound;
-            return this.DeclareInterestFor(this.dbContext.JobPost, userId, jobInDb);
+            return this.DeclareInterestFor(this.dbContext.JobPosts, userId, jobInDb);
         }
         public UpdateResult RemoveInterestForJob(uint userId, uint jobId)
         {
             var jobInDb = this.jobService.GetJobById(jobId);
             if(jobInDb is null) return UpdateResult.NotFound;
-            return RemoveInterestFor(this.dbContext.JobPost, userId, jobInDb);
+            return RemoveInterestFor(this.dbContext.JobPosts, userId, jobInDb);
         }
         public UpdateResult DeclareInterestForPost(uint userId, uint jobId)
         {

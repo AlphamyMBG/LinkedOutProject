@@ -106,6 +106,10 @@ builder.Services.AddSingleton<IAuthorizationHandler, HasIdHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, IsAdminHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, HasNotificationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, SentMessageHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, SentConnectionRequestHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, ReceivedConnectionRequestHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, CreatedJobHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, CreatedPostHandler>();
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthConstants.PolicyNames.HasIdEqualToUserIdParamPolicyName, policy =>
         policy.Requirements.Add( new HasIdRequirement("userId")))
@@ -118,7 +122,15 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthConstants.PolicyNames.HasNotificationPolicyName, policy => 
         policy.Requirements.Add( new HasNotificationRequirement("id")))
     .AddPolicy(AuthConstants.PolicyNames.SentMessagePolicyName, policy => 
-        policy.Requirements.Add( new SentMessageRequirement("id")));
+        policy.Requirements.Add( new SentMessageRequirement("id")))
+    .AddPolicy(AuthConstants.PolicyNames.SentConnectionRequestPolicyName, policy => 
+        policy.Requirements.Add( new SentConnectionRequestRequirement("id")))
+    .AddPolicy(AuthConstants.PolicyNames.ReceivedConnectionRequestPolicyName, policy => 
+        policy.Requirements.Add( new ReceivedConnectionRequestRequirement("id")))
+    .AddPolicy(AuthConstants.PolicyNames.CreatedJobPolicyName, policy => 
+        policy.Requirements.Add( new CreatedJobRequirement("id")))
+    .AddPolicy(AuthConstants.PolicyNames.CreatedPostPolicyName, policy => 
+        policy.Requirements.Add( new CreatedPostRequirement("id")));
     
 
 var app = builder.Build();
