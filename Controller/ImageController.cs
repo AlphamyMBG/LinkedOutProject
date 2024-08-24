@@ -42,7 +42,7 @@ public class ImageController
             return this.GetBadRequestResponse(result, image);
         
         //TODO: Add Image processing logic here
-        string createdFileName = await this.fileService.SaveFileAsync(image);
+        string createdFileName = await this.fileService.SaveFileAsync(image, this.imageDirectory);
         return this.Ok(createdFileName);
     }
 

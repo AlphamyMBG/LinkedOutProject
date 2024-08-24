@@ -13,7 +13,7 @@ public enum FileFilterResult
 public interface IFileService
 {
     FileFilterResult FilterFile(IFormFile formFile, params IEnumerable<Func<IFormFile, FileFilterResult>> filters);
-    Task<string> SaveFileAsync(IFormFile imageFile);
+    Task<string> SaveFileAsync(IFormFile imageFile, string directoryPath);
     void DeleteFile(string fileNameWithExtension);
 }
 
@@ -32,12 +32,10 @@ public class FileService(IWebHostEnvironment environment) : IFileService
         return FileFilterResult.Ok;
     }
 
-    public async Task<string> SaveFileAsync(IFormFile imageFile)
+    public async Task<string> SaveFileAsync(IFormFile imageFile, string path)
     {
         ArgumentNullException.ThrowIfNull(imageFile);
 
-        var contentPath = environment.ContentRootPath;
-        var path = contentPath;
         
         if (!Directory.Exists(path))
         {
