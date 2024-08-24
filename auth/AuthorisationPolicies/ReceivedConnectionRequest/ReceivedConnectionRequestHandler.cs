@@ -25,12 +25,12 @@ public class ReceivedConnectionRequestHandler
             return Task.CompletedTask;
         }
         
-        var notificationIdString = httpContextAccessor.HttpContext?
+        var connectionIdString = httpContextAccessor.HttpContext?
             .GetRouteData()
             .Values[requirement.ConnectionIdParamName]
             ?.ToString();
 
-        if( notificationIdString is null )
+        if( connectionIdString is null )
         {
             context.Fail();
             return Task.CompletedTask;
@@ -45,9 +45,9 @@ public class ReceivedConnectionRequestHandler
         }
 
         var user = this.userService.GetUserById(ulong.Parse(userIdClaim.Value));
-        var message = this.connectionService.GetConnectionById(ulong.Parse(notificationIdString));
+        var connectionRequest = this.connectionService.GetConnectionById(ulong.Parse(connectionIdString));
 
-        if(message is not null && message.SentTo == user)
+        if(connectionRequest is not null && connectionRequest.SentTo == user)
         {
             context.Succeed(requirement);
             return Task.CompletedTask;

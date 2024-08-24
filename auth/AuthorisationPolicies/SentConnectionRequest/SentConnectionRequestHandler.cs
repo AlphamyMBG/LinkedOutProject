@@ -45,9 +45,9 @@ public class SentConnectionRequestHandler
         }
 
         var user = this.userService.GetUserById(ulong.Parse(userIdClaim.Value));
-        var message = this.connectionService.GetConnectionById(ulong.Parse(notificationIdString));
+        var connectionRequest = this.connectionService.GetConnectionById(ulong.Parse(notificationIdString));
 
-        if(message is not null && message.SentBy == user)
+        if(connectionRequest is not null && connectionRequest.SentBy == user)
         {
             context.Succeed(requirement);
             return Task.CompletedTask;
