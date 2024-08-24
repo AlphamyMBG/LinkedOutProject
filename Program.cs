@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using BackendApp.auth.Filters;
 using BackendApp.Auth;
+using ImageManipulation.Data.Services;
 
 var corsPolicyName = "_myAllowSpecificOrigins";
 
@@ -33,6 +34,7 @@ builder.Services.AddSingleton<IInterestService, InterestService>();
 builder.Services.AddSingleton<IConnectionService, ConnectionService>();
 builder.Services.AddSingleton<IAdminUserService, AdminUserService>();
 builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
+builder.Services.AddSingleton<IFileService, FileService>();
 
 //Add other general use case services
 builder.Services.AddHttpContextAccessor();
