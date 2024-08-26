@@ -13,7 +13,7 @@ namespace BackendApp.Model
         DateTime postedAt,
         string content,
         List<Post> replies
-    ) : LinkedOutPostBase(postedBy, interestedUsers, postedAt)
+    ) : PostBase(postedBy, interestedUsers, postedAt)
     {
         private Post(DateTime postedAt, string content)
         : this

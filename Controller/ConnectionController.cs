@@ -14,21 +14,22 @@ namespace BackendApp.Controller
     [Route("api/[Controller]")]
     [ApiController]
     public class ConnectionController
-    (IConnectionService connectionService) 
+    (IConnectionService connectionService, IRegularUserService userService) 
     : ControllerBase
     {
-        private readonly IConnectionService ConnectionService = connectionService;  
+        private readonly IConnectionService connectionService = connectionService;  
+        private readonly IRegularUserService userService = userService;  
 
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
         public IActionResult CreateConnection(Connection Connection)
-            => this.ConnectionService.AddConnection(Connection) ? this.Ok(Connection.Id) : this.Conflict();
+            => this.connectionService.AddConnection(Connection) ? this.Ok(Connection.Id) : this.Conflict();
 
         [Route("{id}")]
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
         public IActionResult UpdateConnection(ulong id, Connection notification)
-            => this.ConnectionService.UpdateConnection(id, notification) switch
+            => this.connectionService.UpdateConnection(id, notification) switch
             {
                 UpdateResult.KeyAlreadyExists => this.Conflict(),
                 UpdateResult.NotFound => this.NotFound(),
@@ -40,19 +41,19 @@ namespace BackendApp.Controller
         [HttpDelete]
         [Authorize( IsAdminPolicyName )] //TODO: Add apropriate filter
         public IActionResult Delete(ulong id)
-            => this.ConnectionService.RemoveConnection(id) ? this.Ok() : this.NotFound();
+            => this.connectionService.RemoveConnection(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult GetAll()
-            => this.Ok(this.ConnectionService.GetAllConnections());
+            => this.Ok(this.connectionService.GetAllConnections());
 
         [Route("{id}")]
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Get(ulong id)
         {
-            var Connection = this.ConnectionService.GetConnectionById(id);
+            var Connection = this.connectionService.GetConnectionById(id);
             return Connection is not null ? this.Ok(Connection) : this.NotFound();
         }
 
@@ -61,21 +62,32 @@ namespace BackendApp.Controller
         [Authorize( Policy = HasIdEqualToSenderIdPolicyName)]
         public IActionResult Send(uint senderId, uint receipientId)
         {
-            return this.ConnectionService.SendConnectionRequest(senderId, receipientId) ? this.Ok() : this.NotFound();
+            return this.connectionService.SendConnectionRequest(senderId, receipientId) ? this.Ok() : this.NotFound();
         }
+        
         [Route("accept/{id}")]
         [HttpPost]
         [Authorize( ReceivedConnectionRequestPolicyName )]
         public IActionResult Accept(uint id, RegularUser connectionReceipient)
         {
-            return this.ConnectionService.AcceptConnectionRequest(connectionReceipient, id) ? this.Ok() : this.NotFound();
+            return this.connectionService.AcceptConnectionRequest(connectionReceipient, id) ? this.Ok() : this.NotFound();
         }
+
         [Route("decline/{id}")]
         [HttpPost]
         [Authorize( ReceivedConnectionRequestPolicyName )]
         public IActionResult Decline(uint id, RegularUser connectionReceipient)
         {
-            return this.ConnectionService.DeclineConnectionRequest(connectionReceipient, id) ? this.Ok() : this.NotFound();
+            return this.connectionService.DeclineConnectionRequest(connectionReceipient, id) ? this.Ok() : this.NotFound();
+        }
+
+        [Route("network/{id}")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult GetUsersNetwork(uint id)
+        {
+            if(this.userService.GetUserById(id) is not RegularUser user) return this.NotFound("User not found.");
+            return this.Ok(this.connectionService.GetUsersConnectedTo(user));
         }
     
     }

@@ -15,7 +15,7 @@ namespace BackendApp.Model
         string description,
         string requirements
     ) 
-    : LinkedOutPostBase(postedBy, interestedUsers, postedAt)
+    : PostBase(postedBy, interestedUsers, postedAt)
     {
 
         private JobPost(DateTime postedAt, string jobTitle, string description, string requirements)

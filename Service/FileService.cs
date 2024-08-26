@@ -12,7 +12,7 @@ public enum FileFilterResult
 
 public interface IFileService
 {
-    FileFilterResult FilterFile(IFormFile formFile, params IEnumerable<Func<IFormFile, FileFilterResult>> filters);
+    FileFilterResult FilterFile(IFormFile formFile, params Func<IFormFile, FileFilterResult>[] filters);
     Task<string> SaveFileAsync(IFormFile imageFile, string directoryPath);
     void DeleteFile(string fileNameWithExtension);
 }
@@ -21,7 +21,7 @@ public class FileService(IWebHostEnvironment environment) : IFileService
 {
     public FileFilterResult FilterFile(
         IFormFile formFile, 
-        params IEnumerable<Func<IFormFile, FileFilterResult>> filters
+        Func<IFormFile, FileFilterResult>[] filters
     )
     {
         foreach( var filter in filters )

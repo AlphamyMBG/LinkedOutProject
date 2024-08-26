@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using BackendApp.Model.Enums;
 
 namespace BackendApp.Model
 {
@@ -16,7 +17,7 @@ namespace BackendApp.Model
         string currentPosition,
         List<string> abilities,
         string? imagePath
-    ) : AppUser(email, passwordHash)
+    ) : AppUser(email, passwordHash, UserRole.User)
     
     {
         public static RegularUser MapNewWithHiddenPassword(RegularUser user)

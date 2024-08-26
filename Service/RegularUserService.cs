@@ -18,6 +18,7 @@ namespace BackendApp.Service
         public bool AddUser(RegularUser user);
         public bool RemoveUser(ulong id);
         public UpdateResult Update(ulong id, RegularUser user);
+        public RegularUser[] SearchByUsername(string searchString); 
     }
     public class RegularUserService(ApiContext context) : IRegularUserService
     {
@@ -73,6 +74,12 @@ namespace BackendApp.Service
             this.RemoveDataAssociatedWith(user);
             return true;
         }
+        public RegularUser[] SearchByUsername(string searchString) //TODO: Implement with Fuzzy Search!
+        {
+            return this.context.RegularUsers
+                .Where( user => user.Name.StartsWith(searchString))
+                .ToArray();
+        }
 
         private bool AdminWithEmailExists(string email)
         {
@@ -81,6 +88,7 @@ namespace BackendApp.Service
                 .FirstOrDefault(admin => admin.Email == email);
             return admin is not null;
         }
+
 
         private void RemoveDataAssociatedWith(RegularUser user)
         {

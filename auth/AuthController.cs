@@ -36,7 +36,7 @@ namespace BackendApp.auth
                     user,
                     this.tokenLifeSpan
                 );
-                return Ok(JsonSerializer.Serialize(new TokenResponse(token, user.Id)));
+                return Ok(JsonSerializer.Serialize(new TokenResponse(token, user.Id, user.UserRole)));
             }
             return NotFound("User Not Found");
         }

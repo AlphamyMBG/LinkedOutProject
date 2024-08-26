@@ -4,27 +4,30 @@ using BackendApp.Model.Enums;
 
 namespace BackendApp.Service{
     public interface IConnectionService {
-        public Connection? GetConnectionById(ulong id);
-        public Connection[] GetAllConnections();
-        public Connection[] GetAllConnectionsSentBy(ulong userId);
-        public Connection[] GetAllConnectionsSentTo(ulong userId);
-        public bool AddConnection(Connection Connection);
-        public bool RemoveConnection(ulong id);
-        public UpdateResult UpdateConnection(ulong id, Connection Connection);
-        public bool SendConnectionRequest(RegularUser from, RegularUser to);
-        public bool SendConnectionRequest(uint from, uint to);
-        public bool DeclineConnectionRequest(RegularUser user, uint connectionId);
-        public bool AcceptConnectionRequest(RegularUser user, uint connectionId);
+        Connection? GetConnectionById(ulong id);
+        Connection[] GetAllConnections();
+        Connection[] GetAllConnectionsSentBy(ulong userId);
+        Connection[] GetAllConnectionsSentTo(ulong userId);
+        bool AreConnected(RegularUser userA, RegularUser userB);
+        bool AddConnection(Connection Connection);
+        bool RemoveConnection(ulong id);
+        UpdateResult UpdateConnection(ulong id, Connection Connection);
+        bool SendConnectionRequest(RegularUser from, RegularUser to);
+        bool SendConnectionRequest(uint from, uint to);
+        bool DeclineConnectionRequest(RegularUser user, uint connectionId);
+        bool AcceptConnectionRequest(RegularUser user, uint connectionId);
+        RegularUser[] GetUsersConnectedTo(RegularUser user);
     }
 
     public class ConnectionService(ApiContext context, IRegularUserService userService) : IConnectionService
     {
         private readonly ApiContext context = context;
         private readonly IRegularUserService userService = userService;
-        public bool AddConnection(Connection Connection)
+        public bool AddConnection(Connection connection)
         {
-            if(this.GetConnectionById(Connection.Id) is not null) return false;
-            this.context.Connections.Add(Connection);
+            if(this.GetConnectionById(connection.Id) is not null || this.AreConnected(connection.SentTo, connection.SentBy)) 
+                return false;
+            this.context.Connections.Add(connection);
             this.context.SaveChanges();
             return true;
         }
@@ -137,6 +140,14 @@ namespace BackendApp.Service{
             var to = this.userService.GetUserById(userId);
             if(to is null) return false;
             return this.DeclineConnectionRequest(to, connectionId);
+        }
+
+        public RegularUser[] GetUsersConnectedTo(RegularUser user)
+        {
+            return this.context.Connections
+                .Where((con) => (user == con.SentBy || user == con.SentTo) && con.Accepted)
+                .Select((con) => con.SentBy == user ? con.SentTo : con.SentBy)
+                .ToArray();
         }
 
     }

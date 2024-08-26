@@ -90,6 +90,24 @@ namespace BackendApp.Controllers
                 : this.NotFound()
             );
         }
+
+        [Route("search/{searchString}")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult SearchByUsername(string searchString)
+        {
+            return this.Ok(this.linkedOutUserService.SearchByUsername(searchString));
+        }
+
+        [Route("email/{email}")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult GetUserByEmail(string email)
+        {
+            var user = this.linkedOutUserService.GetUserByEmail(email);
+            if(user is null) return this.NotFound("User not found.");
+            return this.Ok(user);
+        }
         
     }
 }

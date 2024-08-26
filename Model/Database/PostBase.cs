@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BackendApp.Model
 {
-    public class LinkedOutPostBase(
+    public class PostBase(
         RegularUser postedBy, 
         List<RegularUser> interestedUsers,
         DateTime postedAt
@@ -17,7 +17,7 @@ namespace BackendApp.Model
         public RegularUser PostedBy {get; set;} = postedBy;
         public List<RegularUser> InterestedUsers { get; set; } = interestedUsers;
         public DateTime PostedAt {get; set;} = postedAt;
-        public void Update(LinkedOutPostBase postBase)
+        public void Update(PostBase postBase)
         {
             this.PostedBy = postBase.PostedBy;
             this.InterestedUsers = postBase.InterestedUsers;

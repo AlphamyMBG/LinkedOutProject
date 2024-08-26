@@ -28,7 +28,7 @@ namespace BackendApp.Service
 
         private UpdateResult DeclareInterestFor<T>
         (DbSet<T> dbSet, uint userId, T postBase) 
-        where T : LinkedOutPostBase
+        where T : PostBase
         {
             RegularUser? userInDb = this.userService.GetUserById(userId);
             if(userInDb is null) return UpdateResult.NotFound;
@@ -39,8 +39,8 @@ namespace BackendApp.Service
             return UpdateResult.Ok;
         }
         private UpdateResult RemoveInterestFor<T>
-        (DbSet<T> dbSet, uint userId, LinkedOutPostBase postBase) 
-        where T : LinkedOutPostBase
+        (DbSet<T> dbSet, uint userId, PostBase postBase) 
+        where T : PostBase
         {
             RegularUser? userInDb = this.userService.GetUserById(userId);
             if(userInDb is null) return UpdateResult.NotFound;
