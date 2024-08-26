@@ -5,7 +5,7 @@ namespace BackendApp.Util;
 
 public static class MatrixOperations
 {
-    public static double[,] MultiplyMatrices(double[,] a, double[,] b)
+    public static double[,] Multiply(double[,] a, double[,] b)
     {
         if(a.GetLongLength(1) != b.GetLongLength(0)) 
             throw new ArgumentException("The 2 matrices must have dimension AxK and KxB respectively.");

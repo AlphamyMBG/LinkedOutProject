@@ -65,7 +65,11 @@ public class RecommendationService
         double[,] apprMatrix = new double[numberOfUsers, numberOfProducts];
         while(keepGoing)
         {
-            apprMatrix = MatrixOperations.MultiplyMatrices(V, F);
+            apprMatrix = MatrixOperations.Multiply(V, F);
+            var errorMatrix = MatrixOperations.Subtract(dataMatrix, apprMatrix);
+
+            // for();
+
             var error = MatrixOperations.SquareError(dataMatrix, apprMatrix);
         }
 
