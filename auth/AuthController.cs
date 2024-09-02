@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using BackendApp.Auth;
+using BackendApp.Model;
 using BackendApp.Model.Requests;
 using BackendApp.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -18,11 +19,12 @@ namespace BackendApp.auth
     [Route("api/[Controller]")]
     [ApiController]
     public class AuthController
-    (IAuthenticationService authenticationService) 
+    (IAuthenticationService authenticationService, IRegularUserService userService) 
     : ControllerBase
     {
         
         private readonly IAuthenticationService authenticationService = authenticationService;
+        private readonly IRegularUserService userService = userService;
         private readonly TimeSpan tokenLifeSpan = TimeSpan.FromHours(4);
 
         [AllowAnonymous]
@@ -39,6 +41,25 @@ namespace BackendApp.auth
                 return Ok(JsonSerializer.Serialize(new TokenResponse(token, user.Id, user.UserRole.ToString())));
             }
             return NotFound("User Not Found");
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("register")]
+        public IActionResult Register(RegisterRequest request)
+        {   
+            var wasAdded = this.userService.AddUser(new RegularUser(
+                request.Email, 
+                EncryptionUtility.HashPassword(request.Password),
+                request.Name, request.Surname, 
+                request.PhoneNumber, 
+                request.Location,
+                request.CurrentPosition,
+                [],
+                null
+            ));
+            if(!wasAdded) return this.Conflict("User with a duplicate email exists.");
+            return this.Login(new(){Email = request.Email, Password = request.Password});
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using BackendApp.Model;
 using BackendApp.Model.Enums;
+using BackendApp.Model.Requests;
 using BackendApp.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,12 +34,12 @@ namespace BackendApp.Controller
         [Route("create/{userId}")]
         [HttpPost]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName)]
-        public IActionResult CreatePost(ulong userId, string content)
+        public IActionResult CreatePost(ulong userId, PostCreationRequest request)
         {
             var user = this.userService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found.");
-            var resultPost = this.postService.CreateNewPost(content, user); 
-            return resultPost is null ? this.Ok(resultPost) : this.Conflict();
+            var resultPost = this.postService.CreateNewPost(request.Content, user); 
+            return resultPost is not null ? this.Ok(resultPost) : this.Conflict();
         }
         
         [Route("{id}")]

@@ -15,12 +15,18 @@ namespace BackendApp.Controller
     [Route("/api/[Controller]")]
     [ApiController]
     public class JobController
-    (IJobService jobService, IInterestService interestService, IRegularUserService regularUserService) 
+    (
+        IJobService jobService, 
+        IInterestService interestService, 
+        IRegularUserService regularUserService,
+        IRecommendationService recommendationService
+    ) 
     : ControllerBase
     {
         private readonly IJobService jobService = jobService;
         private readonly IInterestService interestService = interestService;
         private readonly IRegularUserService regularUserService = regularUserService;
+        private readonly IRecommendationService recommendationService = recommendationService;
 
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
@@ -97,6 +103,14 @@ namespace BackendApp.Controller
             return this.Ok(this.jobService.GetJobPostsBy(user));
         }
 
+        [HttpGet("reccomend/{userId}/")]
+        [AllowAnonymous]
+        public IActionResult RecommendJobsTo(ulong userId)
+        {
+            var user = this.regularUserService.GetUserById(userId);
+            if(user is null) return this.NotFound("User not found");
+            return this.Ok(this.recommendationService.RecommendJobs(user, 20));
+        }
 
     }
 }

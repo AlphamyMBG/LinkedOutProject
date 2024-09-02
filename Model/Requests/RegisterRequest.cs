@@ -13,6 +13,7 @@ namespace BackendApp.Model.Requests
         public string Surname { get; set; } = "";
         public string PhoneNumber { get; set; } = "";
         public string Location { get; set; } = "";
+        public string? CurrentPosition { get; set; } = "";
         public string? ImageName { get; set; } = "";
     }
 }

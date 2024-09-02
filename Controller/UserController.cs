@@ -21,25 +21,6 @@ namespace BackendApp.Controllers
     {
         private readonly IRegularUserService linkedOutUserService = userService;
 
-        [Route("register")]
-        [HttpPost]
-        [AllowAnonymous]
-        public IActionResult Register( RegisterRequest request ){
-            RegularUser newUser = new(
-                email: request.Email,
-                passwordHash: EncryptionUtility.HashPassword(request.Password),
-                name: request.Name,
-                surname: request.Surname,
-                phoneNumber: request.PhoneNumber,
-                imagePath: request.ImageName,
-                location: request.Location,
-                currentPosition: "",
-                abilities: []
-            );
-            bool added = this.linkedOutUserService.AddUser(newUser);
-            return added ? new JsonResult(this.Ok(newUser.Id)) : new JsonResult(this.Conflict());
-        }
-
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
         public IActionResult Create(RegularUser user){

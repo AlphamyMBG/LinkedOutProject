@@ -14,7 +14,7 @@ namespace BackendApp.Model
         string surname,
         string phoneNumber,
         string location,
-        string currentPosition,
+        string? currentPosition,
         List<string> abilities,
         string? imagePath
     ) : AppUser(email, passwordHash, UserRole.User)
@@ -39,7 +39,7 @@ namespace BackendApp.Model
         public string Surname { get; set; } = surname;
         public string PhoneNumber { get; set; } = phoneNumber;
         public string Location { get; set; } = location;
-        public string CurrentPosition {get; set;} = currentPosition;
+        public string? CurrentPosition {get; set;} = currentPosition;
         public List<string> Abilities {get; set;} = abilities;
         public string? ImagePath { get; set; } = imagePath;
 
