@@ -8,7 +8,7 @@ using BackendApp.Model.Enums;
 
 namespace BackendApp.Service
 {
-    public interface ILinkedOutJobService
+    public interface IJobService
     {
 
         public JobPost? GetJobById(ulong id);
@@ -16,12 +16,12 @@ namespace BackendApp.Service
         public bool AddJob(JobPost post);
         public bool RemoveJob(ulong id);
         public UpdateResult UpdateJob(ulong id, JobPost postContent);
-        public JobPost? CreateNewJobPost(RegularUser user, string title, string description, string requirements);
+        public JobPost? CreateNewJobPost(RegularUser user, string title, string description, string[] requirements);
         public UpdateResult AddInterestedUser(ulong id, RegularUser user);
         public JobPost[] GetJobPostsBy(RegularUser user);
     
     }
-    public class LinkedOutJobService(ApiContext context) : ILinkedOutJobService
+    public class LinkedOutJobService(ApiContext context) : IJobService
     {
         private readonly ApiContext context = context;
         
@@ -83,7 +83,7 @@ namespace BackendApp.Service
             return UpdateResult.Ok;
         }
 
-        public JobPost? CreateNewJobPost(RegularUser user, string title, string description, string requirements)
+        public JobPost? CreateNewJobPost(RegularUser user, string title, string description, string[] requirements)
         {
             var job = new JobPost(user, [], DateTime.Now, title, description, requirements);
             if(!this.AddJob(job)) return null;

@@ -26,8 +26,8 @@ namespace BackendApp.auth
         private readonly TimeSpan tokenLifeSpan = TimeSpan.FromHours(4);
 
         [AllowAnonymous]
-        [HttpPost("token")]
-        public IActionResult GenerateToken(TokenGenerationRequest request)
+        [HttpPost("login")]
+        public IActionResult Login(TokenGenerationRequest request)
         {   
             var user = this.authenticationService.Authenticate(request);
             if(user != null)

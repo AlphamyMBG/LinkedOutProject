@@ -14,11 +14,11 @@ namespace BackendApp.Controller
 {
     [Route("/api/[Controller]")]
     [ApiController]
-    public class LinkedOutJobController
-    (ILinkedOutJobService jobService, IInterestService interestService, IRegularUserService regularUserService) 
+    public class JobController
+    (IJobService jobService, IInterestService interestService, IRegularUserService regularUserService) 
     : ControllerBase
     {
-        private readonly ILinkedOutJobService jobService = jobService;
+        private readonly IJobService jobService = jobService;
         private readonly IInterestService interestService = interestService;
         private readonly IRegularUserService regularUserService = regularUserService;
 
@@ -83,7 +83,7 @@ namespace BackendApp.Controller
             if(creatorOfJob is null) return this.NotFound("User not found.");
 
             var resultingJob = this.jobService
-                .CreateNewJobPost(creatorOfJob, request.Title, request.Requirements, request.Description);
+                .CreateNewJobPost(creatorOfJob, request.Title, request.Description, request.Requirements);
                 
             return resultingJob is not null ? this.Ok(resultingJob) : this.Conflict();
         }

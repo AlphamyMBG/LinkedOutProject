@@ -13,19 +13,19 @@ namespace BackendApp.Model
         DateTime postedAt,
         string jobTitle,
         string description,
-        string requirements
+        string[] requirements
     ) 
     : PostBase(postedBy, interestedUsers, postedAt)
     {
 
-        private JobPost(DateTime postedAt, string jobTitle, string description, string requirements)
+        private JobPost(DateTime postedAt, string jobTitle, string description, string[] requirements)
         : this
         (new("","","","","","","",[],""),[], postedAt, jobTitle, description, requirements)
         {}
 
         public string JobTitle {get; set;} = jobTitle;
         public string Description {get; set;} = description;
-        public string Requirements {get; set;} = requirements;
+        public string[] Requirements {get; set;} = requirements;
 
         public void Update(JobPost job) {
             base.Update(job);

@@ -14,7 +14,7 @@ using BackendApp.auth.Filters;
 using BackendApp.Auth;
 using ImageManipulation.Data.Services;
 
-var corsPolicyName = "_myAllowSpecificOrigins";
+var corsPolicyName = "_myAllowAllOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +27,7 @@ builder.Services.AddDbContext<ApiContext>(
 //Add model services
 builder.Services.AddSingleton<IRegularUserService, RegularUserService>();
 builder.Services.AddSingleton<ILinkedOutPostService, LinkedOutPostService>();
-builder.Services.AddSingleton<ILinkedOutJobService, LinkedOutJobService>();
+builder.Services.AddSingleton<IJobService, LinkedOutJobService>();
 builder.Services.AddSingleton<INotificationService, NotificationService>();
 builder.Services.AddSingleton<IMessageService, MessageService>();
 builder.Services.AddSingleton<IInterestService, InterestService>();
@@ -35,6 +35,7 @@ builder.Services.AddSingleton<IConnectionService, ConnectionService>();
 builder.Services.AddSingleton<IAdminUserService, AdminUserService>();
 builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
 builder.Services.AddSingleton<IFileService, FileService>();
+builder.Services.AddSingleton<IRecommendationService, RecommendationService>();
 
 //Add other general use case services
 builder.Services.AddHttpContextAccessor();

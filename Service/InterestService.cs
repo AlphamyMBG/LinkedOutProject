@@ -17,12 +17,12 @@ namespace BackendApp.Service
 
     }
     public class InterestService
-    (ApiContext dbContext, ILinkedOutPostService postService, ILinkedOutJobService jobService, IRegularUserService userService) 
+    (ApiContext dbContext, ILinkedOutPostService postService, IJobService jobService, IRegularUserService userService) 
     : IInterestService
     {
         private readonly ApiContext dbContext = dbContext;
         private readonly ILinkedOutPostService postService = postService;
-        private readonly ILinkedOutJobService jobService = jobService;
+        private readonly IJobService jobService = jobService;
         private readonly IRegularUserService userService = userService;
 
 

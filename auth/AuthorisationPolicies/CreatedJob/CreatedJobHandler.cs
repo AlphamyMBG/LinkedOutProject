@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Authorization;
 namespace BackendApp.auth.Filters;
 
 public class CreatedJobHandler
-(IHttpContextAccessor httpContextAccessor, IRegularUserService userService, ILinkedOutJobService jobService)
+(IHttpContextAccessor httpContextAccessor, IRegularUserService userService, IJobService jobService)
 : AuthorizationHandler<CreatedJobRequirement>
 {
     private readonly IHttpContextAccessor httpContextAccessor = httpContextAccessor;
     private readonly IRegularUserService userService = userService;
-    private readonly ILinkedOutJobService JobService = jobService;
+    private readonly IJobService JobService = jobService;
 
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context, 
