@@ -8,27 +8,23 @@ using BackendApp.Model.Enums;
 
 namespace BackendApp.Service
 {
-    public interface ILinkedOutPostService
+    public interface IPostService
     {
-
         public Post? GetPostById(ulong id);
-        // public LinkedOutPost[] GetPostsByContent(string content);
-        // public LinkedOutPost[] GetPostsOfUser(ulong id);
-        // public LinkedOutPost[] GetPostPostsOfUserWithId(ulong id);
-        // public LinkedOutPost[] GetAdPostsOfUserWithId(ulong id);
         public Post[] GetAllPosts();
         public bool AddPost(Post post);
         public bool RemovePost(ulong id);
         public Post? CreateNewPost(string post, RegularUser creator);
         public UpdateResult UpdatePost(ulong id, Post postContent);
-    
+        public Post? ReplyToPost(ulong originalPostId, string content, RegularUser replyGuy);
+        public Post[] GetPostsFrom(RegularUser user, bool includeReplies = false);
     }
-    public class LinkedOutPostService(ApiContext context) : ILinkedOutPostService
+
+    public sealed class LinkedOutPostService(ApiContext context) : IPostService
     {
         private readonly ApiContext context = context;
         public bool AddPost(Post post)
         {
-            if(this.GetPostById(post.Id) != null) return false;
             this.context.Posts.Add(post);
             this.context.SaveChanges();
             return true;
@@ -41,10 +37,28 @@ namespace BackendApp.Service
                 [],
                 DateTime.Now,
                 content,
-                []
+                [],
+                false
             );
             if(!this.AddPost(post)) return null;
             return post;
+        }
+
+        public Post? ReplyToPost(ulong originalPostId, string content, RegularUser replyGuy)
+        {
+            var ogPost = this.GetPostById(originalPostId);
+            if(ogPost is null) return null;
+            var reply = new Post(
+                replyGuy,
+                [],
+                DateTime.Now,
+                content,
+                [],
+                true
+            );
+            ogPost.Replies.Add(reply);
+            this.context.SaveChanges();
+            return reply;
         }
 
         public Post[] GetAllPosts()
@@ -57,7 +71,11 @@ namespace BackendApp.Service
         {
             Post? post = this.GetPostById(id);
             if(post == null) return false;
-
+            if(post.IsReply)
+            {
+                var originalPost = this.context.Posts.FirstOrDefault( a => a.Replies.Contains(post));
+                originalPost?.Replies.Remove(post);
+            }
             this.context.Posts.Remove(post);
             this.context.SaveChanges();
             return true;
@@ -73,6 +91,13 @@ namespace BackendApp.Service
             postInDb.Update(postContent);
             this.context.SaveChanges();
             return UpdateResult.Ok;
+        }
+
+        public Post[] GetPostsFrom(RegularUser user, bool includeReplies = false)
+        {
+            if(includeReplies)
+                return this.context.Posts.Where( x => x.PostedBy == user).ToArray();
+            return this.context.Posts.Where( x => x.PostedBy == user && x.IsReply ).ToArray();
         }
     }
 }

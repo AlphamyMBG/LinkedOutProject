@@ -103,7 +103,7 @@ namespace BackendApp.Controller
             return this.Ok(this.jobService.GetJobPostsBy(user));
         }
 
-        [HttpGet("reccomend/{userId}/")]
+        [HttpGet("recommend/{userId}/")]
         [AllowAnonymous]
         public IActionResult RecommendJobsTo(ulong userId)
         {

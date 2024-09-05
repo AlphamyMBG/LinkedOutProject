@@ -12,13 +12,13 @@ public interface IRecommendationService
     public JobPost[] RecommendJobs(RegularUser user, int top);
 }
 
-public class RecommendationService
+public sealed class RecommendationService
 (
     IRegularUserService regularUserService,
     IConnectionService connectionService,
     IInterestService interestService,
     IJobService jobService,
-    ILinkedOutPostService postService
+    IPostService postService
 )
 : IRecommendationService
 {
@@ -26,7 +26,7 @@ public class RecommendationService
     private readonly IConnectionService connectionService = connectionService;
     private readonly IInterestService interestService = interestService;
     private readonly IJobService jobService = jobService;
-    private readonly ILinkedOutPostService postService = postService;
+    private readonly IPostService postService = postService;
 
     public JobPost[] RecommendJobs(RegularUser user, int top)
     {

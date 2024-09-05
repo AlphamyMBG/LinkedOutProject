@@ -18,11 +18,11 @@ namespace BackendApp.Controller
 
     [Route("api/[Controller]")]
     [ApiController]
-    public class LinkedOutPostController
-    (ILinkedOutPostService postService, IInterestService interestService, IRegularUserService userService) 
+    public class PostController
+    (IPostService postService, IInterestService interestService, IRegularUserService userService) 
     : ControllerBase
     {
-        private readonly ILinkedOutPostService postService = postService;
+        private readonly IPostService postService = postService;
         private readonly IInterestService interestService = interestService;
         private readonly IRegularUserService userService = userService;
 
@@ -40,6 +40,17 @@ namespace BackendApp.Controller
             if(user is null) return this.NotFound("User not found.");
             var resultPost = this.postService.CreateNewPost(request.Content, user); 
             return resultPost is not null ? this.Ok(resultPost) : this.Conflict();
+        }
+
+        [Route("reply/{postId}/{userId}")]
+        [HttpPost]
+        [Authorize( HasIdEqualToUserIdParamPolicyName )]
+        public IActionResult ReplyToPost(ulong postId, ulong userId, PostCreationRequest request)
+        {
+            var user = this.userService.GetUserById(userId);
+            if(user is null) return this.NotFound("User not found.");
+            var resultPost = this.postService.ReplyToPost(postId, request.Content, user);
+            return resultPost is not null ? this.Ok(resultPost) : this.NotFound("Original Post not found.");
         }
         
         [Route("{id}")]
@@ -89,5 +100,6 @@ namespace BackendApp.Controller
         {
             return this.interestService.RemoveInterestForPost(userId, postId).ToResultObject(this);
         }
+
     }
 }

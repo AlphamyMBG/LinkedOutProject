@@ -12,22 +12,25 @@ namespace BackendApp.Model
         List<RegularUser> interestedUsers,
         DateTime postedAt,
         string content,
-        List<Post> replies
+        List<Post> replies,
+        bool isReply
     ) : PostBase(postedBy, interestedUsers, postedAt)
     {
-        private Post(DateTime postedAt, string content)
+        private Post(DateTime postedAt, string content, bool isReply)
         : this
-        (new("","","","","","","",[],""),[], postedAt, content, [])
+        (new("","","","","","","",[],""),[], postedAt, content, [], isReply)
         {}
 
         public string Content { get; set; } = content;
         public List<Post> Replies { get; set; } = replies;
+        public bool IsReply { get; set; } = isReply;
         public void Update( Post post ){
             this.Id = post.Id;
             this.Content = post.Content;
             this.Replies = [.. post.Replies];
             this.PostedBy = post.PostedBy;
             this.InterestedUsers = [.. post.InterestedUsers];
+            this.IsReply = post.IsReply;
         }
     }
 }

@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Authorization;
 namespace BackendApp.auth.Filters;
 
 public class  CreatedPostHandler
-(IHttpContextAccessor httpContextAccessor, IRegularUserService userService, ILinkedOutPostService postService)
+(IHttpContextAccessor httpContextAccessor, IRegularUserService userService, IPostService postService)
 : AuthorizationHandler<CreatedPostRequirement>
 {
     private readonly IHttpContextAccessor httpContextAccessor = httpContextAccessor;
     private readonly IRegularUserService userService = userService;
-    private readonly ILinkedOutPostService postService = postService;
+    private readonly IPostService postService = postService;
 
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context, 

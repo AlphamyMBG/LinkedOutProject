@@ -26,7 +26,7 @@ builder.Services.AddDbContext<ApiContext>(
 
 //Add model services
 builder.Services.AddSingleton<IRegularUserService, RegularUserService>();
-builder.Services.AddSingleton<ILinkedOutPostService, LinkedOutPostService>();
+builder.Services.AddSingleton<IPostService, LinkedOutPostService>();
 builder.Services.AddSingleton<IJobService, LinkedOutJobService>();
 builder.Services.AddSingleton<INotificationService, NotificationService>();
 builder.Services.AddSingleton<IMessageService, MessageService>();
