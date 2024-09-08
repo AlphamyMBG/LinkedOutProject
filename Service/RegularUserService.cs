@@ -6,6 +6,7 @@ using BackendApp.Model.Requests;
 using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
 using BackendApp.Model.Enums;
+using BackendApp.auth;
 
 namespace BackendApp.Service
 {
@@ -19,6 +20,7 @@ namespace BackendApp.Service
         public bool RemoveUser(ulong id);
         public UpdateResult Update(ulong id, RegularUser user);
         public RegularUser[] SearchByUsername(string searchString); 
+        public UpdateResult ChangePassword(ulong userId, string oldPassword, string newPassword);
     }
     public class RegularUserService(ApiContext context) : IRegularUserService
     {
@@ -81,6 +83,17 @@ namespace BackendApp.Service
                 .ToArray();
         }
 
+        public UpdateResult ChangePassword(ulong userId, string oldPassword, string newPassword)
+        {
+            var user = this.GetUserById(userId);
+            if(user is null) return UpdateResult.NotFound;
+            if(EncryptionUtility.HashPassword(oldPassword) != user.PasswordHash)
+                return UpdateResult.Unauthorised;
+            user.PasswordHash = EncryptionUtility.HashPassword(newPassword);
+            this.context.SaveChanges();
+            return UpdateResult.Ok;
+        }  
+
         private bool AdminWithEmailExists(string email)
         {
             //Check if admin with same email exists
@@ -88,6 +101,7 @@ namespace BackendApp.Service
                 .FirstOrDefault(admin => admin.Email == email);
             return admin is not null;
         }
+
 
 
         private void RemoveDataAssociatedWith(RegularUser user)

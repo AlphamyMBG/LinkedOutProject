@@ -5,7 +5,8 @@ namespace BackendApp.Model.Enums
     public enum UpdateResult{
         KeyAlreadyExists,
         NotFound,
-        Ok
+        Ok,
+        Unauthorised
     }
 
 

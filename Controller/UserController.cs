@@ -90,5 +90,22 @@ namespace BackendApp.Controllers
             return this.Ok(user);
         }
         
+        [Route("{id}/change/password")]
+        [HttpPost]
+        [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
+        public IActionResult ChangePassword(ulong id, PasswordChangeRequest passwordChangeRequest)
+        {
+            var result = this.linkedOutUserService.ChangePassword(
+                id, 
+                passwordChangeRequest.OldPassword, 
+                passwordChangeRequest.NewPassword
+            );
+            return result switch{
+                UpdateResult.NotFound => this.NotFound("User not found."),
+                UpdateResult.Unauthorised => this.BadRequest("Old password does not match password in database"),
+                UpdateResult.Ok => this.Ok("Password successfully changed."),
+                _ => this.StatusCode(500)
+            };
+        }
     }
 }

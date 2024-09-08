@@ -82,7 +82,7 @@ namespace BackendApp.Controller
         }
 
         [HttpPost("by/{userId}")]
-        [Authorize( HasIdEqualToUserIdParamPolicyName )]
+        [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
         public IActionResult CreateJob(ulong userId, JobCreationRequest request)
         {   
             var creatorOfJob = this.regularUserService.GetUserById(userId);
