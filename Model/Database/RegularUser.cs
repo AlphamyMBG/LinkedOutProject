@@ -8,6 +8,7 @@ using BackendApp.Model.Enums;
 
 namespace BackendApp.Model
 {
+    [method : JsonConstructor]
     public class RegularUser(
         string email,
         string passwordHash,
@@ -35,12 +36,6 @@ namespace BackendApp.Model
         user.Location, user.CurrentPosition, user.Abilities.ToList(), user.ImagePath)
         {}
 
-        [JsonConstructor]
-        private RegularUser()
-        : this
-        ("", "", "", "", "", "", "", [], "")
-        {}
-
 
         public string Name { get; set; } = name;
         public string Surname { get; set; } = surname;
@@ -60,6 +55,7 @@ namespace BackendApp.Model
             this.PhoneNumber = linkedOutUser.PhoneNumber;
             this.Location = linkedOutUser.Location;
             this.ImagePath = linkedOutUser.ImagePath;
+            this.CurrentPosition = linkedOutUser.CurrentPosition;
         }
     }
 }
