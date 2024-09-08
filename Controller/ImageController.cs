@@ -46,6 +46,10 @@ public class ImageController
         return this.Ok(createdFileName);
     }
 
+    [HttpGet]
+    [AllowAnonymous]
+    [Route("download/{path}")]
+
     private BadRequestObjectResult GetBadRequestResponse(FileFilterResult filterResult, IFormFile image){
         return filterResult switch
         {

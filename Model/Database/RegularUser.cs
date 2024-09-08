@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using BackendApp.Model.Enums;
 
@@ -32,6 +33,12 @@ namespace BackendApp.Model
         : this
         (user.Email, user.PasswordHash, user.Name, user.Surname, user.PhoneNumber,
         user.Location, user.CurrentPosition, user.Abilities.ToList(), user.ImagePath)
+        {}
+
+        [JsonConstructor]
+        private RegularUser()
+        : this
+        ("", "", "", "", "", "", "", [], "")
         {}
 
 
