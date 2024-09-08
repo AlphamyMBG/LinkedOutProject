@@ -65,7 +65,13 @@ namespace BackendApp.Service
             if(userWithEmail is not null && userWithEmail.Id != id) return UpdateResult.KeyAlreadyExists;
 
             //Save new data
-            userInDb.Update(user);
+            userInDb.Email = user.Email;
+            userInDb.Name = user.Name;
+            userInDb.Surname = user.Surname;
+            userInDb.PhoneNumber = user.PhoneNumber;
+            userInDb.Location = user.Location;
+            userInDb.ImagePath = user.ImagePath;
+            userInDb.CurrentPosition = user.CurrentPosition;
             this.context.SaveChanges();
             return UpdateResult.Ok;
         }

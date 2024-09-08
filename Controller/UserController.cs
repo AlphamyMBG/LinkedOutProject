@@ -33,7 +33,6 @@ namespace BackendApp.Controllers
         [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
         public IActionResult Update(ulong id, RegularUser user)
         {
-            user.PasswordHash = EncryptionUtility.HashPassword(user.PasswordHash);
             return this.linkedOutUserService.Update(id, user) switch
             {
                 UpdateResult.KeyAlreadyExists => new JsonResult(this.Conflict()),    
