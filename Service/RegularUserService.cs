@@ -64,7 +64,7 @@ namespace BackendApp.Service
             RegularUser? userWithEmail = this.GetUserByEmail(user.Email);
             if(userWithEmail is not null && userWithEmail.Id != id) return UpdateResult.KeyAlreadyExists;
 
-            //Save new data
+            //Save new data (except for password, dedicated endpoint for that)
             userInDb.Email = user.Email;
             userInDb.Name = user.Name;
             userInDb.Surname = user.Surname;
@@ -72,6 +72,7 @@ namespace BackendApp.Service
             userInDb.Location = user.Location;
             userInDb.ImagePath = user.ImagePath;
             userInDb.CurrentPosition = user.CurrentPosition;
+            userInDb.Abilities = user.Abilities;
             this.context.SaveChanges();
             return UpdateResult.Ok;
         }

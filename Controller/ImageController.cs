@@ -48,7 +48,13 @@ public class ImageController
 
     [HttpGet]
     [AllowAnonymous]
-    [Route("download/{path}")]
+    [Route("{imageName}")]
+    public async Task<IActionResult> ReturnImage(string imageName)
+    {
+        var file = await this.fileService.GetFileContents(imageName, this.imageDirectory);
+        var fileType = Path.GetExtension(imageName);
+        return File(file, fileType);
+    }
 
     private BadRequestObjectResult GetBadRequestResponse(FileFilterResult filterResult, IFormFile image){
         return filterResult switch

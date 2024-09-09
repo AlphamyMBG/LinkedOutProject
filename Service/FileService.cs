@@ -13,8 +13,9 @@ public enum FileFilterResult
 public interface IFileService
 {
     FileFilterResult FilterFile(IFormFile formFile, params Func<IFormFile, FileFilterResult>[] filters);
-    Task<string> SaveFileAsync(IFormFile imageFile, string directoryPath);
+    Task<string> SaveFileAsync(IFormFile file, string directoryPath);
     void DeleteFile(string fileNameWithExtension);
+    Task<byte[]> GetFileContents(string fileName, string directoryPath);
 
     
 }
@@ -34,9 +35,9 @@ public class FileService(IWebHostEnvironment environment) : IFileService
         return FileFilterResult.Ok;
     }
 
-    public async Task<string> SaveFileAsync(IFormFile imageFile, string path)
+    public async Task<string> SaveFileAsync(IFormFile file, string path)
     {
-        ArgumentNullException.ThrowIfNull(imageFile);
+        ArgumentNullException.ThrowIfNull(file);
 
         
         if (!Directory.Exists(path))
@@ -45,12 +46,17 @@ public class FileService(IWebHostEnvironment environment) : IFileService
         }
 
         // generate a unique filename
-        var ext = Path.GetExtension(imageFile.Name);
+        var ext = Path.GetExtension(file.Name);
         var fileName = $"{Guid.NewGuid()}{ext}";
         var fileNameWithPath = Path.Combine(path, fileName);
         using var stream = new FileStream(fileNameWithPath, FileMode.Create);
-        await imageFile.CopyToAsync(stream);
+        await file.CopyToAsync(stream);
         return fileName;
+    }
+
+    public async Task<byte[]> GetFileContents(string fileName, string directoryPath)
+    {
+        return await System.IO.File.ReadAllBytesAsync($"{directoryPath}/{fileName}");
     }
 
 
