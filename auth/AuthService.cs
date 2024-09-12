@@ -23,12 +23,11 @@ public interface IAuthenticationService
 }
 
 public class AuthenticationService 
-(IRegularUserService userService, IAdminUserService adminService, IConfiguration config, ApiContext context)
+(IRegularUserService userService, IAdminUserService adminService, IConfiguration config)
 : IAuthenticationService
 {
     private readonly IRegularUserService userService = userService;
     private readonly IAdminUserService adminService = adminService;
-    private readonly ApiContext context = context;
     private readonly IConfiguration configuration = config;
     public AppUser? Authenticate(TokenGenerationRequest loginRequest)
     {

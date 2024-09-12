@@ -68,9 +68,9 @@ namespace BackendApp.Controller
         [Route("accept/{id}")]
         [HttpPost]
         [Authorize( ReceivedConnectionRequestPolicyName )]
-        public IActionResult Accept(uint id, RegularUser connectionReceipient)
+        public IActionResult Accept(uint id)
         {
-            return this.connectionService.AcceptConnectionRequest(connectionReceipient, id) ? this.Ok() : this.NotFound();
+            return this.connectionService.AcceptConnectionRequest(id) ? this.Ok() : this.NotFound();
         }
 
         [Route("decline/{id}")]

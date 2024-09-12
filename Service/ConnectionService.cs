@@ -15,7 +15,7 @@ namespace BackendApp.Service{
         bool SendConnectionRequest(RegularUser from, RegularUser to);
         bool SendConnectionRequest(uint from, uint to);
         bool DeclineConnectionRequest(RegularUser user, uint connectionId);
-        bool AcceptConnectionRequest(RegularUser user, uint connectionId);
+        bool AcceptConnectionRequest(uint connectionId);
         RegularUser[] GetUsersConnectedTo(RegularUser user);
     }
 
@@ -112,10 +112,10 @@ namespace BackendApp.Service{
             return this.SendConnectionRequest(from, to);
         }
 
-        public bool AcceptConnectionRequest(RegularUser user, uint connectionId)
+        public bool AcceptConnectionRequest(uint connectionId)
         {
             Connection? connection = this.GetConnectionById(connectionId);
-            if(connection is null || connection.SentBy != user) return false;
+            if(connection is null) return false;
             connection.Accepted = true;
             this.context.SaveChanges();
             return true;
@@ -132,7 +132,7 @@ namespace BackendApp.Service{
         {
             var to = this.userService.GetUserById(userId);
             if(to is null) return false;
-            return this.AcceptConnectionRequest(to, connectionId);
+            return this.AcceptConnectionRequest(connectionId);
         }
 
         public bool DeclineConnectionRequest(uint userId, uint connectionId)
