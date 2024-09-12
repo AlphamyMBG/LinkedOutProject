@@ -140,6 +140,7 @@ builder.Services.AddAuthorizationBuilder()
     
 
 var app = builder.Build();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -154,17 +155,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.Services.GetService<ApiContext>()?.
-    AdminUsers
-    .Add(new AdminUser("a@emailer.com", EncryptionUtility.HashPassword("bigchungusplayer6969f12")));
-app.Services.GetService<ApiContext>()?.
-    RegularUsers
-    .Add(new RegularUser(
-        "b@emailer.com",
-        EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
-        "name", "poop", "6900000000", "dadaby car",
-        "The Rizzler", [], ""));
-app.Services.GetService<ApiContext>()?.SaveChanges();  
+// app.Services.GetService<ApiContext>()?.
+//     AdminUsers
+//     .Add(new AdminUser("a@emailer.com", EncryptionUtility.HashPassword("bigchungusplayer6969f12")));
+// app.Services.GetService<ApiContext>()?.
+//     RegularUsers
+//     .Add(new RegularUser(
+//         "b@emailer.com",
+//         EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
+//         "name", "poop", "6900000000", "dadaby car",
+//         "The Rizzler", [], ""));
+// app.Services.GetService<ApiContext>()?.SaveChanges(); 
 
 app.Run();
 
