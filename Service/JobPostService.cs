@@ -11,13 +11,13 @@ namespace BackendApp.Service
     public interface IJobService
     {
 
-        public JobPost? GetJobById(ulong id);
+        public JobPost? GetJobById(long id);
         public JobPost[] GetAllJobs();
         public bool AddJob(JobPost post);
-        public bool RemoveJob(ulong id);
-        public UpdateResult UpdateJob(ulong id, JobPost postContent);
+        public bool RemoveJob(long id);
+        public UpdateResult UpdateJob(long id, JobPost postContent);
         public JobPost? CreateNewJobPost(RegularUser user, string title, string description, string[] requirements);
-        public UpdateResult AddInterestedUser(ulong id, RegularUser user);
+        public UpdateResult AddInterestedUser(long id, RegularUser user);
         public JobPost[] GetJobPostsBy(RegularUser user);
     
     }
@@ -36,10 +36,10 @@ namespace BackendApp.Service
         public JobPost[] GetAllJobs()
             => [.. this.context.JobPosts];
 
-        public JobPost? GetJobById(ulong id)
+        public JobPost? GetJobById(long id)
             => this.context.JobPosts.FirstOrDefault(post => post.Id == id);
 
-        public bool RemoveJob(ulong id)
+        public bool RemoveJob(long id)
         {
             JobPost? post = this.GetJobById(id);
             if(post == null) return false;
@@ -49,7 +49,7 @@ namespace BackendApp.Service
             return true;
         }
 
-        public UpdateResult UpdateJob(ulong id, JobPost JobContent)
+        public UpdateResult UpdateJob(long id, JobPost JobContent)
         {
             //Check if user exists
             JobPost? jobInDb = this.GetJobById(id);
@@ -61,7 +61,7 @@ namespace BackendApp.Service
             return UpdateResult.Ok;
         }
 
-        public UpdateResult AddInterestedUser(ulong id, RegularUser user)
+        public UpdateResult AddInterestedUser(long id, RegularUser user)
         {
             JobPost? jobInDb = this.GetJobById(id);
             if(jobInDb is null) return UpdateResult.NotFound;
@@ -72,7 +72,7 @@ namespace BackendApp.Service
             return UpdateResult.Ok;
         }
 
-        public UpdateResult RemoveInterestedUser(ulong id, RegularUser user)
+        public UpdateResult RemoveInterestedUser(long id, RegularUser user)
         {
             JobPost? jobInDb = this.GetJobById(id);
             if(jobInDb is null) return UpdateResult.NotFound;

@@ -19,7 +19,7 @@ namespace BackendApp.Model
         {}
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
-        public ulong Id {get; set;}
+        public long Id {get; set;}
         public string Content {get; set;} = content;
         public RegularUser SentBy {get; set;} = sentBy;
         public RegularUser SentTo {get; set;} = sentTo;

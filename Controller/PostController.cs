@@ -34,7 +34,7 @@ namespace BackendApp.Controller
         [Route("create/{userId}")]
         [HttpPost]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName)]
-        public IActionResult CreatePost(ulong userId, PostCreationRequest request)
+        public IActionResult CreatePost(long userId, PostCreationRequest request)
         {
             var user = this.userService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found.");
@@ -45,7 +45,7 @@ namespace BackendApp.Controller
         [Route("reply/{postId}/{userId}")]
         [HttpPost]
         [Authorize( HasIdEqualToUserIdParamPolicyName )]
-        public IActionResult ReplyToPost(ulong postId, ulong userId, PostCreationRequest request)
+        public IActionResult ReplyToPost(long postId, long userId, PostCreationRequest request)
         {
             var user = this.userService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found.");
@@ -56,7 +56,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
-        public IActionResult UpdatePost(ulong id, Post post)
+        public IActionResult UpdatePost(long id, Post post)
             => this.postService.UpdatePost(id, post) switch
             {
                 UpdateResult.KeyAlreadyExists => this.Conflict(),
@@ -68,7 +68,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpDelete]
         [Authorize]
-        public IActionResult Delete(ulong id)
+        public IActionResult Delete(long id)
             => this.postService.RemovePost(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
@@ -79,7 +79,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Get(ulong id)
+        public IActionResult Get(long id)
         {
             var user = this.postService.GetPostById(id);
             return user is not null ? this.Ok(user) : this.NotFound();

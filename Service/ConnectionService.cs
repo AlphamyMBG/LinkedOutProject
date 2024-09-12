@@ -4,14 +4,14 @@ using BackendApp.Model.Enums;
 
 namespace BackendApp.Service{
     public interface IConnectionService {
-        Connection? GetConnectionById(ulong id);
+        Connection? GetConnectionById(long id);
         Connection[] GetAllConnections();
-        Connection[] GetAllConnectionsSentBy(ulong userId);
-        Connection[] GetAllConnectionsSentTo(ulong userId);
+        Connection[] GetAllConnectionsSentBy(long userId);
+        Connection[] GetAllConnectionsSentTo(long userId);
         bool AreConnected(RegularUser userA, RegularUser userB);
         bool AddConnection(Connection Connection);
-        bool RemoveConnection(ulong id);
-        UpdateResult UpdateConnection(ulong id, Connection Connection);
+        bool RemoveConnection(long id);
+        UpdateResult UpdateConnection(long id, Connection Connection);
         bool SendConnectionRequest(RegularUser from, RegularUser to);
         bool SendConnectionRequest(uint from, uint to);
         bool DeclineConnectionRequest(RegularUser user, uint connectionId);
@@ -35,12 +35,12 @@ namespace BackendApp.Service{
         public Connection[] GetAllConnections()
             => [.. this.context.Connections];
         
-        public Connection[] GetAllConnectionsSentBy(ulong userId)
+        public Connection[] GetAllConnectionsSentBy(long userId)
             => this.context.Connections
                 .Where(Connection => Connection.SentBy.Id == userId)
                 .OrderBy(Connection => Connection.Timestamp)
                 .ToArray();
-        public Connection[] GetAllConnectionsSentTo(ulong userId)
+        public Connection[] GetAllConnectionsSentTo(long userId)
             => this.context.Connections
                 .Where(Connection => Connection.SentTo.Id == userId)
                 .OrderBy(Connection => Connection.Timestamp)
@@ -60,12 +60,12 @@ namespace BackendApp.Service{
                 )
                 .Any();
         }
-        public Connection? GetConnectionById(ulong id)
+        public Connection? GetConnectionById(long id)
             => this.context.Connections.FirstOrDefault( 
                 Connection => Connection.Id == id 
             );
 
-        public bool RemoveConnection(ulong id){
+        public bool RemoveConnection(long id){
             Connection? Connection = this.GetConnectionById(id);
             if( Connection is null ) return false;
 
@@ -74,7 +74,7 @@ namespace BackendApp.Service{
             return true;
         }
 
-        public UpdateResult UpdateConnection(ulong id, Connection Connection)
+        public UpdateResult UpdateConnection(long id, Connection Connection)
         {
             //Check if user exists
             Connection? ConnectionInDb = this.GetConnectionById(id);
@@ -115,7 +115,7 @@ namespace BackendApp.Service{
         public bool AcceptConnectionRequest(RegularUser user, uint connectionId)
         {
             Connection? connection = this.GetConnectionById(connectionId);
-            if(connection is null || connection.SentBy.Id != user.Id) return false;
+            if(connection is null || connection.SentBy != user) return false;
             connection.Accepted = true;
             this.context.SaveChanges();
             return true;

@@ -13,7 +13,7 @@ namespace BackendApp.Model
     )
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
-        public ulong Id {get; set;}
+        public long Id {get; set;}
         public RegularUser PostedBy {get; set;} = postedBy;
         public List<RegularUser> InterestedUsers { get; set; } = interestedUsers;
         public DateTime PostedAt {get; set;} = postedAt;

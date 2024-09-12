@@ -12,15 +12,15 @@ namespace BackendApp.Service
 {
     public interface IRegularUserService{
         public RegularUser? GetUserByEmail(string email);
-        public RegularUser? GetUserById(ulong id);
+        public RegularUser? GetUserById(long id);
         public RegularUser? GetUserByName(string name);
         public RegularUser? GetUserBySurname(string surname);
         public RegularUser[] GetAllUsers();
         public bool AddUser(RegularUser user);
-        public bool RemoveUser(ulong id);
-        public UpdateResult Update(ulong id, RegularUser user);
+        public bool RemoveUser(long id);
+        public UpdateResult Update(long id, RegularUser user);
         public RegularUser[] SearchByUsername(string searchString); 
-        public UpdateResult ChangePassword(ulong userId, string oldPassword, string newPassword);
+        public UpdateResult ChangePassword(long userId, string oldPassword, string newPassword);
     }
     public class RegularUserService(ApiContext context) : IRegularUserService
     {
@@ -41,7 +41,7 @@ namespace BackendApp.Service
         public RegularUser? GetUserByEmail(string email) 
             => this.context.RegularUsers.FirstOrDefault( userInDb => userInDb.Email == email );
 
-        public RegularUser? GetUserById(ulong id)
+        public RegularUser? GetUserById(long id)
             => this.context.RegularUsers.FirstOrDefault( userInDb => userInDb.Id == id );
 
         public RegularUser? GetUserByName(string name)
@@ -50,7 +50,7 @@ namespace BackendApp.Service
         public RegularUser? GetUserBySurname(string surname)
             => this.context.RegularUsers.FirstOrDefault( userInDb => userInDb.Surname == surname );
 
-        public UpdateResult Update(ulong id, RegularUser user)
+        public UpdateResult Update(long id, RegularUser user)
         {
             //Check if admin with same email exists
             if(this.AdminWithEmailExists(user.Email)) 
@@ -77,7 +77,7 @@ namespace BackendApp.Service
             return UpdateResult.Ok;
         }
 
-        public bool RemoveUser(ulong id){
+        public bool RemoveUser(long id){
             RegularUser? user = this.GetUserById(id);
             if( user is null ) return false;
             this.RemoveDataAssociatedWith(user);
@@ -90,7 +90,7 @@ namespace BackendApp.Service
                 .ToArray();
         }
 
-        public UpdateResult ChangePassword(ulong userId, string oldPassword, string newPassword)
+        public UpdateResult ChangePassword(long userId, string oldPassword, string newPassword)
         {
             var user = this.GetUserById(userId);
             if(user is null) return UpdateResult.NotFound;

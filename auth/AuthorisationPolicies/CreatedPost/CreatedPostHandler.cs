@@ -44,8 +44,8 @@ public class  CreatedPostHandler
             return Task.CompletedTask;
         }
 
-        var user = this.userService.GetUserById(ulong.Parse(userIdClaim.Value));
-        var post = this.postService.GetPostById(ulong.Parse(notificationIdString));
+        var user = this.userService.GetUserById(long.Parse(userIdClaim.Value));
+        var post = this.postService.GetPostById(long.Parse(notificationIdString));
 
         if(post is not null && post.PostedBy == user)
         {

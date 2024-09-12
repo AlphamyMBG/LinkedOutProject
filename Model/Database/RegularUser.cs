@@ -36,7 +36,6 @@ namespace BackendApp.Model
         user.Location, user.CurrentPosition, user.Abilities.ToList(), user.ImagePath)
         {}
 
-
         public string Name { get; set; } = name;
         public string Surname { get; set; } = surname;
         public string PhoneNumber { get; set; } = phoneNumber;

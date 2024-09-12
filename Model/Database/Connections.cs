@@ -26,7 +26,7 @@ namespace BackendApp.Model
         {}
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
-        public ulong Id {get; set;}
+        public long Id {get; set;}
         public RegularUser SentBy {get; set;} = sentBy;
         public RegularUser SentTo {get; set;} = sentTo;
         public DateTime Timestamp {get; set;} = timestamp;

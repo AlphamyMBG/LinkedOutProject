@@ -10,13 +10,13 @@ namespace BackendApp.Service
 {
     public interface IPostService
     {
-        public Post? GetPostById(ulong id);
+        public Post? GetPostById(long id);
         public Post[] GetAllPosts();
         public bool AddPost(Post post);
-        public bool RemovePost(ulong id);
+        public bool RemovePost(long id);
         public Post? CreateNewPost(string post, RegularUser creator);
-        public UpdateResult UpdatePost(ulong id, Post postContent);
-        public Post? ReplyToPost(ulong originalPostId, string content, RegularUser replyGuy);
+        public UpdateResult UpdatePost(long id, Post postContent);
+        public Post? ReplyToPost(long originalPostId, string content, RegularUser replyGuy);
         public Post[] GetPostsFrom(RegularUser user, bool includeReplies = false);
     }
 
@@ -44,7 +44,7 @@ namespace BackendApp.Service
             return post;
         }
 
-        public Post? ReplyToPost(ulong originalPostId, string content, RegularUser replyGuy)
+        public Post? ReplyToPost(long originalPostId, string content, RegularUser replyGuy)
         {
             var ogPost = this.GetPostById(originalPostId);
             if(ogPost is null) return null;
@@ -64,10 +64,10 @@ namespace BackendApp.Service
         public Post[] GetAllPosts()
             => this.context.Posts.ToArray();
 
-        public Post? GetPostById(ulong id)
+        public Post? GetPostById(long id)
             => this.context.Posts.FirstOrDefault(post => post.Id == id);
 
-        public bool RemovePost(ulong id)
+        public bool RemovePost(long id)
         {
             Post? post = this.GetPostById(id);
             if(post == null) return false;
@@ -81,7 +81,7 @@ namespace BackendApp.Service
             return true;
         }
 
-        public UpdateResult UpdatePost(ulong id, Post postContent)
+        public UpdateResult UpdatePost(long id, Post postContent)
         {
             //Check if user exists
             Post? postInDb = this.GetPostById(id);

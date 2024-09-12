@@ -4,14 +4,14 @@ using BackendApp.Model.Enums;
 
 namespace BackendApp.Service{
     public interface IMessageService {
-        public Message? GetMessageById(ulong id);
+        public Message? GetMessageById(long id);
         public Message[] GetAllMessages();
         public Message[] GetAllMessagesSentBy(uint userId);
         public Message[] GetAllMessagesSentTo(uint userId);
         public Message[] GetConversationBetween(uint userA, uint userB);
         public bool AddMessage(Message message);
-        public bool RemoveMessage(ulong id);
-        public UpdateResult UpdateMessage(ulong id, Message message);
+        public bool RemoveMessage(long id);
+        public UpdateResult UpdateMessage(long id, Message message);
         public bool SendMessage(RegularUser from, RegularUser to, string content);
         public bool SendMessage(uint from, uint to, string content);
         public Message[] GetRangeOfConversationBetween(uint userAId, uint userBId, int startAt, int endAfter);
@@ -70,12 +70,12 @@ namespace BackendApp.Service{
         }
         
 
-        public Message? GetMessageById(ulong id)
+        public Message? GetMessageById(long id)
             => this.context.Messages.FirstOrDefault( 
                 message => message.Id == id 
             );
 
-        public bool RemoveMessage(ulong id){
+        public bool RemoveMessage(long id){
             Message? message = this.GetMessageById(id);
             if( message is null ) return false;
 
@@ -84,7 +84,7 @@ namespace BackendApp.Service{
             return true;
         }
 
-        public UpdateResult UpdateMessage(ulong id, Message message)
+        public UpdateResult UpdateMessage(long id, Message message)
         {
             //Check if user exists
             Message? messageInDb = this.GetMessageById(id);

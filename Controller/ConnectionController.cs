@@ -28,7 +28,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
-        public IActionResult UpdateConnection(ulong id, Connection notification)
+        public IActionResult UpdateConnection(long id, Connection notification)
             => this.connectionService.UpdateConnection(id, notification) switch
             {
                 UpdateResult.KeyAlreadyExists => this.Conflict(),
@@ -40,7 +40,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpDelete]
         [Authorize( IsAdminPolicyName )] //TODO: Add apropriate filter
-        public IActionResult Delete(ulong id)
+        public IActionResult Delete(long id)
             => this.connectionService.RemoveConnection(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
@@ -51,7 +51,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Get(ulong id)
+        public IActionResult Get(long id)
         {
             var Connection = this.connectionService.GetConnectionById(id);
             return Connection is not null ? this.Ok(Connection) : this.NotFound();

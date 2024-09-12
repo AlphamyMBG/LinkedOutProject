@@ -27,7 +27,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
-        public IActionResult UpdateNotification(ulong id, Notification post)
+        public IActionResult UpdateNotification(long id, Notification post)
             => this.notificationService.UpdateNotifications(id, post) switch
             {
                 UpdateResult.KeyAlreadyExists => this.Conflict(),
@@ -39,7 +39,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpDelete]
         [Authorize( HasNotificationPolicyName )]
-        public IActionResult Delete(ulong id)
+        public IActionResult Delete(long id)
             => this.notificationService.RemoveNotifications(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
@@ -50,7 +50,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpGet]
         [Authorize( HasNotificationPolicyName )]
-        public IActionResult Get(ulong id)
+        public IActionResult Get(long id)
         {
             var notification = this.notificationService.GetNotificationById(id);
             return notification is not null ? this.Ok(notification) : this.NotFound();
@@ -59,13 +59,13 @@ namespace BackendApp.Controller
         [Route("my/{id}")]
         [HttpGet]
         [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
-        public IActionResult GetUsersNotifications(ulong id)
+        public IActionResult GetUsersNotifications(long id)
             => this.Ok(this.notificationService.GetNotificationsForUser(id));
 
         [Route("read/{id}")]
         [HttpGet]
         [Authorize( HasNotificationPolicyName )]
-        public IActionResult MarkNotificationAsRead(ulong id)
+        public IActionResult MarkNotificationAsRead(long id)
             => this.notificationService.MarkNotificationAsRead(id) ? this.Ok() : this.NotFound();
     }
 }

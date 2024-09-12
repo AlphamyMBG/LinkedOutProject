@@ -1,11 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using BackendApp.Data;
-using BackendApp.Controllers;
 using BackendApp.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using BackendApp.auth;
 using BackendApp.Model;
 using Microsoft.OpenApi.Models;
@@ -19,8 +17,13 @@ var corsPolicyName = "_myAllowAllOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 // Set DB context up.
+// builder.Services.AddDbContext<ApiContext>(
+//     opt => opt.UseInMemoryDatabase("LinkedOutDb"), 
+//     contextLifetime: ServiceLifetime.Singleton
+// );
+
 builder.Services.AddDbContext<ApiContext>(
-    opt => opt.UseInMemoryDatabase("LinkedOutDb"), 
+    opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")), 
     contextLifetime: ServiceLifetime.Singleton
 );
 
@@ -145,7 +148,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection(); TODO: Add later
+// app.UseHttpsRedirection();
 app.UseCors(corsPolicyName);
 app.UseAuthentication();
 app.UseAuthorization();
@@ -153,16 +156,14 @@ app.MapControllers();
 
 app.Services.GetService<ApiContext>()?.
     AdminUsers
-    .Add(new AdminUser("a@emailer.com", EncryptionUtility.HashPassword("bigchungusplayer6969f12"))
-    { Id = 1 });
+    .Add(new AdminUser("a@emailer.com", EncryptionUtility.HashPassword("bigchungusplayer6969f12")));
 app.Services.GetService<ApiContext>()?.
     RegularUsers
     .Add(new RegularUser(
         "b@emailer.com",
         EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
         "name", "poop", "6900000000", "dadaby car",
-        "The Rizzler", [], "")
-    { Id = 1 });
+        "The Rizzler", [], ""));
 app.Services.GetService<ApiContext>()?.SaveChanges();  
 
 app.Run();

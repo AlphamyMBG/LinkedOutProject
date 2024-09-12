@@ -36,7 +36,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpPost]
         [Authorize(IsAdminPolicyName )]
-        public IActionResult UpdateJob(ulong id, JobPost job)
+        public IActionResult UpdateJob(long id, JobPost job)
             => this.jobService.UpdateJob(id, job) switch
             {
                 UpdateResult.KeyAlreadyExists => this.Conflict(),
@@ -48,7 +48,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpDelete]
         [Authorize( CreatedJobPolicyName )]
-        public IActionResult Delete(ulong id)
+        public IActionResult Delete(long id)
             => this.jobService.RemoveJob(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
@@ -59,7 +59,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Get(ulong id)
+        public IActionResult Get(long id)
         {
             var user = this.jobService.GetJobById(id);
             return user is not null ? this.Ok(user) : this.NotFound();
@@ -83,7 +83,7 @@ namespace BackendApp.Controller
 
         [HttpPost("by/{userId}")]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
-        public IActionResult CreateJob(ulong userId, JobCreationRequest request)
+        public IActionResult CreateJob(long userId, JobCreationRequest request)
         {   
             var creatorOfJob = this.regularUserService.GetUserById(userId);
             if(creatorOfJob is null) return this.NotFound("User not found.");
@@ -96,7 +96,7 @@ namespace BackendApp.Controller
 
         [HttpGet("by/{userId}")]
         [AllowAnonymous]
-        public IActionResult GetJobsPostedBy(ulong userId)
+        public IActionResult GetJobsPostedBy(long userId)
         {   
             var user = this.regularUserService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found.");
@@ -105,7 +105,7 @@ namespace BackendApp.Controller
 
         [HttpGet("recommend/{userId}/")]
         [AllowAnonymous]
-        public IActionResult RecommendJobsTo(ulong userId)
+        public IActionResult RecommendJobsTo(long userId)
         {
             var user = this.regularUserService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found");

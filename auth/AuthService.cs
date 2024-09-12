@@ -61,7 +61,7 @@ public class AuthenticationService
         var claims = new List<Claim>
         {
             new(ClaimTypes.Email, user.Email),
-            new(ClaimTypes.Sid, user.Id.ToString()),
+            new(ClaimTypes.Sid, user.Id.ToString()), 
             new(ClaimTypes.Role, user is AdminUser ? "admin" : "regular"),
         };
 

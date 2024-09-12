@@ -26,7 +26,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
-        public IActionResult UpdateMessage(ulong id, Message notification)
+        public IActionResult UpdateMessage(long id, Message notification)
             => this.messageService.UpdateMessage(id, notification) switch
             {
                 UpdateResult.KeyAlreadyExists => this.Conflict(),
@@ -38,7 +38,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpDelete]
         [Authorize( SentMessagePolicyName )]
-        public IActionResult Delete(ulong id)
+        public IActionResult Delete(long id)
             => this.messageService.RemoveMessage(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
@@ -49,7 +49,7 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpGet]
         [Authorize( SentMessagePolicyName )]
-        public IActionResult Get(ulong id)
+        public IActionResult Get(long id)
         {
             var Message = this.messageService.GetMessageById(id);
             return Message is not null ? this.Ok(Message) : this.NotFound();

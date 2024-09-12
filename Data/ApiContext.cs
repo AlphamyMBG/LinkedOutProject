@@ -8,8 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendApp.Data;
 
-public class ApiContext(DbContextOptions<ApiContext> options) : DbContext(options)
+public class ApiContext
+(DbContextOptions<ApiContext> options, IConfiguration configuration) 
+: DbContext(options)
 {
+
+    private readonly IConfiguration configuration = configuration;
+
     public DbSet<AdminUser> AdminUsers {get; private set;} 
     public DbSet<RegularUser> RegularUsers {get; private set;}
     public DbSet<Post> Posts {get; private set;}
@@ -18,15 +23,13 @@ public class ApiContext(DbContextOptions<ApiContext> options) : DbContext(option
     public DbSet<Message> Messages {get; private set;}
     public DbSet<Connection> Connections {get; private set;}
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
-        // var admin = new AdminUser("a", EncryptionUtility.HashPassword("bigchungusplayer6969f12"))
-        // {
-        //     Id = 1
-        // };
-        // modelBuilder.Entity<AdminUser>().HasData(
-        //     admin
-        // );
+        modelBuilder.UseIdentityAlwaysColumns();
     }
 }

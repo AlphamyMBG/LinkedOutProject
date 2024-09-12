@@ -44,8 +44,8 @@ public class SentMessageHandler
             return Task.CompletedTask;
         }
 
-        var user = this.userService.GetUserById(ulong.Parse(userIdClaim.Value));
-        var message = this.messageService.GetMessageById(ulong.Parse(notificationIdString));
+        var user = this.userService.GetUserById(long.Parse(userIdClaim.Value));
+        var message = this.messageService.GetMessageById(long.Parse(notificationIdString));
 
         if(message is not null && message.SentBy == user)
         {

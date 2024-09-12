@@ -44,8 +44,8 @@ public class HasNotificationHandler
             return Task.CompletedTask;
         }
 
-        var user = this.userService.GetUserById(ulong.Parse(userIdClaim.Value));
-        var notification = this.notificationService.GetNotificationById(ulong.Parse(notificationIdString));
+        var user = this.userService.GetUserById(long.Parse(userIdClaim.Value));
+        var notification = this.notificationService.GetNotificationById(long.Parse(notificationIdString));
 
         if(notification is not null && notification.ToUser == user)
         {

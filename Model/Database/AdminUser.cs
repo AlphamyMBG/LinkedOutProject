@@ -11,5 +11,7 @@ namespace BackendApp.Model
     (string email, string passwordHash) 
     : AppUser
     (email: email, passwordHash: passwordHash, userRole: UserRole.Admin)
-    {}
+    {
+        
+    }
 }

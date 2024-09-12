@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace BackendApp.Model
         {}
         
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
-        public ulong Id {get; set;}
+        public long Id {get; set;}
         public string Content {get; set;} = content;
         public bool Read {get; set;} = read;
         public RegularUser ToUser {get; set;} = toUser; 

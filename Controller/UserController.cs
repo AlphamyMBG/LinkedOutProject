@@ -31,7 +31,7 @@ namespace BackendApp.Controllers
         [Route("{id}")]
         [HttpPost]
         [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
-        public IActionResult Update(ulong id, RegularUser user)
+        public IActionResult Update(long id, RegularUser user)
         {
             return this.linkedOutUserService.Update(id, user) switch
             {
@@ -44,7 +44,7 @@ namespace BackendApp.Controllers
         [Route("{id}")]
         [HttpDelete]
         [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
-        public IActionResult Delete(ulong id)
+        public IActionResult Delete(long id)
             => this.linkedOutUserService.RemoveUser(id) 
             ? new JsonResult(this.Ok("User successfully deleted.")) 
             : new JsonResult(this.NotFound("User not found."));
@@ -62,7 +62,7 @@ namespace BackendApp.Controllers
         [Route("{id}")]
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Get(ulong id){
+        public IActionResult Get(long id){
             var user = this.linkedOutUserService.GetUserById(id);
             return new JsonResult(
                 user is not null 
@@ -92,7 +92,7 @@ namespace BackendApp.Controllers
         [Route("{id}/change/password")]
         [HttpPost]
         [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
-        public IActionResult ChangePassword(ulong id, PasswordChangeRequest passwordChangeRequest)
+        public IActionResult ChangePassword(long id, PasswordChangeRequest passwordChangeRequest)
         {
             var result = this.linkedOutUserService.ChangePassword(
                 id, 

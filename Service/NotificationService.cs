@@ -4,14 +4,14 @@ using BackendApp.Model.Enums;
 
 namespace BackendApp.Service{
     public interface INotificationService {
-        public Notification? GetNotificationById(ulong id);
+        public Notification? GetNotificationById(long id);
         public Notification[] GetAllNotifications();
         public bool AddNotification(Notification notification);
-        public bool RemoveNotifications(ulong id);
-        public UpdateResult UpdateNotifications(ulong id, Notification notificationContent);
-        public Notification[] GetNotificationsForUser(ulong userId);
+        public bool RemoveNotifications(long id);
+        public UpdateResult UpdateNotifications(long id, Notification notificationContent);
+        public Notification[] GetNotificationsForUser(long userId);
         void SendNotificationTo(RegularUser user, string content);
-        bool MarkNotificationAsRead(ulong notificationId);
+        bool MarkNotificationAsRead(long notificationId);
     }
 
     public class NotificationService(ApiContext context) : INotificationService
@@ -27,12 +27,12 @@ namespace BackendApp.Service{
 
         public Notification[] GetAllNotifications()
             => this.context.Notifications.ToArray();
-        public Notification? GetNotificationById(ulong id)
+        public Notification? GetNotificationById(long id)
             => this.context.Notifications.FirstOrDefault( 
                 notif => notif.Id == id 
             );
 
-        public bool RemoveNotifications(ulong id){
+        public bool RemoveNotifications(long id){
             Notification? notif = this.GetNotificationById(id);
             if( notif is null ) return false;
 
@@ -41,7 +41,7 @@ namespace BackendApp.Service{
             return true;
         }
 
-        public UpdateResult UpdateNotifications(ulong id, Notification notif)
+        public UpdateResult UpdateNotifications(long id, Notification notif)
         {
             //Check if user exists
             Notification? notifInDb = this.GetNotificationById(id);
@@ -53,7 +53,7 @@ namespace BackendApp.Service{
             return UpdateResult.Ok;
         }
 
-        public Notification[] GetNotificationsForUser(ulong userId)
+        public Notification[] GetNotificationsForUser(long userId)
             => this.context.Notifications
                 .Where( notif => notif.ToUser.Id == userId)
                 .OrderBy( notif => notif.Timestamp)
@@ -65,7 +65,7 @@ namespace BackendApp.Service{
             this.context.SaveChanges();
         }
 
-        public bool MarkNotificationAsRead(ulong notificationId)
+        public bool MarkNotificationAsRead(long notificationId)
         {
             Notification? notification = this.GetNotificationById(notificationId);
             if(notification is null) return false;
