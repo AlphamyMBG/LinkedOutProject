@@ -10,7 +10,7 @@ namespace BackendApp.Service{
         public bool RemoveNotifications(long id);
         public UpdateResult UpdateNotifications(long id, Notification notificationContent);
         public Notification[] GetNotificationsForUser(long userId);
-        void SendNotificationTo(RegularUser user, string content);
+        void SendNotificationTo(RegularUser user, string content, PostBase? associatedPost = null);
         bool MarkNotificationAsRead(long notificationId);
     }
 
@@ -59,9 +59,9 @@ namespace BackendApp.Service{
                 .OrderBy( notif => notif.Timestamp)
                 .ToArray();
     
-        public void SendNotificationTo(RegularUser user, string content)
+        public void SendNotificationTo(RegularUser user, string content, PostBase? associatedPost = null)
         {
-            this.AddNotification(new Notification(content, false, user, DateTime.Now));
+            this.AddNotification(new Notification(content, false, user, DateTime.Now, associatedPost));
             this.context.SaveChanges();
         }
 

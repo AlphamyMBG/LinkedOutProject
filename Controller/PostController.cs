@@ -19,12 +19,13 @@ namespace BackendApp.Controller
     [Route("api/[Controller]")]
     [ApiController]
     public class PostController
-    (IPostService postService, IInterestService interestService, IRegularUserService userService) 
+    (IPostService postService, IInterestService interestService, IRegularUserService userService, INotificationService notificationService) 
     : ControllerBase
     {
         private readonly IPostService postService = postService;
         private readonly IInterestService interestService = interestService;
         private readonly IRegularUserService userService = userService;
+        private readonly INotificationService notificationService = notificationService;
 
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
@@ -89,8 +90,16 @@ namespace BackendApp.Controller
         [HttpPost]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
         public IActionResult DeclareInterest(uint userId, uint postId)
-        {
-            return this.interestService.DeclareInterestForPost(userId, postId).ToResultObject(this);
+        {   
+            var user = this.userService.GetUserById(userId);
+            var post = this.postService.GetPostById(postId);
+            if(user is null || post is null) return this.NotFound("User not found.");
+            
+            var result = this.interestService.DeclareInterestForPost(userId, postId);
+            if(result == UpdateResult.Ok){
+                this.notificationService.SendNotificationTo(post.PostedBy, $"{user.Name} was interested in your post!", post);
+            }
+            return result.ToResultObject(this);
         }
 
         [Route("{postId}/interest/unset/{userId}")]

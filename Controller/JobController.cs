@@ -19,14 +19,16 @@ namespace BackendApp.Controller
         IJobService jobService, 
         IInterestService interestService, 
         IRegularUserService regularUserService,
-        IRecommendationService recommendationService
+        IRecommendationService recommendationService,
+        INotificationService notificationService
     ) 
     : ControllerBase
     {
         private readonly IJobService jobService = jobService;
         private readonly IInterestService interestService = interestService;
-        private readonly IRegularUserService regularUserService = regularUserService;
+        private readonly IRegularUserService userService = regularUserService;
         private readonly IRecommendationService recommendationService = recommendationService;
+        private readonly INotificationService notificationService = notificationService;
 
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
@@ -70,7 +72,15 @@ namespace BackendApp.Controller
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
         public IActionResult DeclareInterest(uint userId, uint jobId)
         {
-            return this.interestService.DeclareInterestForJob(userId, jobId).ToResultObject(this);
+            var user = this.userService.GetUserById(userId);
+            var post = this.jobService.GetJobById(jobId);
+            if(user is null || post is null) return this.NotFound("User not found.");
+            
+            var result = this.interestService.DeclareInterestForJob(userId, jobId);
+            if(result == UpdateResult.Ok){
+                this.notificationService.SendNotificationTo(post.PostedBy, $"{user.Name} was interested in your post!", post);
+            }
+            return result.ToResultObject(this);
         }
 
         [Route("{jobId}/interest/unset/{userId}")]
@@ -85,7 +95,7 @@ namespace BackendApp.Controller
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
         public IActionResult CreateJob(long userId, JobCreationRequest request)
         {   
-            var creatorOfJob = this.regularUserService.GetUserById(userId);
+            var creatorOfJob = this.userService.GetUserById(userId);
             if(creatorOfJob is null) return this.NotFound("User not found.");
 
             var resultingJob = this.jobService
@@ -98,7 +108,7 @@ namespace BackendApp.Controller
         [Authorize]
         public IActionResult GetJobsPostedBy(long userId)
         {   
-            var user = this.regularUserService.GetUserById(userId);
+            var user = this.userService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found.");
             return this.Ok(this.jobService.GetJobPostsBy(user));
         }
@@ -107,7 +117,7 @@ namespace BackendApp.Controller
         [Authorize]
         public IActionResult RecommendJobsTo(long userId)
         {
-            var user = this.regularUserService.GetUserById(userId);
+            var user = this.userService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found");
             return this.Ok(this.recommendationService.RecommendJobs(user, 20));
         }
