@@ -89,6 +89,24 @@ namespace BackendApp.Controller
             if(this.userService.GetUserById(id) is not RegularUser user) return this.NotFound("User not found.");
             return this.Ok(this.connectionService.GetUsersConnectedTo(user));
         }
+
+        [Route("sent/{userId}")]
+        [HttpGet]
+        [Authorize( HasIdEqualToUserIdParamPolicyName )]
+        public IActionResult GetConnectionSentBy(uint userId)
+        {
+            if(this.userService.GetUserById(userId) is not RegularUser user) return this.NotFound("User not found.");
+            return this.Ok(this.connectionService.GetConnectionRequestsSentBy(user));
+        }
+
+        [Route("received/{userId}")]
+        [HttpGet]
+        [Authorize( HasIdEqualToUserIdParamPolicyName )]
+        public IActionResult GetConnectionReceivedBy(uint userId)
+        {
+            if(this.userService.GetUserById(userId) is not RegularUser user) return this.NotFound("User not found.");
+            return this.Ok(this.connectionService.GetConnectionRequestsReceivedBy(user));
+        }
     
     }
 }

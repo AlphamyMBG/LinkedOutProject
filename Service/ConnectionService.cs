@@ -17,6 +17,8 @@ namespace BackendApp.Service{
         bool DeclineConnectionRequest(RegularUser user, uint connectionId);
         bool AcceptConnectionRequest(uint connectionId);
         RegularUser[] GetUsersConnectedTo(RegularUser user);
+        public Connection[] GetConnectionRequestsSentBy(RegularUser user);
+        public Connection[] GetConnectionRequestsReceivedBy(RegularUser user);
     }
 
     public class ConnectionService(ApiContext context, IRegularUserService userService) : IConnectionService
@@ -150,5 +152,18 @@ namespace BackendApp.Service{
                 .ToArray();
         }
 
+        public Connection[] GetConnectionRequestsSentBy(RegularUser user)
+        {
+            return this.context.Connections
+                .Where((con) => (user == con.SentBy))
+                .ToArray();
+        }
+
+        public Connection[] GetConnectionRequestsReceivedBy(RegularUser user)
+        {
+            return this.context.Connections
+                .Where((con) => (user == con.SentTo))
+                .ToArray();
+        }
     }
 }
