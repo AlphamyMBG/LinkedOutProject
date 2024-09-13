@@ -44,13 +44,13 @@ namespace BackendApp.Controller
             => this.connectionService.RemoveConnection(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult GetAll()
             => this.Ok(this.connectionService.GetAllConnections());
 
         [Route("{id}")]
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult Get(long id)
         {
             var Connection = this.connectionService.GetConnectionById(id);
@@ -83,7 +83,7 @@ namespace BackendApp.Controller
 
         [Route("network/{id}")]
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult GetUsersNetwork(uint id)
         {
             if(this.userService.GetUserById(id) is not RegularUser user) return this.NotFound("User not found.");

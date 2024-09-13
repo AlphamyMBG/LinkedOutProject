@@ -72,13 +72,13 @@ namespace BackendApp.Controller
             => this.postService.RemovePost(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult GetAll()
             => this.Ok(this.postService.GetAllPosts());
 
         [Route("{id}")]
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult Get(long id)
         {
             var user = this.postService.GetPostById(id);

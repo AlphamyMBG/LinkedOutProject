@@ -52,13 +52,13 @@ namespace BackendApp.Controller
             => this.jobService.RemoveJob(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult GetAll()
             => this.Ok(this.jobService.GetAllJobs());
 
         [Route("{id}")]
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult Get(long id)
         {
             var user = this.jobService.GetJobById(id);
@@ -95,7 +95,7 @@ namespace BackendApp.Controller
         }
 
         [HttpGet("by/{userId}")]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult GetJobsPostedBy(long userId)
         {   
             var user = this.regularUserService.GetUserById(userId);
@@ -104,7 +104,7 @@ namespace BackendApp.Controller
         }
 
         [HttpGet("recommend/{userId}/")]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult RecommendJobsTo(long userId)
         {
             var user = this.regularUserService.GetUserById(userId);

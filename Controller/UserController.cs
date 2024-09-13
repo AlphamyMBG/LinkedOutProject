@@ -51,7 +51,7 @@ namespace BackendApp.Controllers
         
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult GetAll(){
             var users = this.linkedOutUserService
                 .GetAllUsers()
@@ -61,7 +61,7 @@ namespace BackendApp.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult Get(long id){
             var user = this.linkedOutUserService.GetUserById(id);
             return new JsonResult(
@@ -73,7 +73,7 @@ namespace BackendApp.Controllers
 
         [Route("search/{searchString}")]
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult SearchByUsername(string searchString)
         {
             return this.Ok(this.linkedOutUserService.SearchByUsername(searchString));
@@ -81,7 +81,7 @@ namespace BackendApp.Controllers
 
         [Route("email/{email}")]
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult GetUserByEmail(string email)
         {
             var user = this.linkedOutUserService.GetUserByEmail(email);

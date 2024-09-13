@@ -22,7 +22,7 @@ public class ImageController
         = [".jpg", ".jpeg", ".png"];
 
     [HttpPost("upload")]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<IActionResult> UploadImage([FromForm] IFormFile image)
     {
         if(image is null) return this.BadRequest("Invalid file.");
@@ -47,7 +47,7 @@ public class ImageController
     }
 
     [HttpGet]
-    [AllowAnonymous]
+    [Authorize]
     [Route("{imageName}")]
     public async Task<IActionResult> ReturnImage(string imageName)
     {
