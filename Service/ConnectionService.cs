@@ -155,14 +155,14 @@ namespace BackendApp.Service{
         public Connection[] GetConnectionRequestsSentBy(RegularUser user)
         {
             return this.context.Connections
-                .Where((con) => (user == con.SentBy))
+                .Where( (con) => user == con.SentBy ) 
                 .ToArray();
         }
 
         public Connection[] GetConnectionRequestsReceivedBy(RegularUser user)
         {
             return this.context.Connections
-                .Where((con) => (user == con.SentTo))
+                .Where( (con) => user == con.SentTo )
                 .ToArray();
         }
     }

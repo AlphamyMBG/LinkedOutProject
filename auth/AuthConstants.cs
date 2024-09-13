@@ -19,6 +19,7 @@ namespace BackendApp.Auth
             public const string CreatedJobPolicyName = "receivedConnectionRequest";
             public const string CreatedPostPolicyName = "receivedConnectionRequest";
             public const string IsAdminPolicyName = "IsAdminPolicy";
+            public const string IsMemberOfConversationPolicyName = "IsMemberOfConversationPolicy";
         }
 
         public static class ClaimTypes

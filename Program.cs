@@ -136,7 +136,9 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthConstants.PolicyNames.CreatedJobPolicyName, policy => 
         policy.Requirements.Add( new CreatedJobRequirement("id")))
     .AddPolicy(AuthConstants.PolicyNames.CreatedPostPolicyName, policy => 
-        policy.Requirements.Add( new CreatedPostRequirement("id")));
+        policy.Requirements.Add( new CreatedPostRequirement("id")))
+    .AddPolicy(AuthConstants.PolicyNames.IsMemberOfConversationPolicyName, policy => 
+        policy.Requirements.Add( new IsMemberOfConversationRequirement("userAId","userBId")));
     
 
 var app = builder.Build();

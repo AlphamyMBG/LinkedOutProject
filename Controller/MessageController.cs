@@ -65,13 +65,13 @@ namespace BackendApp.Controller
 
         [Route("chat/{userAId}/{userBId}")]
         [HttpGet]
-        [Authorize]
+        [Authorize( IsMemberOfConversationPolicyName )]
         public IActionResult GetChatHistory(uint userAId, uint userBId) 
             => this.Ok(this.messageService.GetConversationBetween(userAId, userBId));
 
         [Route("chat/{userAId}/{userBId}/{startAt}/{endAfter}")]
         [HttpGet]
-        [Authorize]
+        [Authorize( IsMemberOfConversationPolicyName )]
         public IActionResult GetChatHistory(uint userAId, uint userBId, int startAt, int endAfter) 
             => this.Ok(this.messageService.GetRangeOfConversationBetween(userAId, userBId, startAt, endAfter));
 
