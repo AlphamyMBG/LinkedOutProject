@@ -11,14 +11,15 @@ namespace BackendApp.Model
         RegularUser postedBy,
         List<RegularUser> interestedUsers,
         DateTime postedAt,
+        List<PostFile> postFiles,
         string content,
         List<Post> replies,
         bool isReply
-    ) : PostBase(postedBy, interestedUsers, postedAt)
+    ) : PostBase(postedBy, interestedUsers, postedAt, postFiles)
     {
         private Post(DateTime postedAt, string content, bool isReply)
         : this
-        (new("","","","","","","",[],""),[], postedAt, content, [], isReply)
+        (new("","","","","","","",[],""),[], postedAt, [], content, [], isReply)
         {}
 
         public string Content { get; set; } = content;

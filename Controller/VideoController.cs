@@ -10,49 +10,46 @@ namespace BackendApp.Controller;
 
 [Route("api/[Controller]")]
 [ApiController]
-public class ImageController
+public class VideoController
 (IFileService fileService)
 : ControllerBase
 {
-    private readonly string imageDirectory = "./Files/Images";
+    private readonly string videoDirectory = "./Files/Video";
     private readonly IFileService fileService = fileService;
 
-    private readonly ulong fileMaxSizeInBytes = 2 * 1024 * 1024;
+    private readonly ulong fileMaxSizeInBytes = 4 * 1024 * 1024;
     private readonly ImmutableArray<string> allowedExtensions
-        = [".jpg", ".jpeg", ".png"];
+        = [".mp4"];
 
     [HttpPost("upload")]
     [Authorize]
-    public async Task<IActionResult> UploadImage([FromForm] IFormFile image)
+    public async Task<IActionResult> UploadVideo([FromForm] IFormFile video)
     {
-        if(image is null) return this.BadRequest("Invalid file.");
-
         FileFilterResult result = this.fileService
             .FilterFile(
-                image,
-                (image) => 
-                    image.Length > 2 * 1024 * 1024 
+                video,
+                (video) => 
+                    video.Length > (long)fileMaxSizeInBytes
                     ? FileFilterResult.TooBig : FileFilterResult.Ok,
-                (image) => 
-                    this.allowedExtensions.Contains(Path.GetExtension(image.FileName)) 
+                (video) => 
+                    this.allowedExtensions.Contains(Path.GetExtension(video.FileName)) 
                     ? FileFilterResult.ExtensionNotAllowed : FileFilterResult.Ok
             );
 
         if(result is not FileFilterResult.Ok)
-            return this.GetBadRequestResponse(result, image);
+            return this.GetBadRequestResponse(result, video);
         
-        //TODO: Add Image processing logic here
-        string createdFileName = await this.fileService.SaveFileAsync(image, this.imageDirectory);
+        string createdFileName = await this.fileService.SaveFileAsync(video, this.videoDirectory);
         return this.Ok(createdFileName);
     }
 
     [HttpGet]
     [Authorize]
-    [Route("{imageName}")]
-    public async Task<IActionResult> ReturnImage(string imageName)
+    [Route("{videoName}")]
+    public async Task<IActionResult> ReturnVideo(string videoName)
     {
-        var file = await this.fileService.GetFileContents(imageName, this.imageDirectory);
-        var fileType = Path.GetExtension(imageName);
+        var file = await this.fileService.GetFileContents(videoName, this.videoDirectory);
+        var fileType = Path.GetExtension(videoName);
         return File(file, fileType);
     }
 

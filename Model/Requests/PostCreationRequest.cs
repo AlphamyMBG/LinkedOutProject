@@ -8,5 +8,6 @@ namespace BackendApp.Model.Requests
     public class PostCreationRequest
     {
         public string Content { get; set; } = "";
+        public PostFile[] PostFiles {get; set;} = [];
     }
 }

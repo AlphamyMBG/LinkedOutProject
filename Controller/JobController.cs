@@ -33,11 +33,14 @@ namespace BackendApp.Controller
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
         public IActionResult CreateJob(JobPost job)
-            => this.jobService.AddJob(job) ? this.Ok(job.Id) : this.Conflict();
+        {
+            this.jobService.AddJob(job);
+            return this.Ok(job.Id) ;
+        }
         
         [Route("{id}")]
         [HttpPost]
-        [Authorize(IsAdminPolicyName )]
+        [Authorize(IsAdminPolicyName)]
         public IActionResult UpdateJob(long id, JobPost job)
             => this.jobService.UpdateJob(id, job) switch
             {
@@ -99,9 +102,15 @@ namespace BackendApp.Controller
             if(creatorOfJob is null) return this.NotFound("User not found.");
 
             var resultingJob = this.jobService
-                .CreateNewJobPost(creatorOfJob, request.Title, request.Description, request.Requirements);
+                .CreateNewJobPost(
+                    creatorOfJob, 
+                    request.Title, 
+                    request.Description, 
+                    request.PostFiles, 
+                    request.Requirements
+                );
                 
-            return resultingJob is not null ? this.Ok(resultingJob) : this.Conflict();
+            return resultingJob is not null ? this.Ok(resultingJob) : this.BadRequest("Only up to 4 files per post allowed.");
         }
 
         [HttpGet("by/{userId}")]

@@ -13,10 +13,10 @@ namespace BackendApp.Service
 
         public JobPost? GetJobById(long id);
         public JobPost[] GetAllJobs();
-        public bool AddJob(JobPost post);
+        public void AddJob(JobPost post);
         public bool RemoveJob(long id);
         public UpdateResult UpdateJob(long id, JobPost postContent);
-        public JobPost? CreateNewJobPost(RegularUser user, string title, string description, string[] requirements);
+        public JobPost? CreateNewJobPost(RegularUser user, string title, string description, PostFile[] postFiles, string[] requirements);
         public UpdateResult AddInterestedUser(long id, RegularUser user);
         public JobPost[] GetJobPostsBy(RegularUser user);
     
@@ -25,12 +25,10 @@ namespace BackendApp.Service
     {
         private readonly ApiContext context = context;
         
-        public bool AddJob(JobPost job)
+        public void AddJob(JobPost job)
         {
-            if(this.GetJobById(job.Id) != null) return false;
             this.context.JobPosts.Add(job);
             this.context.SaveChanges();
-            return true;
         }
 
         public JobPost[] GetAllJobs()
@@ -83,10 +81,11 @@ namespace BackendApp.Service
             return UpdateResult.Ok;
         }
 
-        public JobPost? CreateNewJobPost(RegularUser user, string title, string description, string[] requirements)
+        public JobPost? CreateNewJobPost(RegularUser user, string title, string description, PostFile[] postFiles, string[] requirements)
         {
-            var job = new JobPost(user, [], DateTime.Now, title, description, requirements);
-            if(!this.AddJob(job)) return null;
+            if(postFiles.Length > 4) return null;
+            var job = new JobPost(user, [], DateTime.Now, postFiles.ToList(), title, description, requirements);
+            this.AddJob(job);
             return job;
         }
 

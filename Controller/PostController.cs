@@ -39,7 +39,7 @@ namespace BackendApp.Controller
         {
             var user = this.userService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found.");
-            var resultPost = this.postService.CreateNewPost(request.Content, user); 
+            var resultPost = this.postService.CreateNewPost(request.Content, user, request.PostFiles); 
             return resultPost is not null ? this.Ok(resultPost) : this.Conflict();
         }
 
@@ -50,7 +50,7 @@ namespace BackendApp.Controller
         {
             var user = this.userService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found.");
-            var resultPost = this.postService.ReplyToPost(postId, request.Content, user);
+            var resultPost = this.postService.ReplyToPost(postId, request.Content, user, request.PostFiles);
             return resultPost is not null ? this.Ok(resultPost) : this.NotFound("Original Post not found.");
         }
         

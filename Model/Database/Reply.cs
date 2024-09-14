@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace BackendApp.Model
 {
+    [Obsolete]
     public class Reply(
         RegularUser postedBy, 
         List<RegularUser> interestedUsers,
-        DateTime postedAt
+        DateTime postedAt,
+        List<PostFile> postFiles
     )
-    : PostBase(postedBy, interestedUsers, postedAt)
+    : PostBase(postedBy, interestedUsers, postedAt, postFiles)
     {}
 }

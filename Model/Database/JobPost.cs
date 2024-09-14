@@ -13,16 +13,17 @@ namespace BackendApp.Model
         RegularUser postedBy,
         List<RegularUser> interestedUsers,
         DateTime postedAt,
+        List<PostFile> postFiles,
         string jobTitle,
         string description,
         string[] requirements
     ) 
-    : PostBase(postedBy, interestedUsers, postedAt)
+    : PostBase(postedBy, interestedUsers, postedAt, postFiles)
     {
 
         private JobPost(DateTime postedAt, string jobTitle, string description, string[] requirements)
         : this
-        (new("","","","","","","",[],""),[], postedAt, jobTitle, description, requirements)
+        (new("","","","","","","",[],""),[], postedAt, [], jobTitle, description, requirements)
         {}
 
         public string JobTitle {get; set;} = jobTitle;

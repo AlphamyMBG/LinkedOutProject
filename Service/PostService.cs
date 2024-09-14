@@ -14,9 +14,9 @@ namespace BackendApp.Service
         public Post[] GetAllPosts();
         public bool AddPost(Post post);
         public bool RemovePost(long id);
-        public Post? CreateNewPost(string post, RegularUser creator);
+        public Post? CreateNewPost(string post, RegularUser creator, PostFile[] postFiles);
         public UpdateResult UpdatePost(long id, Post postContent);
-        public Post? ReplyToPost(long originalPostId, string content, RegularUser replyGuy);
+        public Post? ReplyToPost(long originalPostId, string content, RegularUser replyGuy, PostFile[] postFiles);
         public Post[] GetPostsFrom(RegularUser user, bool includeReplies = false);
     }
 
@@ -30,12 +30,13 @@ namespace BackendApp.Service
             return true;
         }
 
-        public Post? CreateNewPost(string content, RegularUser creator)
+        public Post? CreateNewPost(string content, RegularUser creator, PostFile[] postFiles)
         {
             var post = new Post(
                 creator,
                 [],
                 DateTime.Now,
+                [.. postFiles],
                 content,
                 [],
                 false
@@ -44,7 +45,7 @@ namespace BackendApp.Service
             return post;
         }
 
-        public Post? ReplyToPost(long originalPostId, string content, RegularUser replyGuy)
+        public Post? ReplyToPost(long originalPostId, string content, RegularUser replyGuy, PostFile[] postFiles)
         {
             var ogPost = this.GetPostById(originalPostId);
             if(ogPost is null) return null;
@@ -52,6 +53,7 @@ namespace BackendApp.Service
                 replyGuy,
                 [],
                 DateTime.Now,
+                postFiles.ToList(),
                 content,
                 [],
                 true
