@@ -30,11 +30,17 @@ namespace BackendApp.Model
         : this
         (
             hideableInfo.PhoneNumber, 
+            hideableInfo.PhoneNumberIsPublic,
             hideableInfo.Location, 
+            hideableInfo.LocationIsPublic,
             hideableInfo.Experience,
+            hideableInfo.ExperienceIsPublic,
             hideableInfo.CurrentPosition,
+            hideableInfo.CurrentPositionIsPublic,
             hideableInfo.Capabilities,
-            hideableInfo.Education
+            hideableInfo.CapabilitiesArePublic,
+            hideableInfo.Education,
+            hideableInfo.EducationIsPublic
         )
         {}
 
@@ -85,5 +91,23 @@ namespace BackendApp.Model
         public bool CapabilitiesArePublic {get; set;} = capabilitiesArePublic;
         public List<string> Education {get; set;} = education;
         public bool EducationIsPublic {get; set;} = educationIsPublic;
+
+        public RegularUserHideableInfo MapToHidden()
+        {
+            return new(
+                this.PhoneNumberIsPublic ? PhoneNumber : "",
+                this.PhoneNumberIsPublic,
+                this.LocationIsPublic ? Location : "",
+                this.LocationIsPublic,
+                this.ExperienceIsPublic ? Experience : [],
+                this.ExperienceIsPublic,
+                this.CurrentPositionIsPublic ? CurrentPosition : "",
+                this.CurrentPositionIsPublic,
+                this.CapabilitiesArePublic ? this.Capabilities : [],
+                this.CapabilitiesArePublic,
+                this.EducationIsPublic ? this.Education : [],
+                this.EducationIsPublic
+            );
+        }
     }
 }
