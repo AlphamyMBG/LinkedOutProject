@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackendApp.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigration : Migration
+    public partial class TestMigration4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,6 +29,30 @@ namespace BackendApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RegularUserHideableInfo",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumberIsPublic = table.Column<bool>(type: "boolean", nullable: false),
+                    Location = table.Column<string>(type: "text", nullable: false),
+                    LocationIsPublic = table.Column<bool>(type: "boolean", nullable: false),
+                    CurrentPosition = table.Column<string>(type: "text", nullable: true),
+                    CurrentPositionIsPublic = table.Column<bool>(type: "boolean", nullable: false),
+                    Experience = table.Column<List<string>>(type: "text[]", nullable: false),
+                    ExperienceIsPublic = table.Column<bool>(type: "boolean", nullable: false),
+                    Capabilities = table.Column<List<string>>(type: "text[]", nullable: false),
+                    CapabilitiesArePublic = table.Column<bool>(type: "boolean", nullable: false),
+                    Education = table.Column<List<string>>(type: "text[]", nullable: false),
+                    EducationIsPublic = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RegularUserHideableInfo", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Connections",
                 columns: table => new
                 {
@@ -42,23 +66,6 @@ namespace BackendApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Connections", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "JobPosts",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
-                    JobTitle = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    Requirements = table.Column<string[]>(type: "text[]", nullable: false),
-                    PostedById = table.Column<long>(type: "bigint", nullable: false),
-                    PostedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_JobPosts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,7 +93,8 @@ namespace BackendApp.Migrations
                     Content = table.Column<string>(type: "text", nullable: false),
                     Read = table.Column<bool>(type: "boolean", nullable: false),
                     ToUserId = table.Column<long>(type: "bigint", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    AssociatedPostId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,24 +102,48 @@ namespace BackendApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Posts",
+                name: "PostBase",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
-                    Content = table.Column<string>(type: "text", nullable: false),
-                    IsReply = table.Column<bool>(type: "boolean", nullable: false),
-                    PostId = table.Column<long>(type: "bigint", nullable: true),
                     PostedById = table.Column<long>(type: "bigint", nullable: false),
-                    PostedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    PostedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Discriminator = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
+                    JobTitle = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Requirements = table.Column<string[]>(type: "text[]", nullable: true),
+                    Content = table.Column<string>(type: "text", nullable: true),
+                    IsReply = table.Column<bool>(type: "boolean", nullable: true),
+                    PostId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Posts", x => x.Id);
+                    table.PrimaryKey("PK_PostBase", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_Posts_PostId",
+                        name: "FK_PostBase_PostBase_PostId",
                         column: x => x.PostId,
-                        principalTable: "Posts",
+                        principalTable: "PostBase",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PostFile",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    Path = table.Column<string>(type: "text", nullable: false),
+                    FileType = table.Column<string>(type: "text", nullable: false),
+                    PostBaseId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostFile", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PostFile_PostBase_PostBaseId",
+                        column: x => x.PostBaseId,
+                        principalTable: "PostBase",
                         principalColumn: "Id");
                 });
 
@@ -123,13 +155,9 @@ namespace BackendApp.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Surname = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
-                    Location = table.Column<string>(type: "text", nullable: false),
-                    CurrentPosition = table.Column<string>(type: "text", nullable: true),
-                    Abilities = table.Column<List<string>>(type: "text[]", nullable: false),
                     ImagePath = table.Column<string>(type: "text", nullable: true),
-                    JobPostId = table.Column<long>(type: "bigint", nullable: true),
-                    PostId = table.Column<long>(type: "bigint", nullable: true),
+                    HideableInfoId = table.Column<long>(type: "bigint", nullable: false),
+                    PostBaseId = table.Column<long>(type: "bigint", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
                     UserRole = table.Column<int>(type: "integer", nullable: false)
@@ -138,15 +166,16 @@ namespace BackendApp.Migrations
                 {
                     table.PrimaryKey("PK_RegularUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RegularUsers_JobPosts_JobPostId",
-                        column: x => x.JobPostId,
-                        principalTable: "JobPosts",
+                        name: "FK_RegularUsers_PostBase_PostBaseId",
+                        column: x => x.PostBaseId,
+                        principalTable: "PostBase",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_RegularUsers_Posts_PostId",
-                        column: x => x.PostId,
-                        principalTable: "Posts",
-                        principalColumn: "Id");
+                        name: "FK_RegularUsers_RegularUserHideableInfo_HideableInfoId",
+                        column: x => x.HideableInfoId,
+                        principalTable: "RegularUserHideableInfo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -160,11 +189,6 @@ namespace BackendApp.Migrations
                 column: "SentToId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobPosts_PostedById",
-                table: "JobPosts",
-                column: "PostedById");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Messages_SentById",
                 table: "Messages",
                 column: "SentById");
@@ -175,29 +199,39 @@ namespace BackendApp.Migrations
                 column: "SentToId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Notifications_AssociatedPostId",
+                table: "Notifications",
+                column: "AssociatedPostId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Notifications_ToUserId",
                 table: "Notifications",
                 column: "ToUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_PostId",
-                table: "Posts",
+                name: "IX_PostBase_PostId",
+                table: "PostBase",
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_PostedById",
-                table: "Posts",
+                name: "IX_PostBase_PostedById",
+                table: "PostBase",
                 column: "PostedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RegularUsers_JobPostId",
-                table: "RegularUsers",
-                column: "JobPostId");
+                name: "IX_PostFile_PostBaseId",
+                table: "PostFile",
+                column: "PostBaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RegularUsers_PostId",
+                name: "IX_RegularUsers_HideableInfoId",
                 table: "RegularUsers",
-                column: "PostId");
+                column: "HideableInfoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RegularUsers_PostBaseId",
+                table: "RegularUsers",
+                column: "PostBaseId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Connections_RegularUsers_SentById",
@@ -211,14 +245,6 @@ namespace BackendApp.Migrations
                 name: "FK_Connections_RegularUsers_SentToId",
                 table: "Connections",
                 column: "SentToId",
-                principalTable: "RegularUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_JobPosts_RegularUsers_PostedById",
-                table: "JobPosts",
-                column: "PostedById",
                 principalTable: "RegularUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -240,6 +266,13 @@ namespace BackendApp.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_Notifications_PostBase_AssociatedPostId",
+                table: "Notifications",
+                column: "AssociatedPostId",
+                principalTable: "PostBase",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Notifications_RegularUsers_ToUserId",
                 table: "Notifications",
                 column: "ToUserId",
@@ -248,8 +281,8 @@ namespace BackendApp.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Posts_RegularUsers_PostedById",
-                table: "Posts",
+                name: "FK_PostBase_RegularUsers_PostedById",
+                table: "PostBase",
                 column: "PostedById",
                 principalTable: "RegularUsers",
                 principalColumn: "Id",
@@ -260,12 +293,8 @@ namespace BackendApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_JobPosts_RegularUsers_PostedById",
-                table: "JobPosts");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Posts_RegularUsers_PostedById",
-                table: "Posts");
+                name: "FK_PostBase_RegularUsers_PostedById",
+                table: "PostBase");
 
             migrationBuilder.DropTable(
                 name: "AdminUsers");
@@ -280,13 +309,16 @@ namespace BackendApp.Migrations
                 name: "Notifications");
 
             migrationBuilder.DropTable(
+                name: "PostFile");
+
+            migrationBuilder.DropTable(
                 name: "RegularUsers");
 
             migrationBuilder.DropTable(
-                name: "JobPosts");
+                name: "PostBase");
 
             migrationBuilder.DropTable(
-                name: "Posts");
+                name: "RegularUserHideableInfo");
         }
     }
 }

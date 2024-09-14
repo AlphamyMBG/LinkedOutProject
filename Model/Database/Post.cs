@@ -19,7 +19,7 @@ namespace BackendApp.Model
     {
         private Post(DateTime postedAt, string content, bool isReply)
         : this
-        (new("","","","","","","",[],""),[], postedAt, [], content, [], isReply)
+        (null!, [], postedAt, [], content, [], isReply)
         {}
 
         public string Content { get; set; } = content;

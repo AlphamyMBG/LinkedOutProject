@@ -14,11 +14,8 @@ namespace BackendApp.Model
         string passwordHash,
         string name,
         string surname,
-        string phoneNumber,
-        string location,
-        string? currentPosition,
-        List<string> abilities,
-        string? imagePath
+        string? imagePath,
+        RegularUserHideableInfo hideableInfo
     ) : AppUser(email, passwordHash, UserRole.User)
     
     {
@@ -32,29 +29,22 @@ namespace BackendApp.Model
 
         public RegularUser( RegularUser user ) 
         : this
-        (user.Email, user.PasswordHash, user.Name, user.Surname, user.PhoneNumber,
-        user.Location, user.CurrentPosition, user.Abilities.ToList(), user.ImagePath)
+        (user.Email, user.PasswordHash, user.Name, user.Surname, user.ImagePath, new(user.HideableInfo))
+        {}
+        
+        private RegularUser( 
+            string email,
+            string passwordHash,
+            string name,
+            string surname,
+            string? imagePath
+        )
+        : this(email, passwordHash, name, surname, imagePath, new("", "", [], null, [], [] ))
         {}
 
         public string Name { get; set; } = name;
         public string Surname { get; set; } = surname;
-        public string PhoneNumber { get; set; } = phoneNumber;
-        public string Location { get; set; } = location;
-        public string? CurrentPosition {get; set;} = currentPosition;
-        public List<string> Abilities {get; set;} = abilities;
         public string? ImagePath { get; set; } = imagePath;
-
-        //TODO: Add employer
-
-        public void Update(RegularUser linkedOutUser){
-            this.Email = linkedOutUser.Email;
-            this.PasswordHash = linkedOutUser.PasswordHash;
-            this.Name = linkedOutUser.Name;
-            this.Surname = linkedOutUser.Surname;
-            this.PhoneNumber = linkedOutUser.PhoneNumber;
-            this.Location = linkedOutUser.Location;
-            this.ImagePath = linkedOutUser.ImagePath;
-            this.CurrentPosition = linkedOutUser.CurrentPosition;
-        }
+        public RegularUserHideableInfo HideableInfo { get; set; } = hideableInfo;
     }
 }

@@ -11,7 +11,7 @@ namespace BackendApp.Model
     (string content, bool read, RegularUser toUser, DateTime timestamp, PostBase? associatedPost)
     {
         private Notification(string content, bool read, DateTime timestamp)
-        : this(content, read, new("","","","","","","",[],""), timestamp, null)
+        : this(content, read, null!, timestamp, null)
         {}
         
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 

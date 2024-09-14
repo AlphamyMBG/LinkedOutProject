@@ -23,7 +23,7 @@ namespace BackendApp.Model
 
         private JobPost(DateTime postedAt, string jobTitle, string description, string[] requirements)
         : this
-        (new("","","","","","","",[],""),[], postedAt, [], jobTitle, description, requirements)
+        (null!,[], postedAt, [], jobTitle, description, requirements)
         {}
 
         public string JobTitle {get; set;} = jobTitle;

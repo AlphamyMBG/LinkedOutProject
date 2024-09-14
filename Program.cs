@@ -165,9 +165,13 @@ app.MapControllers();
 //     .Add(new RegularUser(
 //         "b@emailer.com",
 //         EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
-//         "name", "poop", "6900000000", "dadaby car",
-//         "The Rizzler", [], ""));
-// app.Services.GetService<ApiContext>()?.SaveChanges(); 
+//         "name", "poop", null, new(
+//             "6900000000", "My House :D", 
+//             ["Fullstack Dotnet Developer at Microsoft: 4 years", "Game Developer at Microsoft: 2 years"], 
+//             "Dead inside", 
+//             ["Senior Software Developer", "Junior Software Engineer"], 
+//             ["Bachelor's degree in Computer Science from National Kapodistriand University of Athens"])));
+// app.Services.GetService<ApiContext>()?.SaveChanges();
 
 app.Run();
 

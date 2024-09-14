@@ -68,11 +68,8 @@ namespace BackendApp.Service
             userInDb.Email = user.Email;
             userInDb.Name = user.Name;
             userInDb.Surname = user.Surname;
-            userInDb.PhoneNumber = user.PhoneNumber;
-            userInDb.Location = user.Location;
             userInDb.ImagePath = user.ImagePath;
-            userInDb.CurrentPosition = user.CurrentPosition;
-            userInDb.Abilities = user.Abilities;
+            userInDb.HideableInfo = new(user.HideableInfo);
             this.context.SaveChanges();
             return UpdateResult.Ok;
         }
@@ -86,7 +83,7 @@ namespace BackendApp.Service
         public RegularUser[] SearchByUsername(string searchString) //TODO: Implement with Fuzzy Search!
         {
             return this.context.RegularUsers
-                .Where( user => user.Name.StartsWith(searchString))
+                .Where( user => (user.Name + user.Surname).Contains(searchString))
                 .ToArray();
         }
 

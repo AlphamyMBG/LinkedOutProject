@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackendApp.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20240911134820_InitMigration")]
-    partial class InitMigration
+    [Migration("20240914171425_TestMigration4")]
+    partial class TestMigration4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,39 +79,6 @@ namespace BackendApp.Migrations
                     b.ToTable("Connections");
                 });
 
-            modelBuilder.Entity("BackendApp.Model.JobPost", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("JobTitle")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("PostedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long>("PostedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<string[]>("Requirements")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostedById");
-
-                    b.ToTable("JobPosts");
-                });
-
             modelBuilder.Entity("BackendApp.Model.Message", b =>
                 {
                     b.Property<long>("Id")
@@ -150,6 +117,9 @@ namespace BackendApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
+                    b.Property<long?>("AssociatedPostId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text");
@@ -165,12 +135,14 @@ namespace BackendApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AssociatedPostId");
+
                     b.HasIndex("ToUserId");
 
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("BackendApp.Model.Post", b =>
+            modelBuilder.Entity("BackendApp.Model.PostBase", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,15 +150,10 @@ namespace BackendApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Content")
+                    b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsReply")
-                        .HasColumnType("boolean");
-
-                    b.Property<long?>("PostId")
-                        .HasColumnType("bigint");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.Property<DateTime>("PostedAt")
                         .HasColumnType("timestamp with time zone");
@@ -196,11 +163,39 @@ namespace BackendApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
-
                     b.HasIndex("PostedById");
 
-                    b.ToTable("Posts");
+                    b.ToTable("PostBase");
+
+                    b.HasDiscriminator().HasValue("PostBase");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("BackendApp.Model.PostFile", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long?>("PostBaseId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostBaseId");
+
+                    b.ToTable("PostFile");
                 });
 
             modelBuilder.Entity("BackendApp.Model.RegularUser", b =>
@@ -211,25 +206,14 @@ namespace BackendApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
-                    b.Property<List<string>>("Abilities")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
-                    b.Property<string>("CurrentPosition")
-                        .HasColumnType("text");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("text");
-
-                    b.Property<long?>("JobPostId")
+                    b.Property<long>("HideableInfoId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
+                    b.Property<string>("ImagePath")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -240,11 +224,7 @@ namespace BackendApp.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<long?>("PostId")
+                    b.Property<long?>("PostBaseId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Surname")
@@ -256,11 +236,103 @@ namespace BackendApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JobPostId");
+                    b.HasIndex("HideableInfoId");
+
+                    b.HasIndex("PostBaseId");
+
+                    b.ToTable("RegularUsers");
+                });
+
+            modelBuilder.Entity("BackendApp.Model.RegularUserHideableInfo", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+
+                    b.Property<List<string>>("Capabilities")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<bool>("CapabilitiesArePublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("CurrentPosition")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("CurrentPositionIsPublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<List<string>>("Education")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<bool>("EducationIsPublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<List<string>>("Experience")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<bool>("ExperienceIsPublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("LocationIsPublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberIsPublic")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RegularUserHideableInfo");
+                });
+
+            modelBuilder.Entity("BackendApp.Model.JobPost", b =>
+                {
+                    b.HasBaseType("BackendApp.Model.PostBase");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string[]>("Requirements")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.HasDiscriminator().HasValue("JobPost");
+                });
+
+            modelBuilder.Entity("BackendApp.Model.Post", b =>
+                {
+                    b.HasBaseType("BackendApp.Model.PostBase");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsReply")
+                        .HasColumnType("boolean");
+
+                    b.Property<long?>("PostId")
+                        .HasColumnType("bigint");
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("RegularUsers");
+                    b.HasDiscriminator().HasValue("Post");
                 });
 
             modelBuilder.Entity("BackendApp.Model.Connection", b =>
@@ -280,17 +352,6 @@ namespace BackendApp.Migrations
                     b.Navigation("SentBy");
 
                     b.Navigation("SentTo");
-                });
-
-            modelBuilder.Entity("BackendApp.Model.JobPost", b =>
-                {
-                    b.HasOne("BackendApp.Model.RegularUser", "PostedBy")
-                        .WithMany()
-                        .HasForeignKey("PostedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PostedBy");
                 });
 
             modelBuilder.Entity("BackendApp.Model.Message", b =>
@@ -314,21 +375,23 @@ namespace BackendApp.Migrations
 
             modelBuilder.Entity("BackendApp.Model.Notification", b =>
                 {
+                    b.HasOne("BackendApp.Model.PostBase", "AssociatedPost")
+                        .WithMany()
+                        .HasForeignKey("AssociatedPostId");
+
                     b.HasOne("BackendApp.Model.RegularUser", "ToUser")
                         .WithMany()
                         .HasForeignKey("ToUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("AssociatedPost");
+
                     b.Navigation("ToUser");
                 });
 
-            modelBuilder.Entity("BackendApp.Model.Post", b =>
+            modelBuilder.Entity("BackendApp.Model.PostBase", b =>
                 {
-                    b.HasOne("BackendApp.Model.Post", null)
-                        .WithMany("Replies")
-                        .HasForeignKey("PostId");
-
                     b.HasOne("BackendApp.Model.RegularUser", "PostedBy")
                         .WithMany()
                         .HasForeignKey("PostedById")
@@ -338,26 +401,44 @@ namespace BackendApp.Migrations
                     b.Navigation("PostedBy");
                 });
 
-            modelBuilder.Entity("BackendApp.Model.RegularUser", b =>
+            modelBuilder.Entity("BackendApp.Model.PostFile", b =>
                 {
-                    b.HasOne("BackendApp.Model.JobPost", null)
-                        .WithMany("InterestedUsers")
-                        .HasForeignKey("JobPostId");
-
-                    b.HasOne("BackendApp.Model.Post", null)
-                        .WithMany("InterestedUsers")
-                        .HasForeignKey("PostId");
+                    b.HasOne("BackendApp.Model.PostBase", null)
+                        .WithMany("PostFiles")
+                        .HasForeignKey("PostBaseId");
                 });
 
-            modelBuilder.Entity("BackendApp.Model.JobPost", b =>
+            modelBuilder.Entity("BackendApp.Model.RegularUser", b =>
                 {
-                    b.Navigation("InterestedUsers");
+                    b.HasOne("BackendApp.Model.RegularUserHideableInfo", "HideableInfo")
+                        .WithMany()
+                        .HasForeignKey("HideableInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackendApp.Model.PostBase", null)
+                        .WithMany("InterestedUsers")
+                        .HasForeignKey("PostBaseId");
+
+                    b.Navigation("HideableInfo");
                 });
 
             modelBuilder.Entity("BackendApp.Model.Post", b =>
                 {
+                    b.HasOne("BackendApp.Model.Post", null)
+                        .WithMany("Replies")
+                        .HasForeignKey("PostId");
+                });
+
+            modelBuilder.Entity("BackendApp.Model.PostBase", b =>
+                {
                     b.Navigation("InterestedUsers");
 
+                    b.Navigation("PostFiles");
+                });
+
+            modelBuilder.Entity("BackendApp.Model.Post", b =>
+                {
                     b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618

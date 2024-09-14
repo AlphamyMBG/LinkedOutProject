@@ -15,7 +15,7 @@ namespace BackendApp.Model
     )
     {
         private Message(string content, DateTime timestamp)
-        : this(content, new("","","","","","","",[],""), new("","","","","","","",[],""), timestamp)
+        : this(content, null!, null!, timestamp)
         {}
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 

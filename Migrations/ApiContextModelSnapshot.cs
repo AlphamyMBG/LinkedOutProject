@@ -203,22 +203,14 @@ namespace BackendApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
-                    b.Property<List<string>>("Abilities")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
-                    b.Property<string>("CurrentPosition")
-                        .HasColumnType("text");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("text");
+                    b.Property<long>("HideableInfoId")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
+                    b.Property<string>("ImagePath")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -226,10 +218,6 @@ namespace BackendApp.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -245,9 +233,65 @@ namespace BackendApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HideableInfoId");
+
                     b.HasIndex("PostBaseId");
 
                     b.ToTable("RegularUsers");
+                });
+
+            modelBuilder.Entity("BackendApp.Model.RegularUserHideableInfo", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+
+                    b.Property<List<string>>("Capabilities")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<bool>("CapabilitiesArePublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("CurrentPosition")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("CurrentPositionIsPublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<List<string>>("Education")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<bool>("EducationIsPublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<List<string>>("Experience")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<bool>("ExperienceIsPublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("LocationIsPublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberIsPublic")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RegularUserHideableInfo");
                 });
 
             modelBuilder.Entity("BackendApp.Model.JobPost", b =>
@@ -363,9 +407,17 @@ namespace BackendApp.Migrations
 
             modelBuilder.Entity("BackendApp.Model.RegularUser", b =>
                 {
+                    b.HasOne("BackendApp.Model.RegularUserHideableInfo", "HideableInfo")
+                        .WithMany()
+                        .HasForeignKey("HideableInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BackendApp.Model.PostBase", null)
                         .WithMany("InterestedUsers")
                         .HasForeignKey("PostBaseId");
+
+                    b.Navigation("HideableInfo");
                 });
 
             modelBuilder.Entity("BackendApp.Model.Post", b =>

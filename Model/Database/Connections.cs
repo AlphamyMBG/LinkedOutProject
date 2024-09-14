@@ -18,8 +18,8 @@ namespace BackendApp.Model
         /// EF constructor
         /// </summary>
         private Connection(bool accepted, DateTime timestamp) : this(
-            new("","","","","","","",[],""),
-            new("","","","","","","",[],""),
+            null!,
+            null!,
             accepted, 
             timestamp
         )

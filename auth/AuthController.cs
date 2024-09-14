@@ -52,11 +52,15 @@ namespace BackendApp.auth
                 request.Email, 
                 EncryptionUtility.HashPassword(request.Password),
                 request.Name, request.Surname, 
-                request.PhoneNumber, 
-                request.Location,
-                request.CurrentPosition,
-                [],
-                null
+                null,
+                new(
+                    request.PhoneNumber,
+                    request.Location,
+                    [],
+                    request.CurrentPosition,
+                    [],
+                    []
+                )
             ));
             if(!wasAdded) return this.Conflict("User with a duplicate email exists.");
             return this.Login(new(){Email = request.Email, Password = request.Password});
