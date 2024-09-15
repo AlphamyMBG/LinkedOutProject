@@ -15,9 +15,9 @@ namespace BackendApp.Auth
             public const string HasNotificationPolicyName = "HasNotificationPolicy";
             public const string SentMessagePolicyName = "SentMessagePolicy";
             public const string SentConnectionRequestPolicyName = "SentConnectionRequestPolicy";
-            public const string ReceivedConnectionRequestPolicyName = "ReceivedConnectionRequest";
-            public const string CreatedJobPolicyName = "receivedConnectionRequest";
-            public const string CreatedPostPolicyName = "receivedConnectionRequest";
+            public const string ReceivedConnectionRequestPolicyName = "ReceivedConnectionRequestPolicy";
+            public const string CreatedJobPolicyName = "CreatedJobPolicy";
+            public const string CreatedPostPolicyName = "CreatedPostPolicy";
             public const string IsAdminPolicyName = "IsAdminPolicy";
             public const string IsMemberOfConversationPolicyName = "IsMemberOfConversationPolicy";
         }

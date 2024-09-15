@@ -116,6 +116,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, SentConnectionRequestHandle
 builder.Services.AddSingleton<IAuthorizationHandler, ReceivedConnectionRequestHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, CreatedJobHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, CreatedPostHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, IsMemberOfConversationHandler>();
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthConstants.PolicyNames.HasIdEqualToUserIdParamPolicyName, policy =>
         policy.Requirements.Add( new HasIdRequirement("userId")))
@@ -171,6 +172,28 @@ app.MapControllers();
 //             "Dead inside", 
 //             ["Senior Software Developer", "Junior Software Engineer"], 
 //             ["Bachelor's degree in Computer Science from National Kapodistriand University of Athens"])));
+// app.Services.GetService<ApiContext>()?.
+//     RegularUsers
+//     .Add(new RegularUser(
+//         "c@emailer.gr",
+//         EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
+//         "Ninja", "Blevins", null, new(
+//             "6950000769", "His House :D", 
+//             ["Fullstack Dotnet Developer at Microsoft: 4 years", "Game Developer at Microsoft: 2 years"], 
+//             "Dead inside", 
+//             ["Senior Software Developer", "Junior Software Engineer"], 
+//             ["Bachelor's degree in Computer Science from National Kapodistriand University of Athens"])));
+// app.Services.GetService<ApiContext>()?.
+//     RegularUsers
+//     .Add(new RegularUser(
+//         "d@emailer.com",
+//         EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
+//         "name", "poop", null, new(
+//             "6900000000", "In hiding (I am convicted of illegal marijuana possession)", 
+//             ["Hitman for the Russian Government: 7 years experience"], 
+//             "Unemployed", 
+//             ["Senior Hitman", "Junior Software Developer"], 
+//             ["Certificate of Excellence in Service to the People"])));
 // app.Services.GetService<ApiContext>()?.SaveChanges();
 
 app.Run();

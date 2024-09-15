@@ -35,7 +35,6 @@ public class ReceivedConnectionRequestHandler
             context.Fail();
             return Task.CompletedTask;
         }
-
         var userClaims = context.User.Claims;
         var userIdClaim = userClaims.FirstOrDefault( c => c.Type == ClaimTypes.Sid);
         if(userIdClaim is null)
