@@ -18,23 +18,6 @@ namespace BackendApp.Controller
     : ControllerBase
     {
         private readonly INotificationService notificationService = notifService;  
-
-        [HttpPost]
-        [Authorize( IsAdminPolicyName )]
-        public IActionResult CreateNotification(Notification notif)
-            => this.notificationService.AddNotification(notif) ? this.Ok(notif.Id) : this.Conflict();
-        
-        [Route("{id}")]
-        [HttpPost]
-        [Authorize( IsAdminPolicyName )]
-        public IActionResult UpdateNotification(long id, Notification post)
-            => this.notificationService.UpdateNotifications(id, post) switch
-            {
-                UpdateResult.KeyAlreadyExists => this.Conflict(),
-                UpdateResult.NotFound => this.NotFound(),
-                UpdateResult.Ok => this.Ok(),
-                _  => throw new Exception("Something went terribly wrong for you to be here.") 
-            };
         
         [Route("{id}")]
         [HttpDelete]

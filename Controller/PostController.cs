@@ -55,20 +55,8 @@ namespace BackendApp.Controller
         }
         
         [Route("{id}")]
-        [HttpPost]
-        [Authorize( IsAdminPolicyName )]
-        public IActionResult UpdatePost(long id, Post post)
-            => this.postService.UpdatePost(id, post) switch
-            {
-                UpdateResult.KeyAlreadyExists => this.Conflict(),
-                UpdateResult.NotFound => this.NotFound(),
-                UpdateResult.Ok => this.Ok(),
-                _  => throw new Exception("Something went terribly wrong for you to be here.") 
-            };
-        
-        [Route("{id}")]
         [HttpDelete]
-        [Authorize]
+        [Authorize( CreatedPostPolicyName )]
         public IActionResult Delete(long id)
             => this.postService.RemovePost(id) ? this.Ok() : this.NotFound();
 

@@ -14,26 +14,10 @@ namespace BackendApp.Controller
 {
     [Route("api/[Controller]")]
     [ApiController]
-    public class MessageController(IMessageService messageService) : ControllerBase
+    public class MessageController(IMessageService messageService, IRegularUserService userService) : ControllerBase
     {
         private readonly IMessageService messageService = messageService;  
-
-        [HttpPost]
-        [Authorize( IsAdminPolicyName )]
-        public IActionResult CreateMessage(Message message)
-            => this.messageService.AddMessage(message) ? this.Ok(message.Id) : this.Conflict();
-
-        [Route("{id}")]
-        [HttpPost]
-        [Authorize( IsAdminPolicyName )]
-        public IActionResult UpdateMessage(long id, Message notification)
-            => this.messageService.UpdateMessage(id, notification) switch
-            {
-                UpdateResult.KeyAlreadyExists => this.Conflict(),
-                UpdateResult.NotFound => this.NotFound(),
-                UpdateResult.Ok => this.Ok(),
-                _  => throw new Exception("Something went terribly wrong for you to be here.") 
-            };
+        private readonly IRegularUserService userService = userService;  
 
         [Route("{id}")]
         [HttpDelete]
@@ -74,6 +58,16 @@ namespace BackendApp.Controller
         [Authorize( IsMemberOfConversationPolicyName )]
         public IActionResult GetChatHistory(uint userAId, uint userBId, int startAt, int endAfter) 
             => this.Ok(this.messageService.GetRangeOfConversationBetween(userAId, userBId, startAt, endAfter));
+        
 
+        [Route("chat/members/{userId}")]
+        [HttpGet]
+        [Authorize( HasIdEqualToUserIdParamPolicyName )]
+        public IActionResult GetUsers(long userId)
+        {
+            var user = this.userService.GetUserById(userId);
+            if(user is null) return this.NotFound("User not found.");
+            return this.Ok(this.messageService.GetMembersOfChatsWith(user));
+        }
     }
 }

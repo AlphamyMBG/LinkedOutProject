@@ -29,26 +29,6 @@ namespace BackendApp.Controller
         private readonly IRegularUserService userService = regularUserService;
         private readonly IRecommendationService recommendationService = recommendationService;
         private readonly INotificationService notificationService = notificationService;
-
-        [HttpPost]
-        [Authorize( IsAdminPolicyName )]
-        public IActionResult CreateJob(JobPost job)
-        {
-            this.jobService.AddJob(job);
-            return this.Ok(job.Id) ;
-        }
-        
-        [Route("{id}")]
-        [HttpPost]
-        [Authorize(IsAdminPolicyName)]
-        public IActionResult UpdateJob(long id, JobPost job)
-            => this.jobService.UpdateJob(id, job) switch
-            {
-                UpdateResult.KeyAlreadyExists => this.Conflict(),
-                UpdateResult.NotFound => this.NotFound(),
-                UpdateResult.Ok => this.Ok(),
-                _  => throw new Exception("Something went terribly wrong for you to be here.") 
-            };
         
         [Route("{id}")]
         [HttpDelete]

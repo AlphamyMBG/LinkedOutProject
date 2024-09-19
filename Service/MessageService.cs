@@ -15,6 +15,7 @@ namespace BackendApp.Service{
         public bool SendMessage(RegularUser from, RegularUser to, string content);
         public bool SendMessage(uint from, uint to, string content);
         public Message[] GetRangeOfConversationBetween(uint userAId, uint userBId, int startAt, int endAfter);
+        public RegularUser[] GetMembersOfChatsWith(RegularUser user);
     }
 
     public class MessageService(ApiContext context, IRegularUserService userService) : IMessageService
@@ -118,5 +119,15 @@ namespace BackendApp.Service{
             if(to is null) return false;
             return this.SendMessage(from, to, content);
         }
+
+        public RegularUser[] GetMembersOfChatsWith(RegularUser user)
+        {
+            return this.context.Messages
+                .Where( message => message.SentBy == user || message.SentTo == user )
+                .Select( message => message.SentBy == user ? message.SentTo : message.SentBy )
+                .Distinct()
+                .ToArray();
+        }
+
     }
 }

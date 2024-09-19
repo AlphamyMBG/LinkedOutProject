@@ -20,22 +20,6 @@ namespace BackendApp.Controller
         private readonly IConnectionService connectionService = connectionService;  
         private readonly IRegularUserService userService = userService;  
 
-        [HttpPost]
-        [Authorize( IsAdminPolicyName )]
-        public IActionResult CreateConnection(Connection Connection)
-            => this.connectionService.AddConnection(Connection) ? this.Ok(Connection.Id) : this.Conflict();
-
-        [Route("{id}")]
-        [HttpPost]
-        [Authorize( IsAdminPolicyName )]
-        public IActionResult UpdateConnection(long id, Connection notification)
-            => this.connectionService.UpdateConnection(id, notification) switch
-            {
-                UpdateResult.KeyAlreadyExists => this.Conflict(),
-                UpdateResult.NotFound => this.NotFound(),
-                UpdateResult.Ok => this.Ok(),
-                _  => throw new Exception("Something went terribly wrong for you to be here.") 
-            };
 
         [Route("{id}")]
         [HttpDelete]
