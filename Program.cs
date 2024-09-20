@@ -19,26 +19,26 @@ var builder = WebApplication.CreateBuilder(args);
 // Set DB context up.
 // builder.Services.AddDbContext<ApiContext>(
 //     opt => opt.UseInMemoryDatabase("LinkedOutDb"), 
-//     contextLifetime: ServiceLifetime.Singleton
+//     contextLifetime: ServiceLifetime.Transient
 // );
 
 builder.Services.AddDbContext<ApiContext>(
     opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")), 
-    contextLifetime: ServiceLifetime.Singleton
+    contextLifetime: ServiceLifetime.Transient
 );
 
 //Add model services
-builder.Services.AddSingleton<IRegularUserService, RegularUserService>();
-builder.Services.AddSingleton<IPostService, LinkedOutPostService>();
-builder.Services.AddSingleton<IJobService, LinkedOutJobService>();
-builder.Services.AddSingleton<INotificationService, NotificationService>();
-builder.Services.AddSingleton<IMessageService, MessageService>();
-builder.Services.AddSingleton<IInterestService, InterestService>();
-builder.Services.AddSingleton<IConnectionService, ConnectionService>();
-builder.Services.AddSingleton<IAdminUserService, AdminUserService>();
-builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
-builder.Services.AddSingleton<IFileService, FileService>();
-builder.Services.AddSingleton<IRecommendationService, RecommendationService>();
+builder.Services.AddTransient<IRegularUserService, RegularUserService>();
+builder.Services.AddTransient<IPostService, LinkedOutPostService>();
+builder.Services.AddTransient<IJobService, LinkedOutJobService>();
+builder.Services.AddTransient<INotificationService, NotificationService>();
+builder.Services.AddTransient<IMessageService, MessageService>();
+builder.Services.AddTransient<IInterestService, InterestService>();
+builder.Services.AddTransient<IConnectionService, ConnectionService>();
+builder.Services.AddTransient<IAdminUserService, AdminUserService>();
+builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
+builder.Services.AddTransient<IFileService, FileService>();
+builder.Services.AddTransient<IRecommendationService, RecommendationService>();
 
 //Add other general use case services
 builder.Services.AddHttpContextAccessor();
@@ -108,15 +108,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     );
 
 // Add Authorization
-builder.Services.AddSingleton<IAuthorizationHandler, HasIdHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, IsAdminHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, HasNotificationHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, SentMessageHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, SentConnectionRequestHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, ReceivedConnectionRequestHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, CreatedJobHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, CreatedPostHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, IsMemberOfConversationHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, HasIdHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, IsAdminHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, HasNotificationHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, SentMessageHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, SentConnectionRequestHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, ReceivedConnectionRequestHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, CreatedJobHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, CreatedPostHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, IsMemberOfConversationHandler>();
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthConstants.PolicyNames.HasIdEqualToUserIdParamPolicyName, policy =>
         policy.Requirements.Add( new HasIdRequirement("userId")))
