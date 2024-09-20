@@ -53,12 +53,16 @@ namespace BackendApp.Controller
         public IActionResult GetChatHistory(uint userAId, uint userBId) 
             => this.Ok(this.messageService.GetConversationBetween(userAId, userBId));
 
-        [Route("chat/{userAId}/{userBId}/{startAt}/{endAfter}")]
+        [Route("chat/{userAId}/{userBId}/{skip}/{take}")]
         [HttpGet]
         [Authorize( IsMemberOfConversationPolicyName )]
-        public IActionResult GetChatHistory(uint userAId, uint userBId, int startAt, int endAfter) 
-            => this.Ok(this.messageService.GetRangeOfConversationBetween(userAId, userBId, startAt, endAfter));
-        
+        public IActionResult GetChatHistory(uint userAId, uint userBId, int skip, int take) 
+        {    
+            var userA = this.userService.GetUserById(userAId);
+            var userB = this.userService.GetUserById(userBId);
+            if(userA is null || userB is null) return this.NotFound("One of the users was not found.");
+            return this.Ok(this.messageService.GetRangeOfConversationBetween(userA, userB, skip, take));
+        }
 
         [Route("chat/members/{userId}")]
         [HttpGet]

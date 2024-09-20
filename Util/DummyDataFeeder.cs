@@ -40,6 +40,15 @@ public static class DummyDataFeeder
                     "Unemployed", 
                     ["Senior Hitman", "Junior Software Developer"], 
                     ["Certificate of Excellence in Service to the People"]));
+        var user4 = new RegularUser(
+                "e@emailer.com",
+                EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
+                "name", "poop", null, new(
+                    "6900000000", "In hiding (I am convicted of illegal marijuana possession)", 
+                    ["Hitman for the Russian Government: 7 years experience"], 
+                    "Unemployed", 
+                    ["Senior Hitman", "Junior Software Developer"], 
+                    ["Certificate of Excellence in Service to the People"]));
 
         var post1 = new Post(
             user1, [user2, user3], 
@@ -104,6 +113,8 @@ public static class DummyDataFeeder
         context.Posts.Add(post2);
         context.Posts.Add(post3);
         context.Posts.Add(post4);
+        context.Connections.Add(connection1);
+        context.Connections.Add(connection2);
         context.SaveChanges();
     }
 }

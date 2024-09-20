@@ -14,7 +14,7 @@ namespace BackendApp.Service{
         public UpdateResult UpdateMessage(long id, Message message);
         public bool SendMessage(RegularUser from, RegularUser to, string content);
         public bool SendMessage(uint from, uint to, string content);
-        public Message[] GetRangeOfConversationBetween(uint userAId, uint userBId, int startAt, int endAfter);
+        public Message[] GetRangeOfConversationBetween(RegularUser userA, RegularUser userB, int skip, int take);
         public RegularUser[] GetMembersOfChatsWith(RegularUser user);
     }
 
@@ -54,18 +54,18 @@ namespace BackendApp.Service{
                 .OrderBy(message => message.Timestamp)
                 .ToArray();
 
-        public Message[] GetRangeOfConversationBetween(uint userAId, uint userBId, int startAt, int endAfter)
+        public Message[] GetRangeOfConversationBetween(RegularUser userA, RegularUser userB, int skip, int take)
         {
-            if(startAt < 0 || endAfter < 0) return [];
+            if(skip < 0 || take < 0) return [];
             return this.context.Messages
                 .Where(
                     message => 
-                        (message.SentBy.Id == userAId && message.SentTo.Id == userBId)
-                        || (message.SentBy.Id == userBId && message.SentTo.Id == userAId)
+                        (message.SentBy == userA && message.SentTo == userB)
+                        || (message.SentBy == userB && message.SentTo == userA)
                 )
                 .OrderBy(message => message.Timestamp)
-                .Take(startAt + endAfter)
-                .TakeLast(endAfter)
+                .Skip(skip)
+                .Take(take)
                 .OrderBy(message => message.Timestamp)
                 .ToArray();
         }
