@@ -17,13 +17,13 @@ namespace BackendApp.Model
         bool isReply
     ) : PostBase(postedBy, interestedUsers, postedAt, postFiles)
     {
-        private Post(DateTime postedAt, string content, bool isReply)
+        protected Post(DateTime postedAt, string content, bool isReply)
         : this
         (null!, [], postedAt, [], content, [], isReply)
         {}
 
         public string Content { get; set; } = content;
-        public List<Post> Replies { get; set; } = replies;
+        public virtual List<Post> Replies { get; set; } = replies;
         public bool IsReply { get; set; } = isReply;
         public void Update( Post post ){
             this.Id = post.Id;

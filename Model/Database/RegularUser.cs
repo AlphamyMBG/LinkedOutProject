@@ -32,19 +32,20 @@ namespace BackendApp.Model
         (user.Email, user.PasswordHash, user.Name, user.Surname, user.ImagePath, new(user.HideableInfo))
         {}
         
-        private RegularUser( 
+        protected RegularUser( 
             string email,
             string passwordHash,
             string name,
             string surname,
             string? imagePath
         )
-        : this(email, passwordHash, name, surname, imagePath, new("", "", [], null, [], [] ))
+        : this(email, passwordHash, name, surname, imagePath, null!)
         {}
 
         public string Name { get; set; } = name;
         public string Surname { get; set; } = surname;
         public string? ImagePath { get; set; } = imagePath;
-        public RegularUserHideableInfo HideableInfo { get; set; } = hideableInfo;
+        public virtual RegularUserHideableInfo HideableInfo { get; set; } = hideableInfo;
+        public string FullName => $"{this.Name} {this.Surname}";
     }
 }

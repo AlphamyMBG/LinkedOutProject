@@ -21,7 +21,7 @@ namespace BackendApp.Model
     : PostBase(postedBy, interestedUsers, postedAt, postFiles)
     {
 
-        private JobPost(DateTime postedAt, string jobTitle, string description, string[] requirements)
+        protected JobPost(DateTime postedAt, string jobTitle, string description, string[] requirements)
         : this
         (null!,[], postedAt, [], jobTitle, description, requirements)
         {}

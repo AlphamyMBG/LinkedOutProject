@@ -64,7 +64,7 @@ namespace BackendApp.Model
         )
         {}
 
-        private RegularUserHideableInfo
+        protected RegularUserHideableInfo
         (
             string phoneNumber,
             string location,

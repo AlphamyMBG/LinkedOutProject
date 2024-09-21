@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using BackendApp.auth.Filters;
 using BackendApp.Auth;
 using ImageManipulation.Data.Services;
+using Util.DataFeeding;
 
 var corsPolicyName = "_myAllowAllOrigins";
 
@@ -23,7 +24,7 @@ var builder = WebApplication.CreateBuilder(args);
 // );
 
 builder.Services.AddDbContext<ApiContext>(
-    opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")), 
+    opt => opt.UseLazyLoadingProxies().UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")), 
     contextLifetime: ServiceLifetime.Singleton
 );
 
@@ -158,44 +159,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// app.Services.GetService<ApiContext>()?.
-//     AdminUsers
-//     .Add(new AdminUser("a@emailer.com", EncryptionUtility.HashPassword("bigchungusplayer6969f12")));
-// app.Services.GetService<ApiContext>()?.
-//     RegularUsers
-//     .Add(new RegularUser(
-//         "b@emailer.com",
-//         EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
-//         "name", "poop", null, new(
-//             "6900000000", "My House :D", 
-//             ["Fullstack Dotnet Developer at Microsoft: 4 years", "Game Developer at Microsoft: 2 years"], 
-//             "Dead inside", 
-//             ["Senior Software Developer", "Junior Software Engineer"], 
-//             ["Bachelor's degree in Computer Science from National Kapodistriand University of Athens"])));
-// app.Services.GetService<ApiContext>()?.
-//     RegularUsers
-//     .Add(new RegularUser(
-//         "c@emailer.gr",
-//         EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
-//         "Ninja", "Blevins", null, new(
-//             "6950000769", "His House :D", 
-//             ["Fullstack Dotnet Developer at Microsoft: 4 years", "Game Developer at Microsoft: 2 years"], 
-//             "Dead inside", 
-//             ["Senior Software Developer", "Junior Software Engineer"], 
-//             ["Bachelor's degree in Computer Science from National Kapodistriand University of Athens"])));
-// app.Services.GetService<ApiContext>()?.
-//     RegularUsers
-//     .Add(new RegularUser(
-//         "d@emailer.com",
-//         EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
-//         "name", "poop", null, new(
-//             "6900000000", "In hiding (I am convicted of illegal marijuana possession)", 
-//             ["Hitman for the Russian Government: 7 years experience"], 
-//             "Unemployed", 
-//             ["Senior Hitman", "Junior Software Developer"], 
-//             ["Certificate of Excellence in Service to the People"])));
-// app.Services.GetService<ApiContext>()?.SaveChanges();
-
+// DummyDataFeeder.FillWithDummyData(app.Services.GetService<ApiContext>() ?? throw new Exception("Api Context was not set up correctly."));
 app.Run();
 
 

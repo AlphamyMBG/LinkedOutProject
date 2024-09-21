@@ -10,7 +10,7 @@ namespace BackendApp.Model
     public class Notification
     (string content, bool read, RegularUser toUser, DateTime timestamp, PostBase? associatedPost)
     {
-        private Notification(string content, bool read, DateTime timestamp)
+        protected Notification(string content, bool read, DateTime timestamp)
         : this(content, read, null!, timestamp, null)
         {}
         
@@ -18,9 +18,9 @@ namespace BackendApp.Model
         public long Id {get; set;}
         public string Content {get; set;} = content;
         public bool Read {get; set;} = read;
-        public RegularUser ToUser {get; set;} = toUser; 
+        public virtual RegularUser ToUser {get; set;} = toUser; 
         public DateTime Timestamp {get; set;} = timestamp;
-        public PostBase? AssociatedPost {get; set;} = associatedPost;
+        public virtual PostBase? AssociatedPost {get; set;} = associatedPost;
 
         public void Update(Notification notification){
             this.Content = notification.Content;

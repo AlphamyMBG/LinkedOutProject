@@ -14,16 +14,16 @@ namespace BackendApp.Model
     )
     {
 
-        private PostBase(DateTime postedAt)
+        protected PostBase(DateTime postedAt)
         : this(null!, [], postedAt, [])
         {}
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public long Id {get; set;}
-        public RegularUser PostedBy {get; set;} = postedBy;
-        public List<RegularUser> InterestedUsers { get; set; } = interestedUsers;
+        public virtual RegularUser PostedBy {get; set;} = postedBy;
+        public virtual List<RegularUser> InterestedUsers { get; set; } = interestedUsers;
         public DateTime PostedAt {get; set;} = postedAt;
-        public List<PostFile> PostFiles {get; set;} = postFiles; 
+        public virtual List<PostFile> PostFiles {get; set;} = postFiles; 
         public void Update(PostBase postBase)
         {
             this.PostedBy = postBase.PostedBy;

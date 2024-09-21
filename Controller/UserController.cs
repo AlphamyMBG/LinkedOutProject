@@ -76,7 +76,7 @@ namespace BackendApp.Controllers
         [Authorize]
         public IActionResult SearchByUsername(string searchString)
         {
-            return this.Ok(this.linkedOutUserService.SearchByUsername(searchString));
+            return this.Ok(this.linkedOutUserService.SearchByUsernameFuzzy(searchString));
         }
 
         [Route("email/{email}")]

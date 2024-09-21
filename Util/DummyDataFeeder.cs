@@ -21,7 +21,7 @@ public static class DummyDataFeeder
                     ["Fullstack Dotnet Developer at Microsoft: 4 years", "Game Developer at Microsoft: 2 years"], 
                     "Dead inside", 
                     ["Senior Software Developer", "Junior Software Engineer"], 
-                    ["Bachelor's degree in Computer Science from National Kapodistriand University of Athens"]));
+                    ["Bachelor's degree in Computer Science from National Kapodistrian University of Athens"]));
         var user2 = new RegularUser(
                 "c@emailer.gr",
                 EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
@@ -30,11 +30,11 @@ public static class DummyDataFeeder
                     ["Fullstack Dotnet Developer at Microsoft: 4 years", "Game Developer at Microsoft: 2 years"], 
                     "Dead inside", 
                     ["Senior Software Developer", "Junior Software Engineer"], 
-                    ["Bachelor's degree in Computer Science from National Kapodistriand University of Athens"]));
+                    ["Bachelor's degree in Computer Science from National Kapodistrian University of Athens"]));
         var user3 = new RegularUser(
                 "d@emailer.com",
                 EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
-                "name", "poop", null, new(
+                "namasteel", "babies", null, new(
                     "6900000000", "In hiding (I am convicted of illegal marijuana possession)", 
                     ["Hitman for the Russian Government: 7 years experience"], 
                     "Unemployed", 
@@ -43,12 +43,21 @@ public static class DummyDataFeeder
         var user4 = new RegularUser(
                 "e@emailer.com",
                 EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
-                "name", "poop", null, new(
-                    "6900000000", "In hiding (I am convicted of illegal marijuana possession)", 
-                    ["Hitman for the Russian Government: 7 years experience"], 
+                "Person", "Eater", null, new(
+                    "6900000000", "Belarus", 
+                    ["Personal Chef for Hannibal Lecter: 3 years"], 
                     "Unemployed", 
-                    ["Senior Hitman", "Junior Software Developer"], 
-                    ["Certificate of Excellence in Service to the People"]));
+                    ["Chef", "Cook", "Head Chef"], 
+                    ["Doctorate In Cooking Somehow I don't know."]));
+        var user5 = new RegularUser(
+                "f@emailer.com",
+                EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
+                "Jean", "Schena", null, new(
+                    "6900000000", "Florida", 
+                    ["Professional Wrestling: 10 years"], 
+                    "Women's World Heavyweight Champion in WUUE", 
+                    ["Karate", "Olympic Wrestler", "Professional Wrestler"], 
+                    ["Community Colledge Graduate"]));
 
         var post1 = new Post(
             user1, [user2, user3], 
@@ -109,10 +118,15 @@ public static class DummyDataFeeder
         context.RegularUsers.Add(user1);
         context.RegularUsers.Add(user2);
         context.RegularUsers.Add(user3);
+        context.RegularUsers.Add(user4);
+        context.RegularUsers.Add(user5);
+        context.SaveChanges();
         context.Posts.Add(post1);
         context.Posts.Add(post2);
         context.Posts.Add(post3);
         context.Posts.Add(post4);
+        context.JobPosts.Add(jobPost1);
+        context.JobPosts.Add(jobPost2);
         context.Connections.Add(connection1);
         context.Connections.Add(connection2);
         context.SaveChanges();

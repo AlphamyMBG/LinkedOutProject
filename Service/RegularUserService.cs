@@ -7,6 +7,8 @@ using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
 using BackendApp.Model.Enums;
 using BackendApp.auth;
+using Utilities;
+using Util;
 
 namespace BackendApp.Service
 {
@@ -19,7 +21,7 @@ namespace BackendApp.Service
         public bool AddUser(RegularUser user);
         public bool RemoveUser(long id);
         public UpdateResult Update(long id, RegularUser user);
-        public RegularUser[] SearchByUsername(string searchString); 
+        public RegularUser[] SearchByUsernameFuzzy(string searchString); 
         public UpdateResult ChangePassword(long userId, string oldPassword, string newPassword);
     }
     public class RegularUserService(ApiContext context) : IRegularUserService
@@ -36,7 +38,7 @@ namespace BackendApp.Service
         }
 
         public RegularUser[] GetAllUsers()
-            => this.context.RegularUsers.ToArray();
+            => this.context.RegularUsers.Include(user => user.HideableInfo).ToArray();
 
         public RegularUser? GetUserByEmail(string email) 
             => this.context.RegularUsers.FirstOrDefault( userInDb => userInDb.Email == email );
@@ -80,10 +82,15 @@ namespace BackendApp.Service
             this.RemoveDataAssociatedWith(user);
             return true;
         }
-        public RegularUser[] SearchByUsername(string searchString) //TODO: Implement with Fuzzy Search!
+        public RegularUser[] SearchByUsernameFuzzy(string searchString) //TODO: Implement with Fuzzy Search!
         {
+            int maxDistance = 20;
             return this.context.RegularUsers
-                .Where( user => (user.Name + user.Surname).Contains(searchString))
+                .AsEnumerable()
+                .Select(user => new {User = user, Distance = FuzzySearch.LevenshteinDistance(searchString, user.FullName)})
+                .Where( pair => pair.Distance <= maxDistance)
+                .OrderBy( pair => pair.Distance)
+                .Select(pair => pair.User)
                 .ToArray();
         }
 

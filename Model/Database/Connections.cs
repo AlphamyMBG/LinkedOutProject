@@ -17,7 +17,7 @@ namespace BackendApp.Model
         /// <summary>
         /// EF constructor
         /// </summary>
-        private Connection(bool accepted, DateTime timestamp) : this(
+        protected Connection(bool accepted, DateTime timestamp) : this(
             null!,
             null!,
             accepted, 
@@ -27,8 +27,8 @@ namespace BackendApp.Model
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public long Id {get; set;}
-        public RegularUser SentBy {get; set;} = sentBy;
-        public RegularUser SentTo {get; set;} = sentTo;
+        public virtual RegularUser SentBy {get; set;} = sentBy;
+        public virtual RegularUser SentTo {get; set;} = sentTo;
         public DateTime Timestamp {get; set;} = timestamp;
         public bool Accepted {get; set;} = accepted;
     
