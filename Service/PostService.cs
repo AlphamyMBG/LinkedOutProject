@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BackendApp.Data;
 using BackendApp.Model;
 using BackendApp.Model.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendApp.Service
 {
@@ -53,7 +54,7 @@ namespace BackendApp.Service
                 replyGuy,
                 [],
                 DateTime.Now,
-                postFiles.ToList(),
+                [.. postFiles],
                 content,
                 [],
                 true

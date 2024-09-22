@@ -93,7 +93,10 @@ namespace BackendApp.Service{
             if(messageInDb is null) return UpdateResult.NotFound;
 
             //Save new data
-            messageInDb.Update(message);
+            messageInDb.SentBy = message.SentBy;
+            messageInDb.SentTo = message.SentTo;
+            messageInDb.Content = message.Content;
+            messageInDb.Timestamp = message.Timestamp;
             this.context.SaveChanges();
             return UpdateResult.Ok;
         }
@@ -105,7 +108,7 @@ namespace BackendApp.Service{
                 content: content,
                 sentBy: from,
                 sentTo: to,
-                DateTime.Now //I'd rather kill myself than manage time for different timezones thank you
+                DateTime.Now
             );
             this.context.Messages.Add(message);
             this.context.SaveChanges();

@@ -1,6 +1,7 @@
 using BackendApp.Data;
 using BackendApp.Model;
 using BackendApp.Model.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendApp.Service{
     public interface INotificationService {

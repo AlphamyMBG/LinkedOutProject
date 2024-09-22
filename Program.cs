@@ -24,7 +24,9 @@ var builder = WebApplication.CreateBuilder(args);
 // );
 
 builder.Services.AddDbContext<ApiContext>(
-    opt => opt.UseLazyLoadingProxies().UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")), 
+    opt => opt
+        .UseLazyLoadingProxies()
+        .UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")), 
     contextLifetime: ServiceLifetime.Singleton
 );
 

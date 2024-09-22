@@ -15,7 +15,7 @@ namespace BackendApp.Model
         UserRole userRole
     )
     {
-        // [Key]
+        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id {get; set;}
         public string Email { get; set; } = email;

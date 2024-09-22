@@ -31,12 +31,13 @@ public class ApiContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseIdentityAlwaysColumns();
+        modelBuilder.UseIdentityByDefaultColumns();
         modelBuilder.Entity<RegularUser>()
             .HasOne( u => u.HideableInfo )
             .WithOne()
             .HasForeignKey<RegularUserHideableInfo>("UserId")
             .IsRequired();
+
         modelBuilder.Entity<Message>()
             .HasOne( m => m.SentBy )
             .WithMany()
@@ -45,7 +46,6 @@ public class ApiContext
             .HasOne( m => m.SentTo )
             .WithMany()
             .HasForeignKey("ReceivedId");
-            
             
         modelBuilder.Entity<PostBase>()
             .HasOne( p => p.PostedBy )

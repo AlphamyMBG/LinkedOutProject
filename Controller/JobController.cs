@@ -33,17 +33,25 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpDelete]
         [Authorize( CreatedJobPolicyName )]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(long id)
             => this.jobService.RemoveJob(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetAll()
             => this.Ok(this.jobService.GetAllJobs());
 
         [Route("{id}")]
         [HttpGet]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Get(long id)
         {
             var user = this.jobService.GetJobById(id);
@@ -53,6 +61,10 @@ namespace BackendApp.Controller
         [Route("{jobId}/interest/set/{userId}")]
         [HttpPost]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult DeclareInterest(uint userId, uint jobId)
         {
             var user = this.userService.GetUserById(userId);
@@ -69,6 +81,9 @@ namespace BackendApp.Controller
         [Route("{jobId}/interest/unset/{userId}")]
         [HttpPost]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult RemoveInterest(uint userId, uint jobId)
         {
             return this.interestService.RemoveInterestForJob(userId, jobId).ToResultObject(this);
@@ -76,6 +91,10 @@ namespace BackendApp.Controller
 
         [HttpPost("by/{userId}")]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreateJob(long userId, JobCreationRequest request)
         {   
             var creatorOfJob = this.userService.GetUserById(userId);
@@ -95,6 +114,9 @@ namespace BackendApp.Controller
 
         [HttpGet("by/{userId}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetJobsPostedBy(long userId)
         {   
             var user = this.userService.GetUserById(userId);
@@ -104,6 +126,9 @@ namespace BackendApp.Controller
 
         [HttpGet("recommend/{userId}/")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult RecommendJobsTo(long userId)
         {
             var user = this.userService.GetUserById(userId);
