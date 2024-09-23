@@ -33,8 +33,8 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpDelete]
         [Authorize( Policy = CreatedJobPolicyName )]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(long id)
@@ -42,7 +42,7 @@ namespace BackendApp.Controller
 
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType<JobPost[]>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetAll()
             => this.Ok(this.jobService.GetAllJobs());
@@ -50,13 +50,13 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType<JobPost>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Get(long id)
         {
-            var user = this.jobService.GetJobById(id);
-            return user is not null ? this.Ok(user) : this.NotFound();
+            var job = this.jobService.GetJobById(id);
+            return job is not null ? this.Ok(job) : this.NotFound();
         }
 
         [Route("{jobId}/interest/set/{userId}")]
@@ -94,7 +94,7 @@ namespace BackendApp.Controller
 
         [HttpPost("by/{userId}")]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType<JobPost>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -118,7 +118,7 @@ namespace BackendApp.Controller
 
         [HttpGet("by/{userId}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType<JobPost[]>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetJobsPostedBy(long userId)
@@ -130,7 +130,7 @@ namespace BackendApp.Controller
 
         [HttpGet("recommend/{userId}/")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType<JobPost[]>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult RecommendJobsTo(long userId)

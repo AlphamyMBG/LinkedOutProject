@@ -27,35 +27,41 @@ namespace BackendApp.Service
 
         public Post[] GetPostTimelineForUser(RegularUser user, int skip, int take)
         {
-            var result = this
-                .CreateQueryForPostsOfConnectedUsers(user)
+            var result = context.Connections
+                .Where( 
+                    con =>
+                        con.Accepted && 
+                        (con.SentBy == user || con.SentTo == user) 
+                )
+                .SelectMany( 
+                    con => this.context.Posts
+                        .Where( 
+                            post => (post.PostedBy == con.SentBy && con.SentBy != user) 
+                                || (post.PostedBy == con.SentTo && con.SentTo != user) )
+                )
+                .OrderByDescending(x => x.PostedAt)
                 .Skip(skip)
-                .Take(take);
-
-
-            return [.. result];
+                .Take(take)
+                .ToArray();
+            return result;
         }
 
         public Post[] GetPostTimelineForUser(RegularUser user)
         {
-            return [.. this.CreateQueryForPostsOfConnectedUsers(user)];
-        }
-
-        private IQueryable<Post> CreateQueryForPostsOfConnectedUsers(RegularUser user)
-        {
-            return context.Posts
+            return context.Connections
                 .Where( 
-                    post => 
-                        context.Connections
-                        .Where( 
-                            con =>
-                                con.Accepted && 
-                                (con.SentBy == user || con.SentTo == user) 
-                        )
-                        .Select( con => con.SentBy == user ? con.SentTo : con.SentBy )
-                        .Contains( post.PostedBy )
+                    con =>
+                        con.Accepted && 
+                        (con.SentBy == user || con.SentTo == user) 
                 )
-                .OrderByDescending(x => x.PostedAt);
+                .SelectMany( 
+                    con => this.context.Posts
+                        .Where( 
+                            post => (post.PostedBy == con.SentBy && con.SentBy != user) 
+                                || (post.PostedBy == con.SentTo && con.SentTo != user) )
+                )
+                .OrderByDescending(x => x.PostedAt)
+                .ToArray();
         }
     }
 }

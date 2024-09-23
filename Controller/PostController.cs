@@ -110,9 +110,9 @@ namespace BackendApp.Controller
         [HttpGet]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
         [ProducesResponseType<Post[]>(StatusCodes.Status200OK)]
-        [ProducesResponseType<BadRequestObjectResult>(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType<NotFoundObjectResult>(StatusCodes.Status404NotFound)]
-        [ProducesResponseType<UnauthorizedObjectResult>(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public IActionResult GetTimelineForUser(uint userId, int skip = 0, int take = 10)
         {
