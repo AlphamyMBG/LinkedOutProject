@@ -46,7 +46,7 @@ namespace BackendApp.Controller
             => this.Ok(this.notificationService.GetNotificationsForUser(id));
 
         [Route("read/{id}")]
-        [HttpGet]
+        [HttpPost]
         [Authorize( HasNotificationPolicyName )]
         public IActionResult MarkNotificationAsRead(long id)
             => this.notificationService.MarkNotificationAsRead(id) ? this.Ok() : this.NotFound();
