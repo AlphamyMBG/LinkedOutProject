@@ -21,7 +21,7 @@ namespace BackendApp.Service
         public JobPost[] GetJobPostsBy(RegularUser user);
     
     }
-    public class LinkedOutJobService(ApiContext context) : IJobService
+    public class JobService(ApiContext context) : IJobService
     {
         private readonly ApiContext context = context;
         

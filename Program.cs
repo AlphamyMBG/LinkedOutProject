@@ -32,8 +32,8 @@ builder.Services.AddDbContext<ApiContext>(
 
 //Add model services
 builder.Services.AddSingleton<IRegularUserService, RegularUserService>();
-builder.Services.AddSingleton<IPostService, LinkedOutPostService>();
-builder.Services.AddSingleton<IJobService, LinkedOutJobService>();
+builder.Services.AddSingleton<IPostService, PostService>();
+builder.Services.AddSingleton<IJobService, JobService>();
 builder.Services.AddSingleton<INotificationService, NotificationService>();
 builder.Services.AddSingleton<IMessageService, MessageService>();
 builder.Services.AddSingleton<IInterestService, InterestService>();
@@ -42,6 +42,7 @@ builder.Services.AddSingleton<IAdminUserService, AdminUserService>();
 builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
 builder.Services.AddSingleton<IFileService, FileService>();
 builder.Services.AddSingleton<IRecommendationService, RecommendationService>();
+builder.Services.AddSingleton<ITimelineService, TimelineService>();
 
 //Add other general use case services
 builder.Services.AddHttpContextAccessor();

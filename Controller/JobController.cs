@@ -32,9 +32,10 @@ namespace BackendApp.Controller
         
         [Route("{id}")]
         [HttpDelete]
-        [Authorize( CreatedJobPolicyName )]
+        [Authorize( Policy = CreatedJobPolicyName )]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(long id)
             => this.jobService.RemoveJob(id) ? this.Ok() : this.NotFound();
@@ -64,6 +65,7 @@ namespace BackendApp.Controller
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult DeclareInterest(uint userId, uint jobId)
         {
@@ -83,6 +85,7 @@ namespace BackendApp.Controller
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult RemoveInterest(uint userId, uint jobId)
         {
@@ -94,6 +97,7 @@ namespace BackendApp.Controller
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreateJob(long userId, JobCreationRequest request)
         {   

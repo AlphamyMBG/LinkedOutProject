@@ -21,7 +21,7 @@ namespace BackendApp.Service
         public Post[] GetPostsFrom(RegularUser user, bool includeReplies = false);
     }
 
-    public sealed class LinkedOutPostService(ApiContext context) : IPostService
+    public sealed class PostService(ApiContext context) : IPostService
     {
         private readonly ApiContext context = context;
         public bool AddPost(Post post)

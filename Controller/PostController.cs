@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -19,13 +20,20 @@ namespace BackendApp.Controller
     [Route("api/[Controller]")]
     [ApiController]
     public class PostController
-    (IPostService postService, IInterestService interestService, IRegularUserService userService, INotificationService notificationService) 
+    (
+        IPostService postService, 
+        IInterestService interestService, 
+        IRegularUserService userService, 
+        INotificationService notificationService,
+        ITimelineService timelineService
+    ) 
     : ControllerBase
     {
         private readonly IPostService postService = postService;
         private readonly IInterestService interestService = interestService;
         private readonly IRegularUserService userService = userService;
         private readonly INotificationService notificationService = notificationService;
+        private readonly ITimelineService timelineService = timelineService;
 
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
@@ -96,6 +104,22 @@ namespace BackendApp.Controller
         public IActionResult RemoveInterest(uint userId, uint postId)
         {
             return this.interestService.RemoveInterestForPost(userId, postId).ToResultObject(this);
+        }
+
+        [Route("timeline/{userId}")]
+        [HttpGet]
+        [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
+        [ProducesResponseType<Post[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType<BadRequestObjectResult>(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType<NotFoundObjectResult>(StatusCodes.Status404NotFound)]
+        [ProducesResponseType<UnauthorizedObjectResult>(StatusCodes.Status401Unauthorized)]
+        public IActionResult GetTimelineForUser(uint userId, int skip = 0, int take = 10)
+        {
+            if(skip < 0 || take < 0) 
+                return this.BadRequest("Skip and take parameters must be positive integer values.");
+            var user = this.userService.GetUserById(userId);
+            if(user is null) return this.NotFound("User not found.");
+            return this.Ok(this.timelineService.GetPostTimelineForUser(user, skip, take));
         }
 
     }
