@@ -22,17 +22,28 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpDelete]
         [Authorize( HasNotificationPolicyName )]
+        [ProducesResponseType<Notification>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(long id)
             => this.notificationService.RemoveNotifications(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
         [Authorize( IsAdminPolicyName )]
+        [ProducesResponseType<Notification>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public IActionResult GetAll()
             => this.Ok(this.notificationService.GetAllNotifications());
 
         [Route("{id}")]
         [HttpGet]
         [Authorize( HasNotificationPolicyName )]
+        [ProducesResponseType<Notification>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get(long id)
         {
             var notification = this.notificationService.GetNotificationById(id);
@@ -42,12 +53,20 @@ namespace BackendApp.Controller
         [Route("my/{id}")]
         [HttpGet]
         [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
+        [ProducesResponseType<Notification[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetUsersNotifications(long id)
             => this.Ok(this.notificationService.GetNotificationsForUser(id));
 
         [Route("read/{id}")]
         [HttpPost]
         [Authorize( HasNotificationPolicyName )]
+        [ProducesResponseType<Notification[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult MarkNotificationAsRead(long id)
             => this.notificationService.MarkNotificationAsRead(id) ? this.Ok() : this.NotFound();
     }
