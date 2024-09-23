@@ -113,6 +113,7 @@ namespace BackendApp.Controller
         [ProducesResponseType<BadRequestObjectResult>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<NotFoundObjectResult>(StatusCodes.Status404NotFound)]
         [ProducesResponseType<UnauthorizedObjectResult>(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public IActionResult GetTimelineForUser(uint userId, int skip = 0, int take = 10)
         {
             if(skip < 0 || take < 0) 

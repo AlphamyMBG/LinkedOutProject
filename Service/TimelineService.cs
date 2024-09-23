@@ -54,7 +54,8 @@ namespace BackendApp.Service
                         )
                         .Select( con => con.SentBy == user ? con.SentTo : con.SentBy )
                         .Contains( post.PostedBy )
-                );
+                )
+                .OrderByDescending(x => x.PostedAt);
         }
     }
 }
