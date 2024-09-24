@@ -24,18 +24,18 @@ builder.Services.AddDbContext<ApiContext>(
 );
 
 //Add model services
-builder.Services.AddSingleton<IRegularUserService, RegularUserService>();
-builder.Services.AddSingleton<IPostService, PostService>();
-builder.Services.AddSingleton<IJobService, JobService>();
-builder.Services.AddSingleton<INotificationService, NotificationService>();
-builder.Services.AddSingleton<IMessageService, MessageService>();
-builder.Services.AddSingleton<IInterestService, InterestService>();
-builder.Services.AddSingleton<IConnectionService, ConnectionService>();
-builder.Services.AddSingleton<IAdminUserService, AdminUserService>();
-builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
-builder.Services.AddSingleton<IFileService, FileService>();
-builder.Services.AddSingleton<IRecommendationService, RecommendationService>();
-builder.Services.AddSingleton<ITimelineService, TimelineService>();
+builder.Services.AddScoped<IRegularUserService, RegularUserService>();
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IJobService, JobService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IInterestService, InterestService>();
+builder.Services.AddScoped<IConnectionService, ConnectionService>();
+builder.Services.AddScoped<IAdminUserService, AdminUserService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
+builder.Services.AddScoped<ITimelineService, TimelineService>();
 
 //Add other general use case services
 builder.Services.AddHttpContextAccessor();
@@ -105,15 +105,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     );
 
 // Add Authorization
-builder.Services.AddSingleton<IAuthorizationHandler, HasIdHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, IsAdminHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, HasNotificationHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, SentMessageHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, SentConnectionRequestHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, ReceivedConnectionRequestHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, CreatedJobHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, CreatedPostHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, IsMemberOfConversationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, HasIdHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, IsAdminHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, HasNotificationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, SentMessageHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, SentConnectionRequestHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, ReceivedConnectionRequestHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, CreatedJobHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, CreatedPostHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, IsMemberOfConversationHandler>();
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthConstants.PolicyNames.HasIdEqualToUserIdParamPolicyName, policy =>
         policy.Requirements.Add( new HasIdRequirement("userId")))
