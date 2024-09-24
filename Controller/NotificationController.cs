@@ -27,7 +27,9 @@ namespace BackendApp.Controller
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(long id)
-            => this.notificationService.RemoveNotifications(id) ? this.Ok() : this.NotFound();
+        {
+            return this.notificationService.RemoveNotifications(id) ? this.Ok() : this.NotFound();
+        }
 
         [HttpGet]
         [Authorize( IsAdminPolicyName )]
@@ -35,7 +37,9 @@ namespace BackendApp.Controller
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public IActionResult GetAll()
-            => this.Ok(this.notificationService.GetAllNotifications());
+        {
+            return this.Ok(this.notificationService.GetAllNotifications());
+        }
 
         [Route("{id}")]
         [HttpGet]
@@ -58,7 +62,9 @@ namespace BackendApp.Controller
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetUsersNotifications(long id)
-            => this.Ok(this.notificationService.GetNotificationsForUser(id));
+        {
+            return this.Ok(this.notificationService.GetNotificationsForUser(id));
+        }
 
         [Route("read/{id}")]
         [HttpPost]
@@ -68,6 +74,8 @@ namespace BackendApp.Controller
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult MarkNotificationAsRead(long id)
-            => this.notificationService.MarkNotificationAsRead(id) ? this.Ok() : this.NotFound();
+        {
+            return this.notificationService.MarkNotificationAsRead(id) ? this.Ok() : this.NotFound();
+        }
     }
 }

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BackendApp.auth;
-using BackendApp.Model;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using BackendApp.auth.Filters;
@@ -17,17 +16,11 @@ var corsPolicyName = "_myAllowAllOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Set DB context up.
-// builder.Services.AddDbContext<ApiContext>(
-//     opt => opt.UseInMemoryDatabase("LinkedOutDb"), 
-//     contextLifetime: ServiceLifetime.Singleton
-// );
-
 builder.Services.AddDbContext<ApiContext>(
     opt => opt
         .UseLazyLoadingProxies()
         .UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")), 
-    contextLifetime: ServiceLifetime.Singleton
+    contextLifetime: ServiceLifetime.Scoped
 );
 
 //Add model services
