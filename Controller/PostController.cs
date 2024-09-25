@@ -61,6 +61,13 @@ namespace BackendApp.Controller
             var user = this.userService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found.");
             var resultPost = this.postService.ReplyToPost(postId, request.Content, user, request.PostFiles);
+            if(resultPost is not null){
+                Post? post = this.postService.GetPostById(postId);
+                if(post is not null)
+                {
+                    this.notificationService.SendNotificationTo(post.PostedBy, $"User {user.FullName} has replied to your post!", resultPost);
+                } 
+            }
             return resultPost is not null ? this.Ok(resultPost) : this.NotFound("Original Post not found.");
         }
         
@@ -152,7 +159,7 @@ namespace BackendApp.Controller
             return this.Ok(this.interestService.GetJobsUserIsInterestedIn(user));
         }
 
-        [HttpGet("interested/{userId}")]
+        [HttpGet("commented/{userId}")]
         [Authorize]
         [ProducesResponseType<Post[]>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

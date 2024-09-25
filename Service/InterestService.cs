@@ -17,7 +17,6 @@ namespace BackendApp.Service
         Post[] GetPostsUserIsInterestedIn(RegularUser user);
         JobPost[] GetJobsUserIsInterestedIn(RegularUser user);
         Post[] GetPostsUserHasCommentedOn(RegularUser user);
-
     }
     public class InterestService
     (ApiContext dbContext, IPostService postService, IJobService jobService, IRegularUserService userService) 
@@ -82,14 +81,14 @@ namespace BackendApp.Service
         public Post[] GetPostsUserIsInterestedIn(RegularUser user)
         {
             var query = this.dbContext.Posts
-                .Where( post => post.InterestedUsers.Contains(user));
+                .Where( post => post.InterestedUsers.Any(x => x == user));
             return [.. query];
         }
 
         public JobPost[] GetJobsUserIsInterestedIn(RegularUser user)
         {
             var query = this.dbContext.JobPosts
-                .Where( post => post.InterestedUsers.Contains(user));
+                .Where( post => post.InterestedUsers.Any(x => x == user));
             return [.. query];
         }
 
@@ -101,7 +100,7 @@ namespace BackendApp.Service
                         post.Replies
                             .Select(reply => reply.PostedBy)
                             .Distinct()
-                            .Contains(user)
+                            .Any(x => x == user)
                 );
             return [.. query];
         }

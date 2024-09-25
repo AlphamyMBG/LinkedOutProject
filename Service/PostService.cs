@@ -19,6 +19,7 @@ namespace BackendApp.Service
         public UpdateResult UpdatePost(long id, Post postContent);
         public Post? ReplyToPost(long originalPostId, string content, RegularUser replyGuy, PostFile[] postFiles);
         public Post[] GetPostsFrom(RegularUser user, bool includeReplies = false);
+        public Post? GetOriginalPostOf(Post reply);
     }
 
     public sealed class PostService(ApiContext context) : IPostService
@@ -76,7 +77,7 @@ namespace BackendApp.Service
             if(post == null) return false;
             if(post.IsReply)
             {
-                var originalPost = this.context.Posts.FirstOrDefault( a => a.Replies.Contains(post));
+                var originalPost = this.context.Posts.FirstOrDefault( a => a.Replies.Any(reply => reply == post));
                 originalPost?.Replies.Remove(post);
             }
             this.context.Posts.Remove(post);
@@ -101,6 +102,11 @@ namespace BackendApp.Service
             if(includeReplies)
                 return this.context.Posts.Where( x => x.PostedBy == user).ToArray();
             return this.context.Posts.Where( x => x.PostedBy == user && x.IsReply ).ToArray();
+        }
+
+        public Post? GetOriginalPostOf(Post reply)
+        {
+            return this.context.Posts.FirstOrDefault( post => post.Replies.Any(rep => rep == reply) );
         }
     }
 }
