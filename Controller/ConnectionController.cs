@@ -23,7 +23,7 @@ namespace BackendApp.Controller
 
         [Route("{id}")]
         [HttpDelete]
-        [Authorize( IsAdminPolicyName )] //TODO: Add apropriate filter
+        [Authorize( IsMemberOfConnectionPolicyName )] //TODO: Add apropriate filter
         public IActionResult Delete(long id)
             => this.connectionService.RemoveConnection(id) ? this.Ok() : this.NotFound();
 

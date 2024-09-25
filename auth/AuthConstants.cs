@@ -20,6 +20,7 @@ namespace BackendApp.Auth
             public const string CreatedPostPolicyName = "CreatedPostPolicy";
             public const string IsAdminPolicyName = "IsAdminPolicy";
             public const string IsMemberOfConversationPolicyName = "IsMemberOfConversationPolicy";
+            public const string IsMemberOfConnectionPolicyName = "IsMemberOfConnectionPolicy";
         }
 
         public static class ClaimTypes

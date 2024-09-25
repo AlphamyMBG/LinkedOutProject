@@ -114,6 +114,7 @@ builder.Services.AddScoped<IAuthorizationHandler, ReceivedConnectionRequestHandl
 builder.Services.AddScoped<IAuthorizationHandler, CreatedJobHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, CreatedPostHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, IsMemberOfConversationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, IsMemberOfConnectionHandler>();
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthConstants.PolicyNames.HasIdEqualToUserIdParamPolicyName, policy =>
         policy.Requirements.Add( new HasIdRequirement("userId")))
@@ -136,7 +137,9 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthConstants.PolicyNames.CreatedPostPolicyName, policy => 
         policy.Requirements.Add( new CreatedPostRequirement("id")))
     .AddPolicy(AuthConstants.PolicyNames.IsMemberOfConversationPolicyName, policy => 
-        policy.Requirements.Add( new IsMemberOfConversationRequirement("userAId","userBId")));
+        policy.Requirements.Add( new IsMemberOfConversationRequirement("userAId","userBId")))
+    .AddPolicy(AuthConstants.PolicyNames.IsMemberOfConnectionPolicyName, policy =>
+        policy.Requirements.Add( new IsMemberOfConnectionRequirement("id")));
     
 
 var app = builder.Build();
