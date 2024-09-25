@@ -14,6 +14,8 @@ namespace BackendApp.Service
         UpdateResult RemoveInterestForPost(uint userId, uint postId);
         UpdateResult DeclareInterestForJob(uint userId, uint jobId);
         UpdateResult RemoveInterestForJob(uint userId, uint jobId);
+        Post[] GetPostsUserIsInterestIn(RegularUser user);
+        JobPost[] GetJobsUserIsInterestedIn(RegularUser user);
 
     }
     public class InterestService
@@ -75,5 +77,19 @@ namespace BackendApp.Service
             if(postInDb is null) return UpdateResult.NotFound;
             return this.RemoveInterestFor(this.dbContext.Posts, userId, postInDb);
         }
-    }
+
+        public Post[] GetPostsUserIsInterestIn(RegularUser user)
+        {
+            var query = this.dbContext.Posts
+                .Where( post => post.InterestedUsers.Contains(user));
+            return [.. query];
+        }
+
+        public JobPost[] GetJobsUserIsInterestedIn(RegularUser user)
+        {
+            var query = this.dbContext.JobPosts
+                .Where( post => post.InterestedUsers.Contains(user));
+            return [.. query];
+        }
+    } 
 }
