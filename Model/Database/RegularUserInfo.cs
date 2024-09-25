@@ -63,7 +63,10 @@ namespace BackendApp.Model
             education, true
         )
         {}
-
+        
+        /// <summary>
+        /// DO NOT USE!!! This is the EFCore Constructor.
+        /// </summary>
         protected RegularUserHideableInfo
         (
             string phoneNumber,

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BackendApp.Controllers.Filters;
 using BackendApp.Model;
 using BackendApp.Model.Enums;
 using BackendApp.Service;
@@ -14,6 +15,7 @@ namespace BackendApp.Controller
 {
     [Route("api/[Controller]")]
     [ApiController]
+    [XmlConverterFilter]
     public class MessageController(IMessageService messageService, IRegularUserService userService) : ControllerBase
     {
         private readonly IMessageService messageService = messageService;  

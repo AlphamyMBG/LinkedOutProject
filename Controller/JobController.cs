@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BackendApp.Controllers.Filters;
 using BackendApp.Model;
 using BackendApp.Model.Enums;
 using BackendApp.Model.Requests;
@@ -14,6 +15,7 @@ namespace BackendApp.Controller
 {
     [Route("/api/[Controller]")]
     [ApiController]
+    [XmlConverterFilter]
     public class JobController
     (
         IJobService jobService, 

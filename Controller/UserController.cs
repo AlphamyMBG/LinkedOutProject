@@ -9,12 +9,14 @@ using BackendApp.Model.Enums;
 using BackendApp.auth;
 using Microsoft.AspNetCore.Authorization;
 using static BackendApp.Auth.AuthConstants.PolicyNames;
+using BackendApp.Controllers.Filters;
 
 
 namespace BackendApp.Controllers
 {
     [Route("api/[Controller]")]
     [ApiController]
+    [XmlConverterFilter]
     public class UserController(
         IRegularUserService userService
     ) : ControllerBase

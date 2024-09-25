@@ -5,6 +5,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using BackendApp.Controllers.Filters;
 using BackendApp.Model;
 using BackendApp.Model.Enums;
 using BackendApp.Model.Requests;
@@ -19,6 +20,7 @@ namespace BackendApp.Controller
 
     [Route("api/[Controller]")]
     [ApiController]
+    [XmlConverterFilter]
     public class PostController
     (
         IPostService postService, 

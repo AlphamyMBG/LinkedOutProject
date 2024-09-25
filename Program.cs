@@ -11,6 +11,7 @@ using BackendApp.auth.Filters;
 using BackendApp.Auth;
 using ImageManipulation.Data.Services;
 using Util.DataFeeding;
+using Microsoft.Net.Http.Headers;
 
 var corsPolicyName = "_myAllowAllOrigins";
 
@@ -39,6 +40,14 @@ builder.Services.AddScoped<ITimelineService, TimelineService>();
 
 //Add other general use case services
 builder.Services.AddHttpContextAccessor();
+// builder.Services.AddMvc(
+//     options =>  {
+//         options.FormatterMappings.SetMediaTypeMappingForFormat
+//                 ("xml", MediaTypeHeaderValue.Parse("application/xml"));
+//         options.FormatterMappings.SetMediaTypeMappingForFormat
+//             ("json", MediaTypeHeaderValue.Parse("application/json"));
+// })
+// .AddXmlSerializerFormatters();
 
 // Controllers
 builder.Services.AddControllers();
