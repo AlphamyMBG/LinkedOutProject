@@ -125,5 +125,18 @@ namespace BackendApp.Controller
             return this.Ok(this.timelineService.GetPostTimelineForUser(user, skip, take));
         }
 
+        [Route("from/{userId}")]
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public IActionResult GetPostsCreatedBy(long userId, bool includeReplies = false)
+        {
+            var user = this.userService.GetUserById(userId);
+            if(user is null) return this.NotFound("User not found.");
+            return this.Ok(this.postService.GetPostsFrom(user, includeReplies));
+        }      
+
     }
 }
