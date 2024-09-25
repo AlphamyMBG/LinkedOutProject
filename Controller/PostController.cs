@@ -152,5 +152,17 @@ namespace BackendApp.Controller
             return this.Ok(this.interestService.GetJobsUserIsInterestedIn(user));
         }
 
+        [HttpGet("interested/{userId}")]
+        [Authorize]
+        [ProducesResponseType<Post[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetArticlesUserHasCommentedOn(long userId)
+        {   
+            var user = this.userService.GetUserById(userId);
+            if(user is null) return this.NotFound("User not found.");
+            return this.Ok(this.interestService.GetPostsUserHasCommentedOn(user));
+        }
+
     }
 }
