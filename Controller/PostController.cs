@@ -171,5 +171,17 @@ namespace BackendApp.Controller
             return this.Ok(this.interestService.GetPostsUserHasCommentedOn(user));
         }
 
+        [HttpGet("original/{replyId}")]
+        [Authorize]
+        [ProducesResponseType<Post>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetOriginalPostOf(long replyId)
+        {   
+            var reply = this.postService.GetPostById(replyId);
+            if(reply is null) return this.NotFound("Reply not found.");
+            return this.Ok(this.postService.GetOriginalPostOf(reply));
+        }
+
     }
 }
