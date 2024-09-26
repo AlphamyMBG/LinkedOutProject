@@ -156,7 +156,7 @@ namespace BackendApp.Controller
         {   
             var user = this.userService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found.");
-            return this.Ok(this.interestService.GetJobsUserIsInterestedIn(user));
+            return this.Ok(this.interestService.GetPostsUserIsInterestedIn(user));
         }
 
         [HttpGet("commented/{userId}")]

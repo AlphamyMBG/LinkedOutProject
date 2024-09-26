@@ -81,20 +81,24 @@ namespace BackendApp.Service
         public Post[] GetPostsUserIsInterestedIn(RegularUser user)
         {
             var query = this.dbContext.Posts
-                .Where( post => post.InterestedUsers.Any(x => x == user));
+                .Include( post => post.InterestedUsers )
+                .Where( post => post.InterestedUsers.Any(x => x == user) );
             return [.. query];
         }
 
         public JobPost[] GetJobsUserIsInterestedIn(RegularUser user)
         {
             var query = this.dbContext.JobPosts
-                .Where( post => post.InterestedUsers.Any(x => x == user));
+                .Include( job => job.InterestedUsers )
+                .Where( post => post.InterestedUsers.Any(x => x == user) );
             return [.. query];
         }
 
         public Post[] GetPostsUserHasCommentedOn(RegularUser user)
         {
             var query = this.dbContext.Posts
+                .Include( x => x.Replies)
+                .ThenInclude( x => x.PostedBy )
                 .Where( 
                     post => 
                         post.Replies
