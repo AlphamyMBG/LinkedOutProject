@@ -66,7 +66,7 @@ namespace BackendApp.Service
         }
 
         public Post[] GetAllPosts()
-            => this.context.Posts.ToArray();
+            => [.. this.context.Posts];
 
         public Post? GetPostById(long id)
             => this.context.Posts.FirstOrDefault(post => post.Id == id);
@@ -99,9 +99,9 @@ namespace BackendApp.Service
 
         public Post[] GetPostsFrom(RegularUser user, bool includeReplies = false)
         {
-            if(!includeReplies)
-                return this.context.Posts.Where( x => x.PostedBy == user).ToArray();
-            return this.context.Posts.Where( x => x.PostedBy == user && x.IsReply ).ToArray();
+            if(includeReplies)
+                return [.. this.context.Posts.Where( x => x.PostedBy == user)];
+            return [.. this.context.Posts.Where( x => x.PostedBy == user && !x.IsReply )];
         }
 
         public Post? GetOriginalPostOf(Post reply)

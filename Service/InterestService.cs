@@ -90,7 +90,7 @@ namespace BackendApp.Service
         {
             var query = this.dbContext.JobPosts
                 .Include( job => job.InterestedUsers )
-                .Where( post => post.InterestedUsers.Any(x => x == user) );
+                .Where( job => job.InterestedUsers.Any(x => x == user) );
             return [.. query];
         }
 
