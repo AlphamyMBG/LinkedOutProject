@@ -99,7 +99,7 @@ namespace BackendApp.Service
 
         public Post[] GetPostsFrom(RegularUser user, bool includeReplies = false)
         {
-            if(includeReplies)
+            if(!includeReplies)
                 return this.context.Posts.Where( x => x.PostedBy == user).ToArray();
             return this.context.Posts.Where( x => x.PostedBy == user && x.IsReply ).ToArray();
         }

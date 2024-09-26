@@ -28,19 +28,19 @@ public class XmlConverterFilterAttribute : ActionFilterAttribute
         if(!this.VerifyXmlParameter(filterContext.HttpContext)) return;
         FormatResponseIntoXml(filterContext);
     }
-    private Task SetHeaders(ActionExecutingContext filterContext)
+    private static Task<string> SetHeaders(ActionExecutingContext filterContext)
     {
         return Task.Run( () => filterContext.HttpContext.Response.ContentType = "application/xml; charset=utf-8" );
         
     }
-    private void FormatResponseIntoXml(ResultExecutingContext filterContext)
+    private static void FormatResponseIntoXml(ResultExecutingContext filterContext)
     {  
         if (filterContext.Result is not JsonResult result) return;     
 
         var jsonString = JsonConvert.SerializeObject(result);
         var xmlDoc = JsonConvert.DeserializeXmlNode(jsonString, "root");
         if(xmlDoc is null) return;
-        this.FilterXmlDoc(xmlDoc);
+        FilterXmlDoc(xmlDoc);
 
         File.AppendAllLines("./log.txt", [filterContext.HttpContext.Response.StatusCode.ToString()]);
         //await filterContext.HttpContext.Response.Body.WriteAsync(memoryStream.ToArray().AsMemory(0, (int)memoryStream.Length));
@@ -53,7 +53,7 @@ public class XmlConverterFilterAttribute : ActionFilterAttribute
         
     }
 
-    private void FilterXmlDoc(XmlDocument xmlDoc)
+    private static void FilterXmlDoc(XmlDocument xmlDoc)
     {
         var elementToRemove = xmlDoc.GetElementsByTagName("StatusCode")[0];
         if(elementToRemove is not null)
