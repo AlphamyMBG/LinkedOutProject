@@ -18,7 +18,7 @@ public static class MatrixOperations
 
         for(long i = 0; i < dim0; i++)
         {
-            for(long j = 0; j < dim1; i++)
+            for(long j = 0; j < dim1; j++)
             {
                 result[i,j] = 0;
                 for(long k = 0; k < commonDim; k++)
