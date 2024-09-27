@@ -27,7 +27,8 @@ namespace BackendApp.Controller
         IInterestService interestService, 
         IRegularUserService userService, 
         INotificationService notificationService,
-        ITimelineService timelineService
+        ITimelineService timelineService,
+        IRecommendationService recommendationService
     ) 
     : ControllerBase
     {
@@ -36,6 +37,7 @@ namespace BackendApp.Controller
         private readonly IRegularUserService userService = userService;
         private readonly INotificationService notificationService = notificationService;
         private readonly ITimelineService timelineService = timelineService;
+        private readonly IRecommendationService recommendationService = recommendationService;
 
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
@@ -115,7 +117,7 @@ namespace BackendApp.Controller
             return this.interestService.RemoveInterestForPost(userId, postId).ToResultObject(this);
         }
 
-        [Route("timeline/{userId}")]
+        [Route("timeline/following/{userId}")]
         [HttpGet]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
         [ProducesResponseType<Post[]>(StatusCodes.Status200OK)]
@@ -123,13 +125,30 @@ namespace BackendApp.Controller
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public IActionResult GetTimelineForUser(uint userId, int skip = 0, int take = 10)
+        public IActionResult GetFollowingTimelineForUser(uint userId, int skip = 0, int take = 10)
         {
             if(skip < 0 || take < 0) 
                 return this.BadRequest("Skip and take parameters must be positive integer values.");
             var user = this.userService.GetUserById(userId);
             if(user is null) return this.NotFound("User not found.");
             return this.Ok(this.timelineService.GetPostTimelineForUser(user, skip, take));
+        }
+
+        [Route("timeline/suggested/{userId}")]
+        [HttpGet]
+        [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
+        [ProducesResponseType<Post[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult GetSuggestedTimelineForUser(uint userId, int skip = 0, int take = 10)
+        {
+            if(skip < 0 || take < 0) 
+                return this.BadRequest("Skip and take parameters must be positive integer values.");
+            var user = this.userService.GetUserById(userId);
+            if(user is null) return this.NotFound("User not found.");
+            return this.Ok(this.recommendationService.RecommendPosts(user, skip, take));
         }
 
         [Route("from/{userId}")]
