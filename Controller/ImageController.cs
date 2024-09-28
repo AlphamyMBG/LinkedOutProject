@@ -1,6 +1,7 @@
 
 
 using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
 using ImageManipulation.Data.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,12 +49,11 @@ public class ImageController
 
     [HttpGet]
     [Authorize]
-    [Route("{imageName}")]
-    public async Task<IActionResult> ReturnImage(string imageName)
+    [Route("/download")]
+    public async Task<IActionResult> ReturnImage([Required] string imageName)
     {
-        var file = await this.fileService.GetFileContents(imageName, this.imageDirectory);
-        var fileType = Path.GetExtension(imageName);
-        return File(file, fileType);
+        var file = await this.fileService.GetFileContents(imageName, this.imageDirectory);   
+        return File(file, $"image/{Path.GetExtension(imageName)}");
     }
 
     private BadRequestObjectResult GetBadRequestResponse(FileFilterResult filterResult, IFormFile image){

@@ -38,8 +38,6 @@ public class FileService(IWebHostEnvironment environment) : IFileService
     public async Task<string> SaveFileAsync(IFormFile file, string path)
     {
         ArgumentNullException.ThrowIfNull(file);
-
-        
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -47,7 +45,7 @@ public class FileService(IWebHostEnvironment environment) : IFileService
 
         // generate a unique filename
         var ext = Path.GetExtension(file.Name);
-        var fileName = $"{Guid.NewGuid()}{ext}";
+        var fileName = $"{Guid.NewGuid()}.{ext}";
         var fileNameWithPath = Path.Combine(path, fileName);
         using var stream = new FileStream(fileNameWithPath, FileMode.Create);
         await file.CopyToAsync(stream);
@@ -56,7 +54,9 @@ public class FileService(IWebHostEnvironment environment) : IFileService
 
     public async Task<byte[]> GetFileContents(string fileName, string directoryPath)
     {
-        return await System.IO.File.ReadAllBytesAsync($"{directoryPath}/{fileName}");
+        var fullPath = $"{directoryPath}/{fileName}";
+        if(!File.Exists(fullPath)) return [];
+        return await File.ReadAllBytesAsync(fullPath);
     }
 
 

@@ -36,20 +36,25 @@ public class ApiContext
             .HasOne( u => u.HideableInfo )
             .WithOne()
             .HasForeignKey<RegularUserHideableInfo>("UserId")
+            .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 
         modelBuilder.Entity<Message>()
             .HasOne( m => m.SentBy )
             .WithMany()
+            .OnDelete(DeleteBehavior.Restrict)
             .HasForeignKey("SentId");
+
         modelBuilder.Entity<Message>()
             .HasOne( m => m.SentTo )
             .WithMany()
+            .OnDelete(DeleteBehavior.Restrict)
             .HasForeignKey("ReceivedId");
             
         modelBuilder.Entity<PostBase>()
             .HasOne( p => p.PostedBy )
             .WithMany()
+            .OnDelete(DeleteBehavior.Restrict)
             .HasForeignKey("PostedById");
         modelBuilder.Entity<PostBase>()
             .HasMany(p => p.InterestedUsers)
@@ -61,24 +66,29 @@ public class ApiContext
         modelBuilder.Entity<Post>()
             .HasMany(p => p.Replies)
             .WithOne()
+            .OnDelete(DeleteBehavior.Restrict)
             .HasForeignKey("OriginalPost");
         
         modelBuilder.Entity<Notification>()
             .HasOne(n => n.ToUser)
             .WithMany()
+            .OnDelete(DeleteBehavior.Restrict)
             .HasForeignKey("NotificationsIds");
         modelBuilder.Entity<Notification>()
             .HasOne(n => n.AssociatedPost)
             .WithMany()
+            .OnDelete(DeleteBehavior.Restrict)
             .HasForeignKey("NotificIds");
 
         modelBuilder.Entity<Connection>()
             .HasOne( n => n.SentBy)
             .WithMany()
+            .OnDelete(DeleteBehavior.Restrict)
             .HasForeignKey("UsersSentNotificationId");
         modelBuilder.Entity<Connection>()
             .HasOne( n => n.SentTo)
             .WithMany()
+            .OnDelete(DeleteBehavior.Restrict)
             .HasForeignKey("UsersReceivedNotificationId");
         
 

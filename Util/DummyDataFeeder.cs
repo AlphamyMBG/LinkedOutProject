@@ -20,7 +20,7 @@ public static class DummyDataFeeder
                     "6900000000", "My House :D", 
                     ["Fullstack Dotnet Developer at Microsoft: 4 years", "Game Developer at Microsoft: 2 years"], 
                     "Dead inside", 
-                    ["Senior Software Developer", "Junior Software Engineer"], 
+                    ["Senior Software Developer", "Junior Software Engineer", "ASP .NET Developer"], 
                     ["Bachelor's degree in Computer Science from National Kapodistrian University of Athens"]));
         var user2 = new RegularUser(
                 "c@emailer.gr",
@@ -29,8 +29,8 @@ public static class DummyDataFeeder
                     "6950000769", "His House :D", 
                     ["Fullstack Dotnet Developer at Microsoft: 4 years", "Game Developer at Microsoft: 2 years"], 
                     "Dead inside", 
-                    ["Senior Software Developer", "Junior Software Engineer"], 
-                    ["Bachelor's degree in Computer Science from National Kapodistrian University of Athens"]));
+                    ["Junior Software Developer", "Gamer", "Streamer"], 
+                    ["High School Graduate", "Academy player at G2", "Online Course Programming Certificate"]));
         var user3 = new RegularUser(
                 "d@emailer.com",
                 EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
@@ -56,7 +56,7 @@ public static class DummyDataFeeder
                     "6900000000", "Florida", 
                     ["Professional Wrestling: 10 years"], 
                     "Women's World Heavyweight Champion in WUUE", 
-                    ["Karate", "Olympic Wrestler", "Professional Wrestler"], 
+                    ["Karate", "Olympic Wrestler", "Professional Wrestler", "Athletics"], 
                     ["Community Colledge Graduate"]));
 
         var post1 = new Post(
@@ -97,16 +97,49 @@ public static class DummyDataFeeder
             [],
             "Needed: ASP .NET developer",
             "Our company needs an ASP .NET developer for a project. Could you help?",
-            ["ASP .NET Backend Developer", "Junior Software Developer", "Senior Software Developer"]
+            ["ASP .NET Developer", "Junior Software Developer", "Senior Software Developer"]
         );
         var jobPost2 = new JobPost(
             user2, [], 
             DateTime.Now, 
             [],
-            "Searching for Moring Shift Security Officer",
-            "I have noticed strange men with pagers walking around the front of my apartment complex and I have begun to worry about the safety of my neightbours. " 
-            + "I need someone to cover the morning shift (4AM to 12PM)",
-            ["Just be like, very big. Like very very big. And know how to use a gun, hopefully"]
+            "Searching for Morning Shift Security Officer",
+            "I have noticed strange men with pagers walking around the front of my apartment complex and I have begun to worry about the safety of my neighbours. " 
+            + "I need someone to cover the morning shift (4AM to 12PM). Just be like, very big. Like very very big. And know how to use a gun, hopefully",
+            ["Security", "Bodyguard", "Police Officer", "Private Security"]
+        );
+
+        var jobPost3 = new JobPost(
+            user3, [], 
+            DateTime.Now, 
+            [],
+            "Expert baby Thief Position",
+            "There's too many babies around. I want to steel them! Don't contact me after midnight, I'm stealing babies.",
+            ["Theft", "Larsony", "Lawyer", "Athletics"]
+        );
+        var jobPost4 = new JobPost(
+            user4, [], 
+            DateTime.Now, 
+            [],
+            "Looking for head chef!",
+            "Looking for someone who can cook delicious meals using meat. Preference for people with zero moral conscience.",
+            ["Chef", "Head Chef", "Cook"]
+        );
+        var jobPost5 = new JobPost(
+            user2, [], 
+            DateTime.Now, 
+            [],
+            "Maid Position Open",
+            "Looking for a maid. Preferably a cute girl. I don't go out much so I don't have time to socialise...",
+            ["Model", "Athletics"]
+        );
+        var jobPost6 = new JobPost(
+            user4, [], 
+            DateTime.Now, 
+            [],
+            "Somebody sued me, now I'm looking for a laywer...",
+            "Someone is baselessly accusing me of eating their parents. I need a laywer who can prove that I didn't, and that even if I did, it wasn't a big deal.",
+            ["Lawyer", "Legal Counselor"]
         );
 
 
@@ -127,6 +160,10 @@ public static class DummyDataFeeder
         context.Posts.Add(post4);
         context.JobPosts.Add(jobPost1);
         context.JobPosts.Add(jobPost2);
+        context.JobPosts.Add(jobPost3);
+        context.JobPosts.Add(jobPost4);
+        context.JobPosts.Add(jobPost5);
+        context.JobPosts.Add(jobPost6);
         context.Connections.Add(connection1);
         context.Connections.Add(connection2);
         context.SaveChanges();
