@@ -126,11 +126,13 @@ namespace BackendApp.Service{
 
         public RegularUser[] GetMembersOfChatsWith(RegularUser user)
         {
-            return this.context.Messages
+            var data = this.context.Messages
+                .Include(message => message.SentBy)
+                .Include(message => message.SentTo)
                 .Where( message => message.SentBy == user || message.SentTo == user )
                 .Select( message => message.SentBy == user ? message.SentTo : message.SentBy )
-                .Distinct()
                 .ToArray();
+            return data.DistinctBy(user => user.Id).ToArray();
         }
 
     }

@@ -1,6 +1,7 @@
 
 
 using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
 using ImageManipulation.Data.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,12 +46,12 @@ public class VideoController
 
     [HttpGet]
     [Authorize]
-    [Route("{videoName}")]
-    public async Task<IActionResult> ReturnVideo(string videoName)
+    [Route("download")]
+    public async Task<IActionResult> ReturnVideo([Required] string videoName)
     {
         var file = await this.fileService.GetFileContents(videoName, this.videoDirectory);
         var fileType = Path.GetExtension(videoName);
-        return File(file, fileType);
+        return File(file, $"video/{Path.GetExtension(videoName)}");
     }
 
     private BadRequestObjectResult GetBadRequestResponse(FileFilterResult filterResult, IFormFile image){
