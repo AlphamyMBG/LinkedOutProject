@@ -52,7 +52,7 @@ namespace BackendApp.Service{
                         (message.SentBy.Id == userAId && message.SentTo.Id == userBId)
                         || (message.SentBy.Id == userBId && message.SentTo.Id == userAId)
                 )
-                .OrderBy(message => message.Timestamp)
+                .OrderByDescending(message => message.Timestamp)
                 .ToArray();
 
         public Message[] GetRangeOfConversationBetween(RegularUser userA, RegularUser userB, int skip, int take)
@@ -64,10 +64,9 @@ namespace BackendApp.Service{
                         (message.SentBy == userA && message.SentTo == userB)
                         || (message.SentBy == userB && message.SentTo == userA)
                 )
-                .OrderBy(message => message.Timestamp)
+                .OrderByDescending(message => message.Timestamp)
                 .Skip(skip)
                 .Take(take)
-                .OrderBy(message => message.Timestamp)
                 .ToArray();
         }
         
