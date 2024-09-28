@@ -36,13 +36,13 @@ public sealed class RecommendationService
         if(userIndex == -1) return [];
         
         double[,] dataMatrix = this.CreateInitialMatrixForJobs(users, jobs);
-        double[,] matrixApproximation = this.MatrixFactorization(dataMatrix, 100, 0.005);
+        double[,] matrixApproximation = this.MatrixFactorization(dataMatrix, 1000, 0.005, maxIterations: 1000);
         double[] jobRow = MatrixOperations.GetRow(matrixApproximation, userIndex);
 
         JobPost[] jobsSelected = jobRow
             .Select( (jobRating, jobIndex) => (jobRating, job: jobs[jobIndex]))
             .Where( pair => !pair.job.InterestedUsers.Contains(user) )
-            .Select( pair => (jobRating: pair.jobRating + this.RatingOfSimilarSkillset(user, pair.job), job: pair.job))
+            .Select( pair => (jobRating: pair.jobRating + this.RatingOfSimilarSkillset(user, pair.job), pair.job))
             .OrderByDescending( x => x.jobRating )
             .Select( x => x.job )
             .Skip(skip)
@@ -55,16 +55,16 @@ public sealed class RecommendationService
     public Post[] RecommendPosts(RegularUser user, int skip, int top)
     {
         var users = this.regularUserService.GetAllUsers();
-        var jobs = this.postService.GetAllPosts();
+        var posts = this.postService.GetAllPosts().Where( post => !post.IsReply ).ToArray();
         var userIndex = users.ToList().IndexOf(user);
         if(userIndex == -1) return [];
         
-        double[,] dataMatrix = this.CreateInitialMatrixForPosts(users, jobs);
-        double[,] matrixApproximation = this.MatrixFactorization(dataMatrix, 100, 0.005);
+        double[,] dataMatrix = this.CreateInitialMatrixForPosts(users, posts);
+        double[,] matrixApproximation = this.MatrixFactorization(dataMatrix, 1000, 0.005, maxIterations: 1);
         double[] postRow = MatrixOperations.GetRow(matrixApproximation, userIndex);
 
         Post[] jobsSelected = postRow
-            .Select( (jobRating, jobIndex) => (jobRating, job: jobs[jobIndex]))
+            .Select( (jobRating, jobIndex) => (jobRating, job: posts[jobIndex]))
             .Where( pair => !pair.job.InterestedUsers.Contains(user) )
             .OrderByDescending( x => x.jobRating )
             .Select( x => x.job )
@@ -88,8 +88,9 @@ public sealed class RecommendationService
         uint numberOfUsers = (uint)dataMatrix.GetLongLength(0);
         uint numberOfProducts = (uint)dataMatrix.GetLongLength(1);
         var initialMatrixMin = MatrixOperations.MatrixMin(dataMatrix); 
-        var initialMatrixMax = MatrixOperations.MatrixMin(dataMatrix);
-
+        var initialMatrixMax = MatrixOperations.MatrixMax(dataMatrix);
+        File.AppendAllLines("./log.txt", [$"Min Value is: {initialMatrixMin}"]);
+        File.AppendAllLines("./log.txt", [$"Max Value is: {initialMatrixMax}"]);
         double[,] V = MatrixOperations.RandomDoubleMatrix(
             numberOfUsers, 
             latentFeatures, 
@@ -104,13 +105,12 @@ public sealed class RecommendationService
         );
         
         bool keepGoing = true;
-        double error = 0;
+        double? error = null;
         ulong iterations = 0;
         while(keepGoing)
         {
             double[,] apprMatrix = MatrixOperations.Multiply(V, F);
             var errorMatrix = MatrixOperations.Subtract(dataMatrix, apprMatrix);
-            
             var newV = new double[numberOfUsers, latentFeatures];
             var newF = new double[latentFeatures, numberOfProducts];
             for(var (i, j)  = (0, 0); i < numberOfUsers && j < numberOfProducts; i++, j++){
@@ -123,8 +123,9 @@ public sealed class RecommendationService
             F = newF;
             var newError = errorMatrix.Cast<double>().Select(a => a * a).Sum();
             iterations++;
-            if(error <= newError || iterations == maxIterations) keepGoing = false;
-    
+            // if(error == newError || iterations == maxIterations) keepGoing = false;
+            if( iterations == maxIterations) keepGoing = false;
+            error = newError;
         }
         double[,] finalApproximation = MatrixOperations.Multiply(V,F);
         return finalApproximation; 
@@ -158,7 +159,7 @@ public sealed class RecommendationService
 
     private double DetermineMatrixCellValueForJob(RegularUser user, JobPost post)
     {
-        double value = 0;
+        double value = 1;
         if(post.InterestedUsers.Contains(user)) value += 15;
         
         var connectedUsers = this.connectionService.GetUsersConnectedTo(user);
@@ -171,7 +172,7 @@ public sealed class RecommendationService
 
     private double DetermineMatrixCellValueForPost(RegularUser user, Post post)
     {
-        double value = 0;
+        double value = 1;
         if(post.InterestedUsers.Contains(user)) value += 5;
         if(post.Replies.SelectMany( reply => reply.InterestedUsers).Contains(user)) value += 10;
         var connectedUsers = this.connectionService.GetUsersConnectedTo(user);

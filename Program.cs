@@ -165,8 +165,9 @@ app.UseCors(corsPolicyName);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
-// DummyDataFeeder.FillWithDummyData(app.Services.GetService<ApiContext>() ?? throw new Exception("Api Context was not set up correctly."));
+// IServiceScope scope = app.Services.CreateScope();
+// DummyDataFeeder.FillWithDummyData(scope.ServiceProvider.GetService<ApiContext>() ?? throw new Exception("Api Context was not set up correctly."));
+// scope.Dispose();
 app.Run();
 
 

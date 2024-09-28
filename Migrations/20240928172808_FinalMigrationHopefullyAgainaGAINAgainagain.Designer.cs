@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackendApp.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20240921173640_FinalMigrationHopefullyAgain")]
-    partial class FinalMigrationHopefullyAgain
+    [Migration("20240928172808_FinalMigrationHopefullyAgainaGAINAgainagain")]
+    partial class FinalMigrationHopefullyAgainaGAINAgainagain
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,7 +27,7 @@ namespace BackendApp.Migrations
                 .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.UseIdentityAlwaysColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("BackendApp.Model.AdminUser", b =>
                 {
@@ -35,7 +35,7 @@ namespace BackendApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -59,7 +59,7 @@ namespace BackendApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Accepted")
                         .HasColumnType("boolean");
@@ -88,7 +88,7 @@ namespace BackendApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -118,7 +118,7 @@ namespace BackendApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -151,7 +151,7 @@ namespace BackendApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -181,7 +181,7 @@ namespace BackendApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("FileType")
                         .IsRequired()
@@ -202,7 +202,7 @@ namespace BackendApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -237,7 +237,7 @@ namespace BackendApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<List<string>>("Capabilities")
                         .IsRequired()
@@ -364,13 +364,13 @@ namespace BackendApp.Migrations
                     b.HasOne("BackendApp.Model.RegularUser", "SentTo")
                         .WithMany()
                         .HasForeignKey("UsersReceivedNotificationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackendApp.Model.RegularUser", "SentBy")
                         .WithMany()
                         .HasForeignKey("UsersSentNotificationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("SentBy");
@@ -383,13 +383,13 @@ namespace BackendApp.Migrations
                     b.HasOne("BackendApp.Model.RegularUser", "SentTo")
                         .WithMany()
                         .HasForeignKey("ReceivedId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackendApp.Model.RegularUser", "SentBy")
                         .WithMany()
                         .HasForeignKey("SentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("SentBy");
@@ -401,12 +401,13 @@ namespace BackendApp.Migrations
                 {
                     b.HasOne("BackendApp.Model.PostBase", "AssociatedPost")
                         .WithMany()
-                        .HasForeignKey("NotificIds");
+                        .HasForeignKey("NotificIds")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BackendApp.Model.RegularUser", "ToUser")
                         .WithMany()
                         .HasForeignKey("NotificationsIds")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AssociatedPost");
@@ -419,7 +420,7 @@ namespace BackendApp.Migrations
                     b.HasOne("BackendApp.Model.RegularUser", "PostedBy")
                         .WithMany()
                         .HasForeignKey("PostedById")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("PostedBy");
@@ -468,7 +469,8 @@ namespace BackendApp.Migrations
                 {
                     b.HasOne("BackendApp.Model.Post", null)
                         .WithMany("Replies")
-                        .HasForeignKey("OriginalPost");
+                        .HasForeignKey("OriginalPost")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BackendApp.Model.RegularUser", b =>

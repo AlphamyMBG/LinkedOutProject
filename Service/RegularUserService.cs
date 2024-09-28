@@ -133,7 +133,7 @@ namespace BackendApp.Service
                 .Where(notification => notification.ToUser == user);
             this.context.Notifications.RemoveRange(notificationsToRemove);
 
-            this.context.RegularUsers.Remove(user);
+            this.context.Remove(user);
             this.context.SaveChanges();
         }
     }

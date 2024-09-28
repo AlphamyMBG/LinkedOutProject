@@ -91,6 +91,63 @@ public static class DummyDataFeeder
             [],
             false
         );
+        var post5 = new Post(
+            user4, [user3, user2],
+            DateTime.Now,
+            [],
+            "I cooked some liver today. Was pretty good. I have the urge to cry in the bathroom for the next few hours now.",
+            [
+                new Post(
+                    user3, [user4],
+                    DateTime.Now,
+                    [],
+                    "Damn, I'd personally be proud if I managed to make liver tasty. Anything wrong? Who do you... Oh.",
+                    [],
+                    true
+                )
+            ],
+            false
+        );
+        var post6 = new Post(
+            user4, [user3],
+            DateTime.Now,
+            [],
+            "I hate my job.",
+            [],
+            false
+        );
+        var post7 = new Post(
+            user5, [user1, user2, user3],
+            DateTime.Now,
+            [],
+            "I JUST WON A TITLE LOL!",
+            [],
+            false
+        );
+        var post8 = new Post(
+            user1, [user2],
+            DateTime.Now,
+            [],
+            "DO NOT DO THIS IN .NET: IEnumerables are not to be confused with IQueryables! Make sure to turn your Queryables into Enumberables before passing the around!",
+            [],
+            false
+        );
+        var post9 = new Post(
+            user1, [user2, user3, user4, user5],
+            DateTime.Now,
+            [],
+            "DO NOT DO THIS IN JAVASCRIPT: Code.",
+            [],
+            false
+        );
+        var post10 = new Post(
+            user3, [],
+            DateTime.Now,
+            [],
+            "Killed the president of Cuba today. Hard times ahead, have to be on the lookout for Cuban Intelligence.... But hard times make better men.",
+            [],
+            false
+        );
         var jobPost1 = new JobPost(
             user1, [], 
             DateTime.Now, 
@@ -146,6 +203,8 @@ public static class DummyDataFeeder
         
         var connection1 = new Connection(user1, user3, false, DateTime.Now);
         var connection2 = new Connection(user1, user2, true, DateTime.Now);
+        var connection3 = new Connection(user1, user5, true, DateTime.Now);
+        var connection4 = new Connection(user3, user4, true, DateTime.Now);
 
         context.AdminUsers.Add(adminUser);
         context.RegularUsers.Add(user1);
@@ -158,6 +217,12 @@ public static class DummyDataFeeder
         context.Posts.Add(post2);
         context.Posts.Add(post3);
         context.Posts.Add(post4);
+        context.Posts.Add(post5);
+        context.Posts.Add(post6);
+        context.Posts.Add(post7);
+        context.Posts.Add(post8);
+        context.Posts.Add(post9);
+        context.Posts.Add(post10);
         context.JobPosts.Add(jobPost1);
         context.JobPosts.Add(jobPost2);
         context.JobPosts.Add(jobPost3);
@@ -166,6 +231,8 @@ public static class DummyDataFeeder
         context.JobPosts.Add(jobPost6);
         context.Connections.Add(connection1);
         context.Connections.Add(connection2);
+        context.Connections.Add(connection3);
+        context.Connections.Add(connection4);
         context.SaveChanges();
     }
 }

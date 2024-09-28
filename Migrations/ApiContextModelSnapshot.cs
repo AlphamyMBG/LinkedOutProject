@@ -19,6 +19,9 @@ namespace BackendApp.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -358,13 +361,13 @@ namespace BackendApp.Migrations
                     b.HasOne("BackendApp.Model.RegularUser", "SentTo")
                         .WithMany()
                         .HasForeignKey("UsersReceivedNotificationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackendApp.Model.RegularUser", "SentBy")
                         .WithMany()
                         .HasForeignKey("UsersSentNotificationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("SentBy");
@@ -377,13 +380,13 @@ namespace BackendApp.Migrations
                     b.HasOne("BackendApp.Model.RegularUser", "SentTo")
                         .WithMany()
                         .HasForeignKey("ReceivedId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackendApp.Model.RegularUser", "SentBy")
                         .WithMany()
                         .HasForeignKey("SentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("SentBy");
@@ -395,12 +398,13 @@ namespace BackendApp.Migrations
                 {
                     b.HasOne("BackendApp.Model.PostBase", "AssociatedPost")
                         .WithMany()
-                        .HasForeignKey("NotificIds");
+                        .HasForeignKey("NotificIds")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BackendApp.Model.RegularUser", "ToUser")
                         .WithMany()
                         .HasForeignKey("NotificationsIds")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AssociatedPost");
@@ -413,7 +417,7 @@ namespace BackendApp.Migrations
                     b.HasOne("BackendApp.Model.RegularUser", "PostedBy")
                         .WithMany()
                         .HasForeignKey("PostedById")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("PostedBy");
@@ -462,7 +466,8 @@ namespace BackendApp.Migrations
                 {
                     b.HasOne("BackendApp.Model.Post", null)
                         .WithMany("Replies")
-                        .HasForeignKey("OriginalPost");
+                        .HasForeignKey("OriginalPost")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BackendApp.Model.RegularUser", b =>
