@@ -29,7 +29,7 @@ namespace BackendApp.Model
 
         public RegularUser( RegularUser user ) 
         : this
-        (user.Email, user.PasswordHash, user.Name, user.Surname, user.ImagePath, new(user.HideableInfo))
+        (user.Email, user.PasswordHash ?? "", user.Name, user.Surname, user.ImagePath, new(user.HideableInfo))
         {}
         
         protected RegularUser( 
