@@ -25,6 +25,10 @@ namespace BackendApp.Controllers
 
         [HttpPost]
         [Authorize( IsAdminPolicyName )]
+        [ProducesResponseType<long>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult Create(RegularUser user){
             bool added = this.linkedOutUserService.AddUser(user);
             return added ? new JsonResult(this.Ok(user.Id)) : new JsonResult(this.Conflict());
@@ -33,6 +37,12 @@ namespace BackendApp.Controllers
         [Route("{id}")]
         [HttpPost]
         [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
+        [ProducesResponseType<long>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult Update(long id, RegularUser user)
         {
             return this.linkedOutUserService.Update(id, user) switch
@@ -46,6 +56,11 @@ namespace BackendApp.Controllers
         [Route("{id}")]
         [HttpDelete]
         [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(long id)
             => this.linkedOutUserService.RemoveUser(id) 
             ? new JsonResult(this.Ok("User successfully deleted.")) 
@@ -54,6 +69,11 @@ namespace BackendApp.Controllers
 
         [HttpGet]
         [Authorize]
+        [ProducesResponseType<RegularUser[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetAll(){
             var users = this.linkedOutUserService
                 .GetAllUsers()
@@ -64,11 +84,16 @@ namespace BackendApp.Controllers
         [Route("{id}")]
         [HttpGet]
         [Authorize]
+        [ProducesResponseType<RegularUser>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get(long id){
             var user = this.linkedOutUserService.GetUserById(id);
             return new JsonResult(
                 user is not null 
-                ? this.Ok(RegularUser.MapNewWithHiddenPassword(user)) 
+                ? this.Ok(user) 
                 : this.NotFound()
             );
         }
@@ -76,6 +101,8 @@ namespace BackendApp.Controllers
         [Route("search/{searchString}")]
         [HttpGet]
         [Authorize]
+        [ProducesResponseType<RegularUser[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult SearchByUsername(string searchString)
         {
             return this.Ok(this.linkedOutUserService.SearchByUsernameFuzzy(searchString));
@@ -84,6 +111,9 @@ namespace BackendApp.Controllers
         [Route("email/{email}")]
         [HttpGet]
         [Authorize]
+        [ProducesResponseType<RegularUser[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetUserByEmail(string email)
         {
             var user = this.linkedOutUserService.GetUserByEmail(email);
@@ -94,6 +124,10 @@ namespace BackendApp.Controllers
         [Route("{id}/change/password")]
         [HttpPost]
         [Authorize( Policy = HasIdEqualToIdParamPolicyName )]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult ChangePassword(long id, PasswordChangeRequest passwordChangeRequest)
         {
             var result = this.linkedOutUserService.ChangePassword(

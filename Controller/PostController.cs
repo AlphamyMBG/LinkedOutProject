@@ -39,14 +39,15 @@ namespace BackendApp.Controller
         private readonly ITimelineService timelineService = timelineService;
         private readonly IRecommendationService recommendationService = recommendationService;
 
-        [HttpPost]
-        [Authorize( IsAdminPolicyName )]
-        public IActionResult CreatePost(Post post)
-            => this.postService.AddPost(post) ? this.Ok(post.Id) : this.Conflict();
-        
         [Route("create/{userId}")]
         [HttpPost]
-        [Authorize( Policy = HasIdEqualToUserIdParamPolicyName)]
+        [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
+        [ProducesResponseType<Post>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult CreatePost(long userId, PostCreationRequest request)
         {
             var user = this.userService.GetUserById(userId);
@@ -58,6 +59,11 @@ namespace BackendApp.Controller
         [Route("reply/{postId}/{userId}")]
         [HttpPost]
         [Authorize( HasIdEqualToUserIdParamPolicyName )]
+        [ProducesResponseType<Post>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult ReplyToPost(long postId, long userId, PostCreationRequest request)
         {
             var user = this.userService.GetUserById(userId);
@@ -76,17 +82,29 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpDelete]
         [Authorize( CreatedPostPolicyName )]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(long id)
             => this.postService.RemovePost(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
         [Authorize]
+        [ProducesResponseType<Post[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetAll()
             => this.Ok(this.postService.GetAllPosts());
 
         [Route("{id}")]
         [HttpGet]
         [Authorize]
+        [ProducesResponseType<Post>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get(long id)
         {
             var user = this.postService.GetPostById(id);
@@ -96,6 +114,11 @@ namespace BackendApp.Controller
         [Route("{postId}/interest/set/{userId}")]
         [HttpPost]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeclareInterest(uint userId, uint postId)
         {   
             var user = this.userService.GetUserById(userId);
@@ -112,6 +135,11 @@ namespace BackendApp.Controller
         [Route("{postId}/interest/unset/{userId}")]
         [HttpPost]
         [Authorize( Policy = HasIdEqualToUserIdParamPolicyName )]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult RemoveInterest(uint userId, uint postId)
         {
             return this.interestService.RemoveInterestForPost(userId, postId).ToResultObject(this);

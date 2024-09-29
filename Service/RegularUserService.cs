@@ -71,6 +71,7 @@ namespace BackendApp.Service
             userInDb.Name = user.Name;
             userInDb.Surname = user.Surname;
             userInDb.ImagePath = user.ImagePath;
+            this.context.Remove(userInDb.HideableInfo);
             userInDb.HideableInfo = new(user.HideableInfo);
             this.context.SaveChanges();
             return UpdateResult.Ok;
@@ -82,7 +83,7 @@ namespace BackendApp.Service
             this.RemoveDataAssociatedWith(user);
             return true;
         }
-        public RegularUser[] SearchByUsernameFuzzy(string searchString) //TODO: Implement with Fuzzy Search!
+        public RegularUser[] SearchByUsernameFuzzy(string searchString) 
         {
             int maxDistance = 20;
             return this.context.RegularUsers

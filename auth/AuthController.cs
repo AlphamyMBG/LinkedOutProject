@@ -29,6 +29,8 @@ namespace BackendApp.auth
 
         [AllowAnonymous]
         [HttpPost("login")]
+        [ProducesResponseType<TokenResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Login(TokenGenerationRequest request)
         {   
             var user = this.authenticationService.Authenticate(request);
@@ -46,6 +48,8 @@ namespace BackendApp.auth
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]
+        [ProducesResponseType<TokenResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult Register(RegisterRequest request)
         {   
             var wasAdded = this.userService.AddUser(new RegularUser(

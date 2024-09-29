@@ -31,7 +31,7 @@ public class ApiContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseIdentityByDefaultColumns();
+        modelBuilder.UseIdentityAlwaysColumns();
         modelBuilder.Entity<RegularUser>()
             .HasOne( u => u.HideableInfo )
             .WithOne()

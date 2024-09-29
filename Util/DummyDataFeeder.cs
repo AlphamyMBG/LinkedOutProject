@@ -16,7 +16,7 @@ public static class DummyDataFeeder
         var user1 = new RegularUser(
                 "b@emailer.com",
                 EncryptionUtility.HashPassword("bigchungusplayer6969f12"), 
-                "name", "poop", null, new(
+                "boop", "poop", null, new(
                     "6900000000", "My House :D", 
                     ["Fullstack Dotnet Developer at Microsoft: 4 years", "Game Developer at Microsoft: 2 years"], 
                     "Dead inside", 

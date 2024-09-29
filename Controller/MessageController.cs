@@ -24,17 +24,28 @@ namespace BackendApp.Controller
         [Route("{id}")]
         [HttpDelete]
         [Authorize( SentMessagePolicyName )]
+        [ProducesResponseType<Message[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(long id)
             => this.messageService.RemoveMessage(id) ? this.Ok() : this.NotFound();
 
         [HttpGet]
         [Authorize( IsAdminPolicyName )]
+        [ProducesResponseType<Message[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public IActionResult GetAll()
             => this.Ok(this.messageService.GetAllMessages());
 
         [Route("{id}")]
         [HttpGet]
         [Authorize( SentMessagePolicyName )]
+        [ProducesResponseType<Message>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get(long id)
         {
             var Message = this.messageService.GetMessageById(id);
@@ -44,6 +55,10 @@ namespace BackendApp.Controller
         [Route("send/{senderId}/{receipientId}")]
         [HttpPost]
         [Authorize( HasIdEqualToSenderIdPolicyName )]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Send(uint senderId, uint receipientId, string content)
         {
             return this.messageService.SendMessage(senderId, receipientId, content) ? this.Ok() : this.NotFound();
@@ -52,12 +67,19 @@ namespace BackendApp.Controller
         [Route("chat/{userAId}/{userBId}")]
         [HttpGet]
         [Authorize( IsMemberOfConversationPolicyName )]
+        [ProducesResponseType<Message[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public IActionResult GetChatHistory(uint userAId, uint userBId) 
             => this.Ok(this.messageService.GetConversationBetween(userAId, userBId));
 
         [Route("chat/{userAId}/{userBId}/{skip}/{take}")]
         [HttpGet]
         [Authorize( IsMemberOfConversationPolicyName )]
+        [ProducesResponseType<Message[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetChatHistory(uint userAId, uint userBId, int skip, int take) 
         {    
             var userA = this.userService.GetUserById(userAId);
@@ -69,6 +91,10 @@ namespace BackendApp.Controller
         [Route("chat/members/{userId}")]
         [HttpGet]
         [Authorize( HasIdEqualToUserIdParamPolicyName )]
+        [ProducesResponseType<RegularUser[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetUsers(long userId)
         {
             var user = this.userService.GetUserById(userId);

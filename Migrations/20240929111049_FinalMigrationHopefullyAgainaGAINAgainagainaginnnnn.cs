@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackendApp.Migrations
 {
     /// <inheritdoc />
-    public partial class FinalMigrationHopefullyAgainaGAINAgainagain : Migration
+    public partial class FinalMigrationHopefullyAgainaGAINAgainagainaginnnnn : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,7 @@ namespace BackendApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     Email = table.Column<string>(type: "text", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
                     UserRole = table.Column<int>(type: "integer", nullable: false)
@@ -33,7 +33,7 @@ namespace BackendApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     Path = table.Column<string>(type: "text", nullable: false),
                     FileType = table.Column<string>(type: "text", nullable: false)
                 },
@@ -47,7 +47,7 @@ namespace BackendApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Surname = table.Column<string>(type: "text", nullable: false),
                     ImagePath = table.Column<string>(type: "text", nullable: true),
@@ -65,7 +65,7 @@ namespace BackendApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     UsersSentNotificationId = table.Column<long>(type: "bigint", nullable: false),
                     UsersReceivedNotificationId = table.Column<long>(type: "bigint", nullable: false),
                     Timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -93,7 +93,7 @@ namespace BackendApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     Content = table.Column<string>(type: "text", nullable: false),
                     SentId = table.Column<long>(type: "bigint", nullable: false),
                     ReceivedId = table.Column<long>(type: "bigint", nullable: false),
@@ -121,7 +121,7 @@ namespace BackendApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     PostedById = table.Column<long>(type: "bigint", nullable: false),
                     PostedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Discriminator = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
@@ -154,7 +154,7 @@ namespace BackendApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     PhoneNumber = table.Column<string>(type: "text", nullable: false),
                     PhoneNumberIsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     Location = table.Column<string>(type: "text", nullable: false),
@@ -185,7 +185,7 @@ namespace BackendApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     Content = table.Column<string>(type: "text", nullable: false),
                     Read = table.Column<bool>(type: "boolean", nullable: false),
                     NotificationsIds = table.Column<long>(type: "bigint", nullable: false),
